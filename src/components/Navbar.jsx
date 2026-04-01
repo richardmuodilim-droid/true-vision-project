@@ -41,7 +41,7 @@ export default function Navbar({ onCartOpen }) {
               alt="TVP"
               width="36"
               height="36"
-              style={{}}
+              style={{ filter: 'invert(1)' }}
               className="w-8 h-8 object-contain select-none"
               draggable="false"
             />

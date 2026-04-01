@@ -33,11 +33,10 @@ export default function ArchiveEntry({ onLogout }) {
         className="relative z-10 flex items-center justify-between px-8 sm:px-14 pt-10 pb-0"
       >
         <img
-          src="/logo.svg"
+          src="/logo-archive.svg"
           alt="True Vision Project"
           width="32"
           height="32"
-          style={{}}
           className="w-7 h-7 object-contain select-none opacity-60"
           draggable="false"
         />
