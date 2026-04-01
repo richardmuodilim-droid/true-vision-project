@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const reduced =
@@ -39,6 +39,23 @@ export default function Vault() {
 
   // Footer types in after logo (1.5s) + form slide-up (0.8s) + small buffer = ~2.8s
   const footerText = useTyping(FOOTER_TEXT, { startDelay: 2800, charInterval: 38 })
+
+  const [btnHovered, setBtnHovered] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const scanTimeout = useRef(null)
+
+  const handleBtnEnter = () => {
+    setBtnHovered(true)
+    // Reset then trigger so re-hovering replays the scanline
+    setScanning(false)
+    clearTimeout(scanTimeout.current)
+    scanTimeout.current = setTimeout(() => setScanning(true), 10)
+  }
+
+  const handleBtnLeave = () => {
+    setBtnHovered(false)
+    setScanning(false)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -166,20 +183,30 @@ export default function Vault() {
                   type="submit"
                   disabled={status === 'loading'}
                   aria-label="Join the True Vision Project waitlist"
-                  className="
+                  onMouseEnter={handleBtnEnter}
+                  onMouseLeave={handleBtnLeave}
+                  className={`
+                    btn-vault
                     mt-3 w-full min-h-[44px]
                     border border-white/[0.12]
-                    text-[9px] font-light tracking-[0.5em] text-white/40 uppercase
-                    hover:border-white/28 hover:text-white/65
+                    text-[9px] tracking-[0.5em] uppercase
                     disabled:opacity-20 disabled:cursor-not-allowed
-                    transition-colors duration-500 cursor-pointer
-                  "
+                    transition-all duration-500 cursor-pointer
+                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40 font-light'}
+                    ${scanning ? 'scanning' : ''}
+                  `}
+                  style={btnHovered ? { fontFamily: "'Space Mono', monospace" } : {}}
                 >
+                  {/* Scanline element */}
+                  <span className="scanline" aria-hidden="true" />
+
                   {status === 'loading' ? (
                     <span className="inline-flex items-center justify-center gap-3">
                       <span className="w-2.5 h-2.5 border border-white/25 border-t-white/55 rounded-full animate-spin" aria-hidden="true" />
                       <span>Joining</span>
                     </span>
+                  ) : btnHovered ? (
+                    '[ Access Granted ]'
                   ) : (
                     'Join the Project'
                   )}

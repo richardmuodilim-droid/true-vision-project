@@ -37,6 +37,47 @@
   }
 }
 
+/* Button: scanline sweep — plays once on hover trigger */
+@keyframes scanline {
+  0%   { top: -100%; opacity: 0.6; }
+  100% { top: 200%;  opacity: 0;   }
+}
+
+.btn-vault {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-vault .scanline {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  top: -100%;
+  opacity: 0;
+}
+
+.btn-vault.scanning .scanline {
+  animation: scanline 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Glow — box-shadow on hover */
+.btn-vault:hover:not(:disabled) {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 0 12px rgba(255, 255, 255, 0.06),
+    0 0 28px rgba(255, 255, 255, 0.03);
+}
+
 /* Animated film grain */
 @keyframes grain {
   0%   { transform: translate(0,    0)    }
