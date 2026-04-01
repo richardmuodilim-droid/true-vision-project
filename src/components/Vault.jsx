@@ -85,17 +85,8 @@ export default function Vault() {
         }}
       />
 
-      {/* Film grain — desaturated fractalNoise */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          opacity: 0.055,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '180px 180px',
-        }}
-      />
+      {/* Film grain — animated, steps(1) creates the flickering film feel */}
+      <div aria-hidden="true" className="grain" />
 
       {/* ── Content ── */}
       <div className="relative z-10 flex flex-col items-center w-full max-w-xs sm:max-w-sm">
