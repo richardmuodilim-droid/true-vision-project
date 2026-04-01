@@ -32,7 +32,7 @@ function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
   return displayed
 }
 
-export default function Vault() {
+export default function Vault({ onSuccess, glitching }) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -46,7 +46,6 @@ export default function Vault() {
 
   const handleBtnEnter = () => {
     setBtnHovered(true)
-    // Reset then trigger so re-hovering replays the scanline
     setScanning(false)
     clearTimeout(scanTimeout.current)
     scanTimeout.current = setTimeout(() => setScanning(true), 10)
@@ -68,12 +67,12 @@ export default function Vault() {
     setStatus('loading')
     setErrorMsg('')
     // Replace with your email capture endpoint (Klaviyo, Mailchimp, Resend, etc.)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setStatus('success')
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    onSuccess?.()
   }
 
   return (
-    <main className="relative min-h-screen w-full bg-[#000000] flex flex-col items-center justify-center px-8 overflow-hidden">
+    <main className={`relative min-h-screen w-full bg-[#000000] flex flex-col items-center justify-center px-8 overflow-hidden${glitching ? ' vault-glitch' : ''}`}>
 
       {/* ── Background layers ── */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
