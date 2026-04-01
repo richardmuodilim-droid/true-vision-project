@@ -1,0 +1,131 @@
+export const products = [
+  {
+    id: 'construct-tee',
+    name: 'Construct Tee',
+    category: 'T-Shirts',
+    price: 85,
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    colors: [
+      { name: 'Washed Black', hex: '#0a0a0a' },
+      { name: 'Concrete', hex: '#9a9a8e' },
+    ],
+    stock: { XS: 4, S: 12, M: 8, L: 6, XL: 10, XXL: 3 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'Heavyweight 320gsm cotton. Dropped shoulder, elongated hem. Garment dyed for a lived-in depth. Built for those who move with intention.',
+    material: '100% Heavyweight Cotton, 320gsm. Garment dyed.',
+    care: 'Cold wash. Do not tumble dry. Iron inside out on low.',
+    fit: 'Oversized. Model is 6\'1", wearing size M. We recommend sizing down one for a standard fit.',
+    featured: true,
+    bestSeller: true,
+  },
+  {
+    id: 'foundation-tee',
+    name: 'Foundation Tee',
+    category: 'T-Shirts',
+    price: 75,
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    colors: [
+      { name: 'Off White', hex: '#f0ede8' },
+      { name: 'Washed Black', hex: '#0a0a0a' },
+    ],
+    stock: { XS: 8, S: 15, M: 20, L: 14, XL: 7, XXL: 5 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'The essential piece. Cut from 280gsm cotton jersey with a subtle brushed interior. Structured collar, reinforced seams throughout.',
+    material: '100% Cotton Jersey, 280gsm. Brushed interior.',
+    care: 'Cold wash. Hang to dry. No bleach.',
+    fit: 'Regular oversized. Model is 6\'1", wearing size M.',
+    featured: true,
+    bestSeller: false,
+  },
+  {
+    id: 'void-tee',
+    name: 'Void Tee',
+    category: 'T-Shirts',
+    price: 95,
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    colors: [
+      { name: 'Washed Black', hex: '#0a0a0a' },
+    ],
+    stock: { XS: 2, S: 3, M: 4, L: 5, XL: 2, XXL: 1 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'Limited run. Pigment dyed with a destructured hem and raw edge detailing. Each piece varies slightly — no two are identical.',
+    material: '100% Cotton, 300gsm. Pigment dyed. Raw edge finish.',
+    care: 'Hand wash only. Cold. Lay flat to dry.',
+    fit: 'Extended oversized. Model is 6\'1", wearing size S.',
+    featured: false,
+    bestSeller: true,
+  },
+  {
+    id: 'structure-cap',
+    name: 'Structure Cap',
+    category: 'Hats',
+    price: 65,
+    sizes: ['One Size'],
+    colors: [
+      { name: 'Washed Black', hex: '#0a0a0a' },
+      { name: 'Stone', hex: '#c8c4b8' },
+    ],
+    stock: { 'One Size': 18 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'Six-panel structured cap. Heavy canvas shell, tonal embroidery at front, adjustable brass closure at rear.',
+    material: 'Shell: 100% Heavy Canvas. Lining: 100% Cotton.',
+    care: 'Spot clean only. Do not submerge.',
+    fit: 'One size fits most. Adjustable back closure.',
+    featured: true,
+    bestSeller: true,
+  },
+  {
+    id: 'arch-cap',
+    name: 'Arch Cap',
+    category: 'Hats',
+    price: 70,
+    sizes: ['One Size'],
+    colors: [
+      { name: 'Washed Black', hex: '#0a0a0a' },
+    ],
+    stock: { 'One Size': 9 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'Unstructured 5-panel. Washed canvas for a broken-in profile. Leather patch at rear, raw hem brim.',
+    material: 'Shell: Washed Canvas. Patch: Full-grain leather.',
+    care: 'Spot clean only.',
+    fit: 'One size. Unstructured — sits low.',
+    featured: true,
+    bestSeller: false,
+  },
+  {
+    id: 'signal-cap',
+    name: 'Signal Cap',
+    category: 'Hats',
+    price: 60,
+    sizes: ['S/M', 'L/XL'],
+    colors: [
+      { name: 'Concrete', hex: '#9a9a8e' },
+      { name: 'Washed Black', hex: '#0a0a0a' },
+    ],
+    stock: { 'S/M': 14, 'L/XL': 11 },
+    image: null,
+    images: [null, null, null],
+    description:
+      'Technical mesh back panel with structured canvas front. Tonal logo mark embroidered at crown.',
+    material: 'Front: Canvas. Back: Technical mesh.',
+    care: 'Spot clean only.',
+    fit: 'Two sizes. Measure head circumference to select.',
+    featured: false,
+    bestSeller: true,
+  },
+]
+
+export const getProduct = (id) => products.find((p) => p.id === id)
+export const getFeatured = () => products.filter((p) => p.featured)
+export const getBestSellers = () => products.filter((p) => p.bestSeller)
+export const getByCategory = (cat) => products.filter((p) => p.category === cat)
