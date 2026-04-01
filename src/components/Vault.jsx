@@ -101,7 +101,7 @@ export default function Vault({ onSuccess, glitching }) {
             alt="True Vision Project"
             width="300"
             height="300"
-            style={{ filter: 'invert(1)' }}
+            style={{}}
             className="w-[240px] h-[240px] sm:w-[300px] sm:h-[300px] object-contain select-none"
             draggable="false"
           />

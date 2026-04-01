@@ -37,7 +37,7 @@ export default function ArchiveEntry({ onLogout }) {
           alt="True Vision Project"
           width="32"
           height="32"
-          style={{ filter: 'invert(1)' }}
+          style={{}}
           className="w-7 h-7 object-contain select-none opacity-60"
           draggable="false"
         />

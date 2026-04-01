@@ -13,7 +13,7 @@ export default function Footer() {
               alt="True Vision Project"
               width="40"
               height="40"
-              style={{ filter: 'invert(1)' }}
+              style={{}}
               className="w-9 h-9 object-contain select-none"
               draggable="false"
             />
