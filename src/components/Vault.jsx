@@ -120,8 +120,13 @@ export default function Vault({ onSuccess, glitching }) {
     }
   }
 
+  const [syncing, setSyncing] = useState(false)
+
   const handleResume = () => {
-    onSuccess?.(returning.userId, returning.name)
+    setSyncing(true)
+    setTimeout(() => {
+      onSuccess?.(returning.userId, returning.name)
+    }, 600)
   }
 
   return (
@@ -359,6 +364,32 @@ export default function Vault({ onSuccess, glitching }) {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* ── Sync bar — returning member resume ── */}
+      <AnimatePresence>
+        {syncing && (
+          <motion.div
+            key="sync-bar"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed bottom-0 left-0 right-0 z-50 flex flex-col gap-1 px-6 pb-5"
+          >
+            <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }}
+              className="uppercase">
+              [ SYNCING... ]
+            </p>
+            <div className="w-full h-px bg-white/[0.08] overflow-hidden">
+              <motion.div
+                className="h-full bg-white/50"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.5, ease: 'linear' }}
+                style={{ transformOrigin: 'left' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Footer — always in flow, never absolute ── */}
       <p

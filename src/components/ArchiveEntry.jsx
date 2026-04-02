@@ -28,12 +28,23 @@ function getFirstName(name) {
   return name.trim().split(/\s+/)[0].toUpperCase()
 }
 
+const LS_KEY = 'TrueVisionMember'
+
 export default function ArchiveEntry({ onLogout, userId, memberName }) {
   const [activeImg, setActiveImg] = useState(0)
+  const [flickering, setFlickering] = useState(false)
+
+  const handleDisconnect = () => {
+    setFlickering(true)
+    setTimeout(() => {
+      try { localStorage.removeItem(LS_KEY) } catch {}
+      onLogout()
+    }, 420)
+  }
 
   return (
     <motion.div
-      className="relative min-h-[100dvh] w-full bg-[#000] text-white flex flex-col"
+      className={`relative min-h-[100dvh] w-full bg-[#000] text-white flex flex-col${flickering ? ' vault-glitch' : ''}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.9, ease: 'easeOut' }}
@@ -81,8 +92,9 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 pt-7 mt-8"
       >
         <img src="/logo-archive.svg" alt="True Vision Project"
-          width="36" height="36"
-          className="w-8 h-8 sm:w-9 sm:h-9 object-contain select-none"
+          width="44" height="44"
+          className="w-9 h-9 sm:w-11 sm:h-11 object-contain select-none"
+          style={{ paddingBottom: '20px' }}
           draggable="false" />
         <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           ARCHIVE // ENTRY_001
@@ -412,17 +424,30 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           [SESSION: ACTIVE]
         </p>
-        <button
-          onClick={onLogout}
-          aria-label="Return to Vault"
-          style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
-          className="text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
-            hover:border-white/30 hover:text-white/60
-            active:border-white/30 active:text-white/60
-            transition-all duration-300 cursor-pointer"
-        >
-          [ Log Out ]
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleDisconnect}
+            aria-label="Disconnect member and clear access"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.22em' }}
+            className="text-white/20 uppercase border border-white/[0.06] px-4 min-h-[44px]
+              hover:border-red-900/50 hover:text-red-500/50
+              active:border-red-900/50 active:text-red-500/50
+              transition-all duration-300 cursor-pointer"
+          >
+            [ DISCONNECT_MEMBER ]
+          </button>
+          <button
+            onClick={onLogout}
+            aria-label="Return to Vault"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
+            className="text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
+              hover:border-white/30 hover:text-white/60
+              active:border-white/30 active:text-white/60
+              transition-all duration-300 cursor-pointer"
+          >
+            [ Log Out ]
+          </button>
+        </div>
       </motion.footer>
     </motion.div>
   )
