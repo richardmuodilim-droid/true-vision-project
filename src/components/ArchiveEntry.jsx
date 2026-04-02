@@ -188,6 +188,70 @@ export default function ArchiveEntry({ onLogout }) {
         </motion.div>
       </main>
 
+      {/* ── Manifesto ── */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 shrink-0 flex flex-col items-center text-center px-6 sm:px-16 py-16 sm:py-24"
+        aria-label="Manifesto"
+      >
+        {/* Top rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
+          className="origin-center w-px h-10 bg-white/10 mb-14"
+          aria-hidden="true"
+        />
+
+        {/* Main statement */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, delay: 1.85, ease: 'easeOut' }}
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 500,
+            fontStyle: 'normal',
+            fontSize: 'clamp(22px, 5.5vw, 42px)',
+            color: '#ffffff',
+            lineHeight: '1.25',
+            letterSpacing: '0.02em',
+            maxWidth: '780px',
+          }}
+        >
+          WE ARE NOT BUILDING A BRAND.<br />WE ARE DOCUMENTING A MISSION.
+        </motion.p>
+
+        {/* Sub-line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.28 }}
+          transition={{ duration: 1.2, delay: 2.2, ease: 'easeOut' }}
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 300,
+            fontSize: '11px',
+            color: '#ffffff',
+            letterSpacing: '0.22em',
+            marginTop: '28px',
+          }}
+          className="uppercase"
+        >
+          Two small towns. One fire. Built from nothing.
+        </motion.p>
+
+        {/* Bottom rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 2.0, ease: [0.16, 1, 0.3, 1] }}
+          className="origin-center w-px h-10 bg-white/10 mt-14"
+          aria-hidden="true"
+        />
+      </motion.section>
+
       {/* ── Process Archive ── */}
       <motion.section
         initial={{ opacity: 0, y: 16 }}
