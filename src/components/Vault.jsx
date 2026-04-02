@@ -28,7 +28,26 @@ function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
   return displayed
 }
 
+const LS_KEY = 'TrueVisionMember'
+
+function loadMember() {
+  try {
+    const raw = localStorage.getItem(LS_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch { return null }
+}
+
+function saveMember(data) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)) } catch {}
+}
+
+function getFirstName(name) {
+  if (!name) return 'MEMBER'
+  return name.trim().split(/\s+/)[0].toUpperCase()
+}
+
 export default function Vault({ onSuccess, glitching }) {
+  const [returning, setReturning] = useState(null) // null | { userId, name, email }
   const [step, setStep] = useState('email') // 'email' | 'name'
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -39,6 +58,11 @@ export default function Vault({ onSuccess, glitching }) {
   const [btnHovered, setBtnHovered] = useState(false)
   const [scanning, setScanning] = useState(false)
   const scanTimeout = useRef(null)
+
+  useEffect(() => {
+    const member = loadMember()
+    if (member?.userId && member?.name) setReturning(member)
+  }, [])
 
   const handleBtnEnter = () => {
     setBtnHovered(true)
@@ -87,11 +111,17 @@ export default function Vault({ onSuccess, glitching }) {
         setStatus('error')
         return
       }
-      onSuccess?.(data.userId, data.name || trimmedName)
+      const resolvedName = data.name || trimmedName
+      saveMember({ userId: data.userId, name: resolvedName, email: email.trim() })
+      onSuccess?.(data.userId, resolvedName)
     } catch {
       setErrorMsg('Connection error. Try again.')
       setStatus('error')
     }
+  }
+
+  const handleResume = () => {
+    onSuccess?.(returning.userId, returning.name)
   }
 
   return (
@@ -116,7 +146,7 @@ export default function Vault({ onSuccess, glitching }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: reduced ? 0 : 1.5, ease: 'easeOut' }}
-          className="w-full flex items-center justify-center"
+          className="w-full flex flex-col items-center justify-center gap-4"
         >
           <img
             src="/logo.svg"
@@ -127,12 +157,23 @@ export default function Vault({ onSuccess, glitching }) {
             className="w-[75vw] max-w-[384px] sm:max-w-[494px] h-auto object-contain select-none"
             draggable="false"
           />
+          {returning && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="uppercase text-center"
+              style={{ fontFamily: "'Space Mono', monospace", fontSize: '10px', color: '#ffffff', letterSpacing: '0.25em' }}
+            >
+              RECOGNIZED: MEMBER_{getFirstName(returning.name)}. ACCESS PENDING.
+            </motion.p>
+          )}
         </motion.div>
 
         {/* Breathing room between logo and form — extra 40px on mobile */}
         <div className="h-[88px] sm:h-16" aria-hidden="true" />
 
-        {/* 2. Form */}
+        {/* 2. Form / Resume */}
         <motion.div
           className="w-full"
           initial={{ opacity: 0, y: reduced ? 0 : 20 }}
@@ -140,7 +181,35 @@ export default function Vault({ onSuccess, glitching }) {
           transition={{ duration: reduced ? 0 : 0.8, ease: [0.16, 1, 0.3, 1], delay: reduced ? 0 : 1.3 }}
         >
           <AnimatePresence mode="wait">
-            {step === 'email' ? (
+            {returning ? (
+              <motion.div
+                key="returning"
+                className="flex flex-col items-center gap-4 w-full"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <button
+                  onClick={handleResume}
+                  aria-label="Resume archive access"
+                  onMouseEnter={handleBtnEnter}
+                  onMouseLeave={handleBtnLeave}
+                  className={`
+                    btn-vault w-full h-[52px]
+                    border border-white/[0.12] rounded-none
+                    text-[11px] tracking-[0.45em] uppercase
+                    transition-all duration-500 cursor-pointer
+                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
+                    ${scanning ? 'scanning' : ''}
+                  `}
+                  style={{ fontFamily: "'Space Mono', monospace" }}
+                >
+                  <span className="scanline" aria-hidden="true" />
+                  [ RESUME ARCHIVE ACCESS ]
+                </button>
+              </motion.div>
+            ) : step === 'email' ? (
               <motion.form
                 key="step-email"
                 onSubmit={handleEmailSubmit}
