@@ -48,16 +48,16 @@ export default function ArchiveEntry({ onLogout }) {
         }}
         aria-label="Technical status bar"
       >
-        <span style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}>
+        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <span style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}
+        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}
           className="hidden sm:block">
           [ ARCHIVE ENTRY: 001 ]
         </span>
-        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}>
+        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
           [ STATUS:&nbsp;
-          <span style={{ color: '#3a3a3a' }}>LIVE</span>
+          <span style={{ color: '#888' }}>LIVE</span>
           &nbsp;]
           <span className="status-dot" aria-hidden="true" />
         </span>
@@ -74,7 +74,7 @@ export default function ArchiveEntry({ onLogout }) {
           width="36" height="36"
           className="w-8 h-8 sm:w-9 sm:h-9 object-contain select-none"
           draggable="false" />
-        <p style={{ ...mono, fontSize: '7px', color: '#333', letterSpacing: '0.2em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           ARCHIVE // ENTRY_001
         </p>
       </motion.header>
@@ -116,12 +116,12 @@ export default function ArchiveEntry({ onLogout }) {
 
             {/* Labels */}
             <div className="absolute bottom-3 left-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.25em' }}>
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.25em' }}>
                 {images[activeImg].label}
               </p>
             </div>
             <div className="absolute bottom-3 right-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.2em' }}>
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.2em' }}>
                 {String(activeImg+1).padStart(2,'0')} / {String(images.length).padStart(2,'0')}
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function ArchiveEntry({ onLogout }) {
         >
 
           {/* Section label */}
-          <p style={{ ...mono, fontSize: '7px', color: '#222', letterSpacing: '0.45em' }} className="mb-8 uppercase">
+          <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-8 uppercase">
             Product Manifest
           </p>
 
@@ -166,19 +166,19 @@ export default function ArchiveEntry({ onLogout }) {
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 + i * 0.07, ease: 'easeOut' }}
-                className="flex items-start py-[14px] border-b border-white/[0.04] gap-3"
+                className="flex items-start py-[16px] border-b border-white/[0.07] gap-4"
               >
                 {/* Key */}
                 <span
                   className="shrink-0 leading-snug"
-                  style={{ ...mono, fontSize: '8px', color: '#2c2c2c', letterSpacing: '0.15em', minWidth: '160px' }}
+                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.15em', minWidth: 'min(140px, 38vw)' }}
                 >
                   [ {key} ]
                 </span>
                 {/* Value */}
                 <span
                   className="leading-snug"
-                  style={{ ...mono, fontSize: '11px', color: '#c0c0c0', letterSpacing: '0.06em' }}
+                  style={{ ...mono, fontSize: '11px', color: '#d0d0d0', letterSpacing: '0.06em' }}
                 >
                   {value}
                 </span>
@@ -255,7 +255,7 @@ export default function ArchiveEntry({ onLogout }) {
         {/* Sub-line */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.28 }}
+          animate={{ opacity: 0.45 }}
           transition={{ duration: 1.2, delay: 2.2, ease: 'easeOut' }}
           style={{
             fontFamily: "'Inter', sans-serif",
@@ -285,11 +285,11 @@ export default function ArchiveEntry({ onLogout }) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 shrink-0 px-6 sm:px-12 pb-8"
+        className="relative z-10 shrink-0 px-6 sm:px-12 pt-2 pb-10"
         aria-label="Process Archive"
       >
         {/* Section label */}
-        <p style={{ ...mono, fontSize: '7px', color: '#222', letterSpacing: '0.45em' }} className="mb-4 uppercase">
+        <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-5 uppercase">
           Process Archive
         </p>
 
@@ -336,7 +336,7 @@ export default function ArchiveEntry({ onLogout }) {
               </div>
 
               {/* Caption */}
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.12em', lineHeight: '1.6' }}>
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.12em', lineHeight: '1.6' }}>
                 {item.caption}
               </p>
             </div>
@@ -349,19 +349,19 @@ export default function ArchiveEntry({ onLogout }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1.4 }}
-        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-5 sm:py-6 border-t border-white/[0.04]"
+        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-5 sm:py-6 border-t border-white/[0.07]"
       >
-        <p style={{ ...mono, fontSize: '7px', color: '#1e1e1e', letterSpacing: '0.18em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
           [SESSION: ACTIVE]
         </p>
         <button
           onClick={onLogout}
           aria-label="Return to Vault"
           style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
-          className="text-white/15 uppercase border border-white/[0.06] px-5 min-h-[44px]
-            hover:border-white/18 hover:text-white/45
-            active:border-white/18 active:text-white/45
-            transition-all duration-500 cursor-pointer"
+          className="text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
+            hover:border-white/30 hover:text-white/60
+            active:border-white/30 active:text-white/60
+            transition-all duration-300 cursor-pointer"
         >
           [ Log Out ]
         </button>
