@@ -409,10 +409,6 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', lineHeight: '1.6' }}>
                 {item.caption}
               </p>
-              {/* Technical caption */}
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.15em', lineHeight: '1.6' }}>
-                [TIMESTAMP: {item.timestamp}]&nbsp; [FILE_REF: {item.fileRef}]
-              </p>
             </div>
           ))}
         </div>
