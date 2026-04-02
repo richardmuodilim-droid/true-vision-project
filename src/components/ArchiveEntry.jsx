@@ -188,6 +188,69 @@ export default function ArchiveEntry({ onLogout }) {
         </motion.div>
       </main>
 
+      {/* ── Process Archive ── */}
+      <motion.section
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 shrink-0 px-6 sm:px-12 pb-8"
+        aria-label="Process Archive"
+      >
+        {/* Section label */}
+        <p style={{ ...mono, fontSize: '7px', color: '#222', letterSpacing: '0.45em' }} className="mb-4 uppercase">
+          Process Archive
+        </p>
+
+        {/* Horizontal scroll strip */}
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none" style={{ scrollSnapType: 'x mandatory' }}>
+          {[
+            { caption: '[ LOC: WATERFORD / IRELAND - INITIAL SKETCH ]' },
+            { caption: '[ LOC: MILAN / ITALY - FABRIC SELECTION ]' },
+            { caption: '[ STATUS: PROTOTYPE 001 - PENDING ]' },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="shrink-0 flex flex-col gap-2"
+              style={{ scrollSnapAlign: 'start', width: 'clamp(200px, 55vw, 280px)' }}
+            >
+              {/* Placeholder image frame */}
+              <div
+                className="w-full border border-white/[0.05] relative overflow-hidden"
+                style={{
+                  aspectRatio: '4/3',
+                  background: 'linear-gradient(135deg, #0a0a0a 0%, #111 40%, #0d0d0d 100%)',
+                  filter: 'saturate(0.1) brightness(0.85)',
+                }}
+              >
+                {/* Corner marks */}
+                {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
+                  'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, j) => (
+                  <span key={j} aria-hidden="true" className={`absolute w-3 h-3 border-white/10 ${c}`} />
+                ))}
+                {/* Index stamp */}
+                <span
+                  aria-hidden="true"
+                  className="absolute top-3 left-3"
+                  style={{ ...mono, fontSize: '7px', color: '#1a1a1a', letterSpacing: '0.2em' }}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {/* Center crosshair */}
+                <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center opacity-10">
+                  <div className="w-4 h-px bg-white" />
+                  <div className="absolute w-px h-4 bg-white" />
+                </div>
+              </div>
+
+              {/* Caption */}
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.12em', lineHeight: '1.6' }}>
+                {item.caption}
+              </p>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
       {/* ── Footer ── */}
       <motion.footer
         initial={{ opacity: 0 }}
