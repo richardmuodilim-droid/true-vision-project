@@ -65,7 +65,7 @@ export default function Vault({ onSuccess, glitching }) {
   }
 
   return (
-    <main className={`relative min-h-[100dvh] w-full bg-[#000000] flex flex-col items-center justify-center overflow-hidden${glitching ? ' vault-glitch' : ''}`}>
+    <main className={`relative min-h-[100dvh] w-full bg-[#000000] flex flex-col items-center overflow-hidden${glitching ? ' vault-glitch' : ''}`}>
 
       {/* Background layers */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
@@ -76,10 +76,11 @@ export default function Vault({ onSuccess, glitching }) {
         style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.92) 100%)' }} />
       <div aria-hidden="true" className="grain" />
 
-      {/* Content — full width with safe horizontal padding */}
-      <div className="relative z-10 flex flex-col items-center w-full px-6 sm:px-10" style={{ maxWidth: '560px' }}>
+      {/* ── Centre section — grows to fill available space ── */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-6 sm:px-10 py-12 sm:py-16"
+        style={{ maxWidth: '560px' }}>
 
-        {/* 1. Logo — larger, responsive, visually dominant */}
+        {/* 1. Logo */}
         <motion.div
           aria-label="True Vision Project"
           initial={{ opacity: 0 }}
@@ -98,8 +99,8 @@ export default function Vault({ onSuccess, glitching }) {
           />
         </motion.div>
 
-        {/* Spacer */}
-        <div className="h-14 sm:h-20" aria-hidden="true" />
+        {/* Breathing room between logo and form */}
+        <div className="h-12 sm:h-16" aria-hidden="true" />
 
         {/* 2. Form */}
         <motion.div
@@ -200,9 +201,9 @@ export default function Vault({ onSuccess, glitching }) {
         </motion.div>
       </div>
 
-      {/* 3. Footer — shortened for mobile, types in last */}
+      {/* ── Footer — always in flow, never absolute ── */}
       <p
-        className="absolute bottom-6 z-10 w-full text-center px-4 min-h-[1em]"
+        className="relative z-10 w-full text-center px-4 pb-7 pt-2 min-h-[1em] shrink-0"
         style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#555', letterSpacing: '0.12em' }}
         aria-label={FOOTER_TEXT}
       >
