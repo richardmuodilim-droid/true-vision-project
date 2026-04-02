@@ -167,15 +167,22 @@ export default function ArchiveEntry({ onLogout }) {
             aria-hidden="true"
           />
 
-          {/* Statement */}
+          {/* Serif statement */}
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.2 }}
-            style={{ ...mono, fontSize: '12px', color: '#fff', letterSpacing: '0.07em', lineHeight: '2.2' }}
-            className="uppercase font-bold"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 0.7, y: 0 }}
+            transition={{ duration: 1.1, delay: 1.2, ease: 'easeOut' }}
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontStyle: 'italic',
+              fontSize: '17px',
+              color: '#ffffff',
+              lineHeight: '1.85',
+              opacity: 0.7,
+            }}
+            className="text-center md:text-left"
           >
-            Two small towns.<br />One fire.<br />Built from nothing.
+            Two small towns. One fire. A project born from relentless effort and the refusal to settle for average.
           </motion.p>
 
         </motion.div>
