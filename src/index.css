@@ -178,3 +178,19 @@
 @media (prefers-reduced-motion: reduce) {
   .grain { animation: none; }
 }
+
+/* Live archive feed marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}

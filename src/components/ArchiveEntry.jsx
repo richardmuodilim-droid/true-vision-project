@@ -385,6 +385,23 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         </div>
       </motion.section>
 
+      {/* ── Live Archive Feed ── */}
+      <div
+        className="relative z-10 shrink-0 w-full overflow-hidden border-t border-white/[0.05] py-2"
+        aria-hidden="true"
+      >
+        <div className="marquee-track" style={{ opacity: 0.4 }}>
+          {[0, 1].map(i => (
+            <span
+              key={i}
+              style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#ffffff', letterSpacing: '0.2em', whiteSpace: 'nowrap', paddingRight: '4rem' }}
+            >
+              [ CONNECTION_SECURE ] &nbsp;&nbsp;...&nbsp;&nbsp; [ WEXFORD_ARCHIVE_SYNCED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ BERGAMO_TEXTILE_VERIFIED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ DROP_001_PENDING ] &nbsp;&nbsp;...&nbsp;&nbsp; [ RELENTLESS_EFFORT_REQUIRED ] &nbsp;&nbsp;...&nbsp;&nbsp;
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* ── Footer ── */}
       <motion.footer
         initial={{ opacity: 0 }}
