@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Blinking status dot */
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.status-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: blink-dot 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-dot { animation: none; }
+}
+
 /* Hide scrollbar while keeping scroll functionality */
 .scrollbar-none {
   -ms-overflow-style: none;

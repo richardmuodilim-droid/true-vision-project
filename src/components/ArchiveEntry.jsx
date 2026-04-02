@@ -35,12 +35,40 @@ export default function ArchiveEntry({ onLogout }) {
         style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.8) 90%, #000 100%)' }} />
       <div aria-hidden="true" className="grain" />
 
+      {/* ── Sticky Technical Header ── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8"
+        style={{
+          height: '32px',
+          background: '#000',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}
+        aria-label="Technical status bar"
+      >
+        <span style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}>
+          [ TRUE VISION PROJECT ]
+        </span>
+        <span style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}
+          className="hidden sm:block">
+          [ ARCHIVE ENTRY: 001 ]
+        </span>
+        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.18em' }}>
+          [ STATUS:&nbsp;
+          <span style={{ color: '#3a3a3a' }}>LIVE</span>
+          &nbsp;]
+          <span className="status-dot" aria-hidden="true" />
+        </span>
+      </motion.div>
+
       {/* ── Header ── */}
       <motion.header
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2 }}
-        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 pt-7"
+        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 pt-7 mt-8"
       >
         <img src="/logo-archive.svg" alt="True Vision Project"
           width="36" height="36"
