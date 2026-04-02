@@ -99,8 +99,8 @@ export default function Vault({ onSuccess, glitching }) {
           />
         </motion.div>
 
-        {/* Breathing room between logo and form */}
-        <div className="h-12 sm:h-16" aria-hidden="true" />
+        {/* Breathing room between logo and form — extra 40px on mobile */}
+        <div className="h-[88px] sm:h-16" aria-hidden="true" />
 
         {/* 2. Form */}
         <motion.div

@@ -48,10 +48,10 @@ export default function ArchiveEntry({ onLogout }) {
         }}
         aria-label="Technical status bar"
       >
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
+        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}
+        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
           className="hidden sm:block">
           [ ARCHIVE ENTRY: 001 ]
         </span>
@@ -171,7 +171,7 @@ export default function ArchiveEntry({ onLogout }) {
                 {/* Key */}
                 <span
                   className="shrink-0 leading-snug"
-                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.15em', minWidth: 'min(140px, 38vw)' }}
+                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.2em', minWidth: 'min(140px, 38vw)' }}
                 >
                   [ {key} ]
                 </span>
@@ -245,7 +245,7 @@ export default function ArchiveEntry({ onLogout }) {
             fontSize: 'clamp(22px, 5.5vw, 42px)',
             color: '#ffffff',
             lineHeight: '1.25',
-            letterSpacing: '0.02em',
+            letterSpacing: '-0.03em',
             maxWidth: '780px',
           }}
         >
@@ -262,7 +262,7 @@ export default function ArchiveEntry({ onLogout }) {
             fontWeight: 300,
             fontSize: '11px',
             color: '#ffffff',
-            letterSpacing: '0.22em',
+            letterSpacing: '0.2em',
             marginTop: '28px',
           }}
           className="uppercase"
@@ -307,8 +307,8 @@ export default function ArchiveEntry({ onLogout }) {
             >
               {/* Image frame */}
               <div
-                className="w-full border border-white/[0.05] relative overflow-hidden"
-                style={{ aspectRatio: '4/3' }}
+                className="w-full relative overflow-hidden"
+                style={{ aspectRatio: '4/3', border: '1px solid #1a1a1a' }}
               >
                 {/* Corner marks */}
                 {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
@@ -336,7 +336,7 @@ export default function ArchiveEntry({ onLogout }) {
               </div>
 
               {/* Caption */}
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.12em', lineHeight: '1.6' }}>
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', lineHeight: '1.6' }}>
                 {item.caption}
               </p>
             </div>
@@ -351,7 +351,7 @@ export default function ArchiveEntry({ onLogout }) {
         transition={{ duration: 0.6, delay: 1.4 }}
         className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-5 sm:py-6 border-t border-white/[0.07]"
       >
-        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           [SESSION: ACTIVE]
         </p>
         <button
