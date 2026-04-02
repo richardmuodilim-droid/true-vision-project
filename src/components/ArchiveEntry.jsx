@@ -18,7 +18,7 @@ const images = [
 
 const mono = { fontFamily: "'Space Mono', monospace" }
 
-export default function ArchiveEntry({ onLogout }) {
+export default function ArchiveEntry({ onLogout, userId }) {
   const [activeImg, setActiveImg] = useState(0)
 
   return (
@@ -78,6 +78,26 @@ export default function ArchiveEntry({ onLogout }) {
           ARCHIVE // ENTRY_001
         </p>
       </motion.header>
+
+      {/* ── Member ID badge ── */}
+      {userId && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="relative z-10 flex items-center justify-center px-6 sm:px-12 pb-2"
+        >
+          <div className="flex items-center gap-3 border border-white/[0.08] px-5 py-2">
+            <span className="status-dot" aria-hidden="true" />
+            <span style={{ ...mono, fontSize: '8px', color: '#888', letterSpacing: '0.2em' }}>
+              MEMBER ID:&nbsp;
+            </span>
+            <span style={{ ...mono, fontSize: '9px', color: '#d0d0d0', letterSpacing: '0.2em' }}>
+              {userId}
+            </span>
+          </div>
+        </motion.div>
+      )}
 
       {/* ── Main ── */}
       <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 px-6 sm:px-12 pt-8 md:pt-10 pb-6">

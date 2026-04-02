@@ -60,8 +60,23 @@ export default function Vault({ onSuccess, glitching }) {
     }
     setStatus('loading')
     setErrorMsg('')
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    onSuccess?.()
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmed }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setErrorMsg('Something went wrong. Try again.')
+        setStatus('error')
+        return
+      }
+      onSuccess?.(data.userId)
+    } catch {
+      setErrorMsg('Connection error. Try again.')
+      setStatus('error')
+    }
   }
 
   return (
