@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const specs = [
-  { label: 'PROJECT ID', value: '001' },
-  { label: 'PRODUCT',    value: 'THE FOUNDATION CAP' },
-  { label: 'FABRIC',     value: '300GSM WASHED COTTON' },
-  { label: 'HARDWARE',   value: 'METAL SLIDER' },
-  { label: 'STATUS',     value: 'IN PRODUCTION' },
+const manifest = [
+  { key: 'PROJECT ID',  value: '001' },
+  { key: 'OBJECT',      value: 'THE FOUNDATION CAP' },
+  { key: 'COMPOSITION', value: '300GSM WASHED CHINO TWILL' },
+  { key: 'HARDWARE',    value: 'CUSTOM METAL SLIDER' },
+  { key: 'ORIGIN',      value: 'IRELAND / ITALY' },
+  { key: 'STATUS',      value: 'IN PRODUCTION' },
 ]
 
 const images = [
-  { src: '/product-1.png', alt: 'Foundation Cap — Front view' },
-  { src: '/product-3.png', alt: 'Foundation Cap — 3/4 angle view' },
-  { src: '/product-2.png', alt: 'Foundation Cap — Back view, Built From Nothing' },
+  { src: '/product-1.png', label: 'FRONT' },
+  { src: '/product-3.png', label: '3/4' },
+  { src: '/product-2.png', label: 'BACK' },
 ]
 
 const mono = { fontFamily: "'Space Mono', monospace" }
@@ -22,89 +23,78 @@ export default function ArchiveEntry({ onLogout }) {
 
   return (
     <motion.div
-      className="relative min-h-[100dvh] w-full bg-[#000000] text-white flex flex-col"
+      className="relative min-h-[100dvh] w-full bg-[#000] text-white flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      transition={{ duration: 0.9, ease: 'easeOut' }}
     >
       {/* Background */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 60% 45% at 50% -5%, rgba(255,255,255,0.03) 0%, transparent 100%)' }} />
+        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 100%)' }} />
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.65) 85%, rgba(0,0,0,0.97) 100%)' }} />
+        style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.8) 90%, #000 100%)' }} />
       <div aria-hidden="true" className="grain" />
 
-      {/* Header */}
+      {/* ── Header ── */}
       <motion.header
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-        className="relative z-10 flex items-center justify-between px-6 sm:px-12 pt-7 pb-0 shrink-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 pt-7"
       >
-        <img
-          src="/logo-archive.svg"
-          alt="True Vision Project"
-          width="40"
-          height="40"
-          className="w-9 h-9 object-contain select-none"
-          draggable="false"
-        />
-        <p style={{ ...mono, fontSize: '8px', color: '#3a3a3a', letterSpacing: '0.15em' }}>
+        <img src="/logo-archive.svg" alt="True Vision Project"
+          width="36" height="36"
+          className="w-8 h-8 sm:w-9 sm:h-9 object-contain select-none"
+          draggable="false" />
+        <p style={{ ...mono, fontSize: '7px', color: '#333', letterSpacing: '0.2em' }}>
           ARCHIVE // ENTRY_001
         </p>
       </motion.header>
 
-      {/* Main grid */}
-      <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 px-6 sm:px-12 pt-8 pb-6 gap-8 md:gap-12">
+      {/* ── Main ── */}
+      <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 px-6 sm:px-12 pt-8 md:pt-10 pb-6">
 
-        {/* ── Left: Image Gallery ── */}
+        {/* Left — image gallery */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col gap-3"
+          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col gap-2 md:pr-10 mb-8 md:mb-0"
         >
           {/* Main image */}
-          <div className="relative w-full aspect-square sm:aspect-[4/3] md:aspect-[4/5] overflow-hidden bg-[#080808]">
-            {/* Corner markers */}
-            {[
-              'top-0 left-0 border-t border-l',
-              'top-0 right-0 border-t border-r',
-              'bottom-0 left-0 border-b border-l',
-              'bottom-0 right-0 border-b border-r',
-            ].map((cls, i) => (
-              <span key={i} aria-hidden="true"
-                className={`absolute w-5 h-5 border-white/15 z-10 ${cls}`} />
+          <div className="relative w-full aspect-square sm:aspect-[3/2] md:aspect-[4/5] overflow-hidden bg-[#050505]"
+            style={{ filter: 'saturate(0.15) brightness(0.92)' }}>
+
+            {/* Corner marks */}
+            {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
+              'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c,i)=>(
+              <span key={i} aria-hidden="true" className={`absolute w-5 h-5 border-white/10 z-10 ${c}`}/>
             ))}
 
             <AnimatePresence mode="wait">
               <motion.img
                 key={activeImg}
                 src={images[activeImg].src}
-                alt={images[activeImg].alt}
-                width="800"
-                height="800"
-                loading="eager"
-                initial={{ opacity: 0, scale: 1.03 }}
+                alt={`Foundation Cap — ${images[activeImg].label}`}
+                width="900" height="900"
+                initial={{ opacity: 0, scale: 1.04 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full h-full object-cover object-center select-none"
                 draggable="false"
               />
             </AnimatePresence>
 
-            {/* Shot label */}
+            {/* Labels */}
             <div className="absolute bottom-3 left-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.25em' }}>
-                {activeImg === 0 ? 'FRONT' : activeImg === 1 ? '3/4 ANGLE' : 'BACK'}
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.25em' }}>
+                {images[activeImg].label}
               </p>
             </div>
-
-            {/* Image counter */}
             <div className="absolute bottom-3 right-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>
-                {String(activeImg + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.2em' }}>
+                {String(activeImg+1).padStart(2,'0')} / {String(images.length).padStart(2,'0')}
               </p>
             </div>
           </div>
@@ -112,108 +102,103 @@ export default function ArchiveEntry({ onLogout }) {
           {/* Thumbnails */}
           <div className="flex gap-2">
             {images.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveImg(i)}
-                aria-label={img.alt}
-                aria-pressed={activeImg === i}
-                className={`
-                  relative flex-1 aspect-square overflow-hidden
-                  border transition-all duration-400 cursor-pointer
-                  ${activeImg === i
-                    ? 'border-white/40'
-                    : 'border-white/[0.06] hover:border-white/20 opacity-50 hover:opacity-80'
-                  }
-                `}
+              <button key={i} onClick={() => setActiveImg(i)}
+                aria-label={`View ${img.label}`} aria-pressed={activeImg === i}
+                className={`relative flex-1 aspect-square overflow-hidden border transition-all duration-300 cursor-pointer
+                  ${activeImg === i ? 'border-white/30 opacity-100' : 'border-white/[0.05] opacity-35 hover:opacity-65 hover:border-white/15'}`}
+                style={{ filter: 'saturate(0.1)' }}
               >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  loading="lazy"
-                  width="200"
-                  height="200"
+                <img src={img.src} alt={img.label} loading="lazy"
+                  width="200" height="200"
                   className="w-full h-full object-cover object-center select-none"
-                  draggable="false"
-                />
+                  draggable="false" />
               </button>
             ))}
           </div>
         </motion.div>
 
-        {/* ── Right: Spec block ── */}
+        {/* Right — manifest */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col justify-center md:pl-8 md:border-l border-white/[0.04]"
+          transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col justify-center md:pl-10 md:border-l border-white/[0.04]"
         >
-          {/* Label */}
-          <p style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.4em' }} className="mb-8 uppercase">
-            Technical Specification
+
+          {/* Section label */}
+          <p style={{ ...mono, fontSize: '7px', color: '#222', letterSpacing: '0.45em' }} className="mb-8 uppercase">
+            Product Manifest
           </p>
 
-          {/* Spec rows */}
+          {/* Manifest rows */}
           <div className="flex flex-col mb-10 sm:mb-14">
-            {specs.map(({ label, value }, i) => (
+            {manifest.map(({ key, value }, i) => (
               <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 + i * 0.07, ease: 'easeOut' }}
-                className="flex flex-col sm:flex-row sm:items-center py-4 border-b border-white/[0.05] gap-1"
+                key={key}
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.55 + i * 0.07, ease: 'easeOut' }}
+                className="flex items-start py-[14px] border-b border-white/[0.04] gap-3"
               >
+                {/* Key */}
                 <span
-                  className="shrink-0 sm:w-[148px]"
-                  style={{ ...mono, fontSize: '7px', color: '#2e2e2e', letterSpacing: '0.2em' }}
+                  className="shrink-0 leading-snug"
+                  style={{ ...mono, fontSize: '8px', color: '#2c2c2c', letterSpacing: '0.15em', minWidth: '160px' }}
                 >
-                  [{label}]
+                  [ {key} ]
                 </span>
-                <span style={{ ...mono, fontSize: '11px', color: '#aaaaaa', letterSpacing: '0.08em' }}>
+                {/* Value */}
+                <span
+                  className="leading-snug"
+                  style={{ ...mono, fontSize: '11px', color: '#c0c0c0', letterSpacing: '0.06em' }}
+                >
                   {value}
                 </span>
               </motion.div>
             ))}
           </div>
 
-          {/* Divider */}
-          <div className="w-8 h-px bg-white/10 mb-10" aria-hidden="true" />
+          {/* Rule */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="origin-left w-10 h-px bg-white/10 mb-10"
+            aria-hidden="true"
+          />
 
           {/* Statement */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.1, ease: 'easeOut' }}
-            style={{ ...mono, fontSize: '13px', color: '#ffffff', letterSpacing: '0.06em', lineHeight: '2.1' }}
+            transition={{ duration: 0.9, delay: 1.2 }}
+            style={{ ...mono, fontSize: '12px', color: '#fff', letterSpacing: '0.07em', lineHeight: '2.2' }}
             className="uppercase font-bold"
           >
             Two small towns.<br />One fire.<br />Built from nothing.
           </motion.p>
+
         </motion.div>
       </main>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.3, ease: 'easeOut' }}
-        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-6 border-t border-white/[0.04]"
+        transition={{ duration: 0.6, delay: 1.4 }}
+        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-5 sm:py-6 border-t border-white/[0.04]"
       >
-        <p style={{ ...mono, fontSize: '8px', color: '#222', letterSpacing: '0.15em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: '#1e1e1e', letterSpacing: '0.18em' }}>
           [SESSION: ACTIVE]
         </p>
-
         <button
           onClick={onLogout}
           aria-label="Return to Vault"
-          style={{ ...mono, fontSize: '9px', letterSpacing: '0.3em' }}
-          className="
-            text-white/20 uppercase
-            border border-white/[0.07]
-            px-5 py-3 min-h-[44px]
-            hover:border-white/20 hover:text-white/50
-            active:border-white/20 active:text-white/50
-            transition-all duration-500 cursor-pointer
-          "
+          style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
+          className="text-white/15 uppercase border border-white/[0.06] px-5 min-h-[44px]
+            hover:border-white/18 hover:text-white/45
+            active:border-white/18 active:text-white/45
+            transition-all duration-500 cursor-pointer"
         >
           [ Log Out ]
         </button>
