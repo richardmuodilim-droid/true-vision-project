@@ -14,28 +14,29 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { email } = req.body ?? {}
+  const { email, name } = req.body ?? {}
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email' })
   }
 
   const normalised = email.toLowerCase().trim()
+  const normalisedName = (name ?? '').trim()
 
   // Return existing entry if already registered
   const existing = await kv.hget('tvp:emails', normalised)
   if (existing) {
     const entry = typeof existing === 'string' ? JSON.parse(existing) : existing
-    return res.status(200).json({ userId: entry.userId, returning: true })
+    return res.status(200).json({ userId: entry.userId, name: entry.name ?? '', returning: true })
   }
 
   // Generate unique ID and store
   const memberNumber = await kv.incr('tvp:count')
   const userId = generateUserId()
   const timestamp = new Date().toISOString()
-  const entry = { email: normalised, userId, timestamp, memberNumber }
+  const entry = { email: normalised, name: normalisedName, userId, timestamp, memberNumber }
 
   await kv.hset('tvp:emails', { [normalised]: JSON.stringify(entry) })
   await kv.lpush('tvp:members', JSON.stringify(entry))
 
-  return res.status(200).json({ userId, memberNumber })
+  return res.status(200).json({ userId, name: normalisedName, memberNumber })
 }

@@ -18,7 +18,17 @@ const images = [
 
 const mono = { fontFamily: "'Space Mono', monospace" }
 
-export default function ArchiveEntry({ onLogout, userId }) {
+function formatMemberTag(name) {
+  if (!name) return 'PROJECT_MEMBER_TVP001'
+  return name.trim().toUpperCase().replace(/\s+/g, '_') + '_TVP001'
+}
+
+function getFirstName(name) {
+  if (!name) return 'MEMBER'
+  return name.trim().split(/\s+/)[0].toUpperCase()
+}
+
+export default function ArchiveEntry({ onLogout, userId, memberName }) {
   const [activeImg, setActiveImg] = useState(0)
 
   return (
@@ -53,7 +63,7 @@ export default function ArchiveEntry({ onLogout, userId }) {
         </span>
         <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
           className="hidden sm:block">
-          [ ARCHIVE ENTRY: 001 ]
+          [ PROJECT_MEMBER: {formatMemberTag(memberName)} ]
         </span>
         <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
           [ STATUS:&nbsp;
@@ -98,6 +108,17 @@ export default function ArchiveEntry({ onLogout, userId }) {
           </div>
         </motion.div>
       )}
+
+      {/* ── Welcome Greeting ── */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
+        className="relative z-10 text-center uppercase"
+        style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em', color: '#ffffff', paddingBottom: '4px' }}
+      >
+        WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
+      </motion.p>
 
       {/* ── Main ── */}
       <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 px-6 sm:px-12 pt-8 md:pt-10 pb-6">

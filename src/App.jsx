@@ -13,9 +13,11 @@ const isAdminRoute =
 export default function App() {
   const [screen, setScreen] = useState('vault')
   const [userId, setUserId] = useState(null)
+  const [memberName, setMemberName] = useState('')
 
-  const handleSuccess = useCallback((id) => {
+  const handleSuccess = useCallback((id, name) => {
     setUserId(id)
+    setMemberName(name ?? '')
     setScreen('decrypting')
   }, [])
 
@@ -25,6 +27,7 @@ export default function App() {
 
   const handleLogout = useCallback(() => {
     setUserId(null)
+    setMemberName('')
     setScreen('vault')
   }, [])
 
@@ -35,7 +38,7 @@ export default function App() {
   }
 
   if (screen === 'archive') {
-    return <ArchiveEntry onLogout={handleLogout} userId={userId} />
+    return <ArchiveEntry onLogout={handleLogout} userId={userId} memberName={memberName} />
   }
 
   return <Vault onSuccess={handleSuccess} />
