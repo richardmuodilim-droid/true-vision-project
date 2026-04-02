@@ -77,7 +77,7 @@ export default function Vault({ onSuccess, glitching }) {
       <div aria-hidden="true" className="grain" />
 
       {/* Content — full width with safe horizontal padding */}
-      <div className="relative z-10 flex flex-col items-center w-full px-6 sm:px-10" style={{ maxWidth: '420px' }}>
+      <div className="relative z-10 flex flex-col items-center w-full px-6 sm:px-10" style={{ maxWidth: '560px' }}>
 
         {/* 1. Logo — larger, responsive, visually dominant */}
         <motion.div
@@ -93,13 +93,13 @@ export default function Vault({ onSuccess, glitching }) {
             width="400"
             height="400"
             style={{ filter: 'invert(1)' }}
-            className="w-[75vw] max-w-[320px] sm:max-w-[380px] h-auto object-contain select-none"
+            className="w-[75vw] max-w-[384px] sm:max-w-[494px] h-auto object-contain select-none"
             draggable="false"
           />
         </motion.div>
 
         {/* Spacer */}
-        <div className="h-10 sm:h-14" aria-hidden="true" />
+        <div className="h-14 sm:h-20" aria-hidden="true" />
 
         {/* 2. Form */}
         <motion.div

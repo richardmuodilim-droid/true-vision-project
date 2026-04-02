@@ -296,8 +296,8 @@ export default function ArchiveEntry({ onLogout }) {
         {/* Horizontal scroll strip */}
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none" style={{ scrollSnapType: 'x mandatory' }}>
           {[
-            { caption: '[ LOC: WATERFORD / IRELAND - INITIAL SKETCH ]' },
-            { caption: '[ LOC: MILAN / ITALY - FABRIC SELECTION ]' },
+            { caption: '[ LOC: WEXFORD / IRELAND - INITIAL CONCEPT ]' },
+            { caption: '[ LOC: BERGAMO / ITALY - TEXTILE SELECTION ]' },
             { caption: '[ STATUS: PROTOTYPE 001 - PENDING ]' },
           ].map((item, i) => (
             <div
