@@ -296,42 +296,43 @@ export default function ArchiveEntry({ onLogout }) {
         {/* Horizontal scroll strip */}
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none" style={{ scrollSnapType: 'x mandatory' }}>
           {[
-            { caption: '[ LOC: WEXFORD / IRELAND - INITIAL CONCEPT ]' },
-            { caption: '[ LOC: BERGAMO / ITALY - TEXTILE SELECTION ]' },
-            { caption: '[ STATUS: PROTOTYPE 001 - PENDING ]' },
+            { src: '/process-1.png', caption: '[ LOC: WEXFORD / IRELAND - INITIAL CONCEPT ]' },
+            { src: '/process-2.png', caption: '[ LOC: BERGAMO / ITALY - TEXTILE SELECTION ]' },
+            { src: '/process-3.png', caption: '[ STATUS: PROTOTYPE 001 - PENDING ]' },
           ].map((item, i) => (
             <div
               key={i}
               className="shrink-0 flex flex-col gap-2"
               style={{ scrollSnapAlign: 'start', width: 'clamp(200px, 55vw, 280px)' }}
             >
-              {/* Placeholder image frame */}
+              {/* Image frame */}
               <div
                 className="w-full border border-white/[0.05] relative overflow-hidden"
-                style={{
-                  aspectRatio: '4/3',
-                  background: 'linear-gradient(135deg, #0a0a0a 0%, #111 40%, #0d0d0d 100%)',
-                  filter: 'saturate(0.1) brightness(0.85)',
-                }}
+                style={{ aspectRatio: '4/3' }}
               >
                 {/* Corner marks */}
                 {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
                   'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, j) => (
-                  <span key={j} aria-hidden="true" className={`absolute w-3 h-3 border-white/10 ${c}`} />
+                  <span key={j} aria-hidden="true" className={`absolute w-3 h-3 border-white/10 z-10 ${c}`} />
                 ))}
                 {/* Index stamp */}
                 <span
                   aria-hidden="true"
-                  className="absolute top-3 left-3"
-                  style={{ ...mono, fontSize: '7px', color: '#1a1a1a', letterSpacing: '0.2em' }}
+                  className="absolute top-3 left-3 z-10"
+                  style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em' }}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                {/* Center crosshair */}
-                <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center opacity-10">
-                  <div className="w-4 h-px bg-white" />
-                  <div className="absolute w-px h-4 bg-white" />
-                </div>
+                <img
+                  src={item.src}
+                  alt={item.caption}
+                  loading="lazy"
+                  width="560"
+                  height="420"
+                  className="w-full h-full object-cover object-center select-none"
+                  draggable="false"
+                  style={{ filter: 'saturate(0.08) brightness(0.82) contrast(1.1)' }}
+                />
               </div>
 
               {/* Caption */}
