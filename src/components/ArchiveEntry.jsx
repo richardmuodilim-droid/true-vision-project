@@ -112,9 +112,8 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 pt-7 mt-8"
       >
         <img src="/logo-archive.svg" alt="True Vision Project"
-          width="44" height="44"
-          className="w-9 h-9 sm:w-11 sm:h-11 object-contain select-none"
-          style={{ paddingBottom: '20px' }}
+          width="80" height="80"
+          className="w-16 h-16 sm:w-14 sm:h-14 object-contain select-none mb-3 sm:mb-2"
           draggable="false" />
         <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
           ARCHIVE // ENTRY_001
