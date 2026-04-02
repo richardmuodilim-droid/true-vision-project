@@ -146,15 +146,15 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
         transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
-        className="relative z-10 text-center uppercase"
-        style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em', color: '#ffffff', paddingBottom: '4px',
+        className="relative z-10 text-center uppercase px-4 sm:px-0"
+        style={{ ...mono, fontSize: 'clamp(8px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#ffffff', paddingBottom: '4px',
           textShadow: '0 0 12px rgba(255,255,255,0.35), 0 0 28px rgba(255,255,255,0.12)' }}
       >
         WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
       </motion.p>
 
       {/* ── Main ── */}
-      <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 px-6 sm:px-12 pt-8 md:pt-10 pb-6">
+      <main className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 px-4 sm:px-12 pt-6 md:pt-10 pb-6">
 
         {/* Left — image gallery */}
         <motion.div
@@ -362,7 +362,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 shrink-0 px-6 sm:px-12 pt-2 pb-10"
+        className="relative z-10 shrink-0 px-4 sm:px-12 pt-2 pb-10"
         aria-label="Process Archive"
       >
         {/* Section label */}
@@ -375,8 +375,8 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           {processItems.map((item, i) => (
             <div
               key={i}
-              className="shrink-0 flex flex-col gap-2"
-              style={{ scrollSnapAlign: 'start', width: 'clamp(200px, 55vw, 280px)' }}
+              className="w-full sm:w-[280px] sm:shrink-0 flex flex-col gap-2"
+              style={{ scrollSnapAlign: 'start' }}
             >
               {/* Image frame */}
               <div
@@ -441,33 +441,34 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1.4 }}
-        className="relative z-10 shrink-0 flex items-center justify-between px-6 sm:px-12 py-5 sm:py-6 border-t border-white/[0.07]"
+        className="relative z-10 shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-12 py-4 sm:py-6 border-t border-white/[0.07]"
       >
-        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
+          className="text-center sm:text-left">
           [SESSION: ACTIVE]
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={handleDisconnect}
             aria-label="Disconnect member and clear access"
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.22em' }}
-            className="btn-archive text-white/20 uppercase border border-white/[0.06] px-4 min-h-[44px]
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.14em' }}
+            className="btn-archive flex-1 sm:flex-none text-white/20 uppercase border border-white/[0.06] px-3 sm:px-4 min-h-[44px]
               hover:border-red-900/50 hover:text-red-400/50
               transition-all duration-300 cursor-pointer"
           >
             <span className="scanline" aria-hidden="true" />
-            [ DISCONNECT_MEMBER ]
+            [ DISCONNECT ]
           </button>
           <button
             onClick={onLogout}
             aria-label="Return to Vault"
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
-            className="btn-archive text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em' }}
+            className="btn-archive flex-1 sm:flex-none text-white/30 uppercase border border-white/[0.12] px-3 sm:px-5 min-h-[44px]
               hover:border-white/30 hover:text-white/60
               transition-all duration-300 cursor-pointer"
           >
             <span className="scanline" aria-hidden="true" />
-            [ Log Out ]
+            [ LOG OUT ]
           </button>
         </div>
       </motion.footer>
