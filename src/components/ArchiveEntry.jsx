@@ -7,7 +7,28 @@ const manifest = [
   { key: 'COMPOSITION', value: '300GSM WASHED CHINO TWILL' },
   { key: 'HARDWARE',    value: 'CUSTOM METAL SLIDER' },
   { key: 'ORIGIN',      value: 'IRELAND / ITALY' },
-  { key: 'STATUS',      value: 'IN PRODUCTION' },
+  { key: 'STATUS',      value: 'IN PRODUCTION', live: true },
+]
+
+const processItems = [
+  {
+    src: '/process-1.png',
+    caption: '[ LOC: WEXFORD / IRELAND - INITIAL CONCEPT ]',
+    timestamp: '2026.01.14_09:32',
+    fileRef: 'TVP-ARCHIVE-001',
+  },
+  {
+    src: '/process-2.png',
+    caption: '[ LOC: BERGAMO / ITALY - TEXTILE SELECTION ]',
+    timestamp: '2026.02.03_14:17',
+    fileRef: 'TVP-ARCHIVE-002',
+  },
+  {
+    src: '/process-3.png',
+    caption: '[ STATUS: PROTOTYPE 001 - PENDING ]',
+    timestamp: '2026.03.21_11:45',
+    fileRef: 'TVP-ARCHIVE-003',
+  },
 ]
 
 const images = [
@@ -61,9 +82,8 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 h-[26px] sm:h-8"
         style={{
-          height: '32px',
           background: '#000',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
@@ -127,7 +147,8 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         animate={{ opacity: 0.6 }}
         transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
         className="relative z-10 text-center uppercase"
-        style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em', color: '#ffffff', paddingBottom: '4px' }}
+        style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em', color: '#ffffff', paddingBottom: '4px',
+          textShadow: '0 0 12px rgba(255,255,255,0.35), 0 0 28px rgba(255,255,255,0.12)' }}
       >
         WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
       </motion.p>
@@ -213,7 +234,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
           {/* Manifest rows */}
           <div className="flex flex-col mb-10 sm:mb-14">
-            {manifest.map(({ key, value }, i) => (
+            {manifest.map(({ key, value, live }, i) => (
               <motion.div
                 key={key}
                 initial={{ opacity: 0, x: -6 }}
@@ -224,17 +245,20 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                 {/* Key */}
                 <span
                   className="shrink-0 leading-snug"
-                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.2em', minWidth: 'min(140px, 38vw)' }}
+                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.25em', minWidth: 'min(140px, 38vw)' }}
                 >
                   [ {key} ]
                 </span>
                 {/* Value */}
-                <span
-                  className="leading-snug"
-                  style={{ ...mono, fontSize: '11px', color: '#d0d0d0', letterSpacing: '0.06em' }}
-                >
-                  {value}
-                </span>
+                {live ? (
+                  <span className="leading-snug status-live" style={{ ...mono, fontSize: '11px', letterSpacing: '0.06em' }}>
+                    {value}
+                  </span>
+                ) : (
+                  <span className="leading-snug" style={{ ...mono, fontSize: '11px', color: '#d0d0d0', letterSpacing: '0.06em' }}>
+                    {value}
+                  </span>
+                )}
               </motion.div>
             ))}
           </div>
@@ -346,13 +370,9 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           Process Archive
         </p>
 
-        {/* Horizontal scroll strip */}
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none" style={{ scrollSnapType: 'x mandatory' }}>
-          {[
-            { src: '/process-1.png', caption: '[ LOC: WEXFORD / IRELAND - INITIAL CONCEPT ]' },
-            { src: '/process-2.png', caption: '[ LOC: BERGAMO / ITALY - TEXTILE SELECTION ]' },
-            { src: '/process-3.png', caption: '[ STATUS: PROTOTYPE 001 - PENDING ]' },
-          ].map((item, i) => (
+        {/* Mobile: vertical stack / Desktop: horizontal scroll */}
+        <div className="flex flex-col sm:flex-row gap-6 sm:gap-3 sm:overflow-x-auto pb-2 scrollbar-none" style={{ scrollSnapType: 'x mandatory' }}>
+          {processItems.map((item, i) => (
             <div
               key={i}
               className="shrink-0 flex flex-col gap-2"
@@ -363,12 +383,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                 className="w-full relative overflow-hidden"
                 style={{ aspectRatio: '4/3', border: '1px solid #1a1a1a' }}
               >
-                {/* Corner marks */}
                 {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
                   'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, j) => (
                   <span key={j} aria-hidden="true" className={`absolute w-3 h-3 border-white/10 z-10 ${c}`} />
                 ))}
-                {/* Index stamp */}
                 <span
                   aria-hidden="true"
                   className="absolute top-3 left-3 z-10"
@@ -391,6 +409,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               {/* Caption */}
               <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', lineHeight: '1.6' }}>
                 {item.caption}
+              </p>
+              {/* Technical caption */}
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.15em', lineHeight: '1.6' }}>
+                [TIMESTAMP: {item.timestamp}]&nbsp; [FILE_REF: {item.fileRef}]
               </p>
             </div>
           ))}
@@ -429,22 +451,22 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             onClick={handleDisconnect}
             aria-label="Disconnect member and clear access"
             style={{ ...mono, fontSize: '9px', letterSpacing: '0.22em' }}
-            className="text-white/20 uppercase border border-white/[0.06] px-4 min-h-[44px]
-              hover:border-red-900/50 hover:text-red-500/50
-              active:border-red-900/50 active:text-red-500/50
+            className="btn-archive text-white/20 uppercase border border-white/[0.06] px-4 min-h-[44px]
+              hover:border-red-900/50 hover:text-red-400/50
               transition-all duration-300 cursor-pointer"
           >
+            <span className="scanline" aria-hidden="true" />
             [ DISCONNECT_MEMBER ]
           </button>
           <button
             onClick={onLogout}
             aria-label="Return to Vault"
             style={{ ...mono, fontSize: '9px', letterSpacing: '0.28em' }}
-            className="text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
+            className="btn-archive text-white/30 uppercase border border-white/[0.12] px-5 min-h-[44px]
               hover:border-white/30 hover:text-white/60
-              active:border-white/30 active:text-white/60
               transition-all duration-300 cursor-pointer"
           >
+            <span className="scanline" aria-hidden="true" />
             [ Log Out ]
           </button>
         </div>
