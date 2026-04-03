@@ -59,9 +59,18 @@ export default function Vault({ onSuccess, glitching }) {
   const [scanning, setScanning] = useState(false)
   const scanTimeout = useRef(null)
 
+  const [memberCount, setMemberCount] = useState(null)
+
   useEffect(() => {
     const member = loadMember()
     if (member?.userId && member?.name) setReturning(member)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/count')
+      .then(r => r.json())
+      .then(d => setMemberCount(d.count))
+      .catch(() => {})
   }, [])
 
   const handleBtnEnter = () => {
@@ -364,6 +373,19 @@ export default function Vault({ onSuccess, glitching }) {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* ── Member counter ── */}
+      {memberCount !== null && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.35 }}
+          transition={{ duration: 1, delay: 1.8 }}
+          className="relative z-10 text-center uppercase px-6 pb-4"
+          style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#ffffff', letterSpacing: '0.25em' }}
+        >
+          [ {String(memberCount).padStart(2, '0')} MEMBERS HAVE JOINED THE PROJECT ]
+        </motion.p>
+      )}
 
       {/* ── Sync bar — returning member resume ── */}
       <AnimatePresence>
