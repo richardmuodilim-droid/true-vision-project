@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const rateLimitKey = `tvp:ratelimit:${ip}`
   const attempts = await kv.incr(rateLimitKey)
   if (attempts === 1) await kv.expire(rateLimitKey, 3600)
-  if (attempts > 5) {
+  if (attempts > 20) {
     return res.status(429).json({ error: 'Too many attempts. Please try again later.' })
   }
 
