@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const rateLimitKey = `tvp:ratelimit:${ip}`
   const attempts = await kv.incr(rateLimitKey)
   if (attempts === 1) await kv.expire(rateLimitKey, 3600)
-  if (attempts > 20) {
+  if (attempts > 5) {
     return res.status(429).json({ error: 'Too many attempts. Please try again later.' })
   }
 
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
   // Send branded confirmation email (non-blocking)
   const firstName = normalisedName.split(' ')[0] || 'MEMBER'
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
-  const emailResult = await resend.emails.send({
+  resend.emails.send({
     from: 'archive@truevisionproject.com',
     to: normalised,
     subject: `You're one of us now, ${capName} — TRUE VISION PROJECT`,
@@ -197,8 +197,7 @@ export default async function handler(req, res) {
   </table>
 </body>
 </html>`,
-  })
-  console.log('[TVP EMAIL]', JSON.stringify(emailResult))
+  }).catch(() => {})
 
   return res.status(200).json({ userId, name: normalisedName, memberNumber })
 }
