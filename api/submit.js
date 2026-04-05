@@ -17,6 +17,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  // Rate limiting — max 5 attempts per IP per hour
+  const ip = (req.headers['x-forwarded-for'] ?? '').split(',')[0].trim() || 'unknown'
+  const rateLimitKey = `tvp:ratelimit:${ip}`
+  const attempts = await kv.incr(rateLimitKey)
+  if (attempts === 1) await kv.expire(rateLimitKey, 3600)
+  if (attempts > 5) {
+    return res.status(429).json({ error: 'Too many attempts. Please try again later.' })
+  }
+
   const { email, name } = req.body ?? {}
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email' })
@@ -44,7 +53,7 @@ export default async function handler(req, res) {
   // Send branded confirmation email (non-blocking)
   const firstName = normalisedName.split(' ')[0] || 'MEMBER'
   resend.emails.send({
-    from: 'archive@truevisionproject.com',
+    from: 'onboarding@resend.dev',
     to: normalised,
     subject: `[ ACCESS GRANTED ] — TRUE VISION PROJECT`,
     html: `<!DOCTYPE html>
