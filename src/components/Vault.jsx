@@ -60,6 +60,7 @@ export default function Vault({ onSuccess, glitching }) {
   const scanTimeout = useRef(null)
 
   const [memberCount, setMemberCount] = useState(null)
+  const [syncing, setSyncing] = useState(false)
 
   useEffect(() => {
     const member = loadMember()
@@ -129,8 +130,6 @@ export default function Vault({ onSuccess, glitching }) {
     }
   }
 
-  const [syncing, setSyncing] = useState(false)
-
   const handleResume = () => {
     setSyncing(true)
     setTimeout(() => {
@@ -184,8 +183,8 @@ export default function Vault({ onSuccess, glitching }) {
           )}
         </motion.div>
 
-        {/* Breathing room between logo and form — extra 40px on mobile */}
-        <div className="h-[88px] sm:h-16" aria-hidden="true" />
+        {/* Breathing room between logo and form */}
+        <div className="h-10 sm:h-14" aria-hidden="true" />
 
         {/* 2. Form / Resume */}
         <motion.div
@@ -263,7 +262,7 @@ export default function Vault({ onSuccess, glitching }) {
                     id="vault-email-error"
                     role="alert"
                     className="-mt-1 text-center uppercase"
-                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(248,113,113,0.6)', letterSpacing: '0.2em' }}
+                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(248,113,113,0.7)', letterSpacing: '0.1em' }}
                   >
                     {errorMsg}
                   </p>
@@ -298,19 +297,13 @@ export default function Vault({ onSuccess, glitching }) {
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
-                <p
-                  className="text-center uppercase mb-1"
-                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.3em' }}
-                >
-                  [ STEP 02 // ARCHIVE CLEARANCE ]
-                </p>
                 <label htmlFor="vault-name" className="sr-only">Full name for archive clearance</label>
                 <input
                   id="vault-name"
                   type="text"
                   name="name"
                   autoComplete="name"
-                  placeholder="ENTER FULL NAME FOR ARCHIVE CLEARANCE"
+                  placeholder="YOUR FULL NAME"
                   value={name}
                   autoFocus
                   onChange={(e) => {
@@ -334,7 +327,7 @@ export default function Vault({ onSuccess, glitching }) {
                     id="vault-name-error"
                     role="alert"
                     className="-mt-1 text-center uppercase"
-                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(248,113,113,0.6)', letterSpacing: '0.2em' }}
+                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(248,113,113,0.7)', letterSpacing: '0.1em' }}
                   >
                     {errorMsg}
                   </p>
@@ -379,7 +372,7 @@ export default function Vault({ onSuccess, glitching }) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.35 }}
-          transition={{ duration: 1, delay: 1.8 }}
+          transition={{ duration: 1, delay: 1.4 }}
           className="relative z-10 text-center uppercase px-6 pb-4"
           style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#ffffff', letterSpacing: '0.25em' }}
         >

@@ -120,33 +120,13 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         </p>
       </motion.header>
 
-      {/* ── Member ID badge ── */}
-      {userId && (
-        <motion.div
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="relative z-10 flex items-center justify-center px-6 sm:px-12 pb-2"
-        >
-          <div className="flex items-center gap-3 border border-white/[0.08] px-5 py-2">
-            <span className="status-dot" aria-hidden="true" />
-            <span style={{ ...mono, fontSize: '8px', color: '#888', letterSpacing: '0.2em' }}>
-              MEMBER ID:&nbsp;
-            </span>
-            <span style={{ ...mono, fontSize: '9px', color: '#d0d0d0', letterSpacing: '0.2em' }}>
-              {userId}
-            </span>
-          </div>
-        </motion.div>
-      )}
-
       {/* ── Welcome Greeting ── */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
         transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
         className="relative z-10 text-center uppercase px-4 sm:px-0"
-        style={{ ...mono, fontSize: 'clamp(8px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#ffffff', paddingBottom: '4px',
+        style={{ ...mono, fontSize: 'clamp(10px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#ffffff', paddingBottom: '4px',
           textShadow: '0 0 12px rgba(255,255,255,0.35), 0 0 28px rgba(255,255,255,0.12)' }}
       >
         WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
@@ -274,7 +254,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           {/* Serif statement */}
           <motion.p
             initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 0.7, y: 0 }}
+            animate={{ opacity: 0.6, y: 0 }}
             transition={{ duration: 1.1, delay: 1.2, ease: 'easeOut' }}
             style={{
               fontFamily: "'Cormorant Garamond', serif",
@@ -282,11 +262,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               fontSize: '17px',
               color: '#ffffff',
               lineHeight: '1.85',
-              opacity: 0.7,
             }}
             className="text-center md:text-left"
           >
-            Two small towns. One fire. A project born from relentless effort and the refusal to settle for average.
+            20 units. No restock. No compromise. This is Drop 001.
           </motion.p>
 
         </motion.div>
@@ -297,7 +276,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 shrink-0 flex flex-col items-center text-center px-6 sm:px-16 py-16 sm:py-24"
+        className="relative z-10 shrink-0 flex flex-col items-center text-center px-6 sm:px-16 py-8 sm:py-20"
         aria-label="Manifesto"
       >
         {/* Top rule */}
@@ -442,28 +421,25 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           className="text-center sm:text-left">
           [SESSION: ACTIVE]
         </p>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
           <button
             onClick={handleDisconnect}
             aria-label="Disconnect member and clear access"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.14em' }}
-            className="btn-archive flex-1 sm:flex-none text-white/20 uppercase border border-white/[0.06] px-3 sm:px-4 min-h-[44px]
-              hover:border-red-900/50 hover:text-red-400/50
-              transition-all duration-300 cursor-pointer"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.1em' }}
+            className="text-white/15 uppercase hover:text-red-400/50 transition-colors duration-300 cursor-pointer min-h-[44px] flex items-center"
           >
-            <span className="scanline" aria-hidden="true" />
-            [ DISCONNECT ]
+            [ switch member ]
           </button>
           <button
             onClick={onLogout}
-            aria-label="Return to Vault"
+            aria-label="Exit Archive"
             style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em' }}
-            className="btn-archive flex-1 sm:flex-none text-white/30 uppercase border border-white/[0.12] px-3 sm:px-5 min-h-[44px]
-              hover:border-white/30 hover:text-white/60
+            className="btn-archive flex-1 sm:flex-none text-white/40 uppercase border border-white/[0.12] px-4 sm:px-6 min-h-[44px]
+              hover:border-white/30 hover:text-white/70
               transition-all duration-300 cursor-pointer"
           >
             <span className="scanline" aria-hidden="true" />
-            [ LOG OUT ]
+            [ EXIT ARCHIVE ]
           </button>
         </div>
       </motion.footer>
