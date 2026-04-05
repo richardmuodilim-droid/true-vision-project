@@ -53,7 +53,7 @@ export default async function handler(req, res) {
   // Send branded confirmation email (non-blocking)
   const firstName = normalisedName.split(' ')[0] || 'MEMBER'
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
-  resend.emails.send({
+  const emailResult = await resend.emails.send({
     from: 'archive@truevisionproject.com',
     to: normalised,
     subject: `You're one of us now, ${capName} — TRUE VISION PROJECT`,
@@ -197,7 +197,8 @@ export default async function handler(req, res) {
   </table>
 </body>
 </html>`,
-  }).catch(() => {})
+  })
+  console.log('[TVP EMAIL]', JSON.stringify(emailResult))
 
   return res.status(200).json({ userId, name: normalisedName, memberNumber })
 }
