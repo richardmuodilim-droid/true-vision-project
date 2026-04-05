@@ -130,9 +130,83 @@ function StatCard({ label, value, sub, highlight }) {
   )
 }
 
+function MemberRow({ m, onDelete }) {
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = async () => {
+    if (!confirmDelete) { setConfirmDelete(true); return }
+    setDeleting(true)
+    try {
+      await fetch('/api/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: m.email }),
+      })
+      onDelete(m.email)
+    } catch {
+      setDeleting(false)
+      setConfirmDelete(false)
+    }
+  }
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-1 px-4 py-4"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <span style={{ ...mono, fontSize: '13px', color: '#ffffff', letterSpacing: '0.05em' }}>
+          {m.name || '—'}
+        </span>
+        <div className="flex items-center gap-3">
+          <span style={{ ...mono, fontSize: '11px', color: '#555' }}>#{m.memberNumber}</span>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
+            className={`px-2 py-1 border transition-all duration-200 cursor-pointer disabled:opacity-30 ${
+              confirmDelete
+                ? 'border-red-500/60 text-red-400 hover:border-red-400 hover:text-red-300'
+                : 'border-white/[0.1] text-white/20 hover:border-white/30 hover:text-white/50'
+            }`}
+          >
+            {deleting ? '...' : confirmDelete ? 'CONFIRM' : '×'}
+          </button>
+        </div>
+      </div>
+      <span style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.03em' }}>
+        {m.email}
+      </span>
+      <div className="flex items-center justify-between gap-2 mt-1">
+        <span style={{ ...mono, fontSize: '10px', color: '#444' }}>{m.userId}</span>
+        <span style={{ ...mono, fontSize: '10px', color: '#444' }}>{formatDate(m.timestamp)}</span>
+      </div>
+      {confirmDelete && !deleting && (
+        <p
+          style={{ ...mono, fontSize: '9px', color: 'rgba(248,113,113,0.5)', letterSpacing: '0.1em' }}
+          className="mt-1"
+        >
+          Tap CONFIRM to delete — this cannot be undone
+        </p>
+      )}
+    </motion.div>
+  )
+}
+
 function Dashboard({ data }) {
-  const { count, members, financials } = data
+  const { financials } = data
   const f = financials ?? FINANCIALS
+  const [members, setMembers] = useState(data.members)
+  const count = members.length
+
+  const handleDeleteMember = (email) => {
+    setMembers(prev => prev.filter(m => m.email !== email))
+  }
+
   const revenue = count * f.retailPrice
   const netProfit = revenue - f.initialInvestment
   const breakEvenPct = Math.min((count / f.breakEvenUnits) * 100, 100)
@@ -266,29 +340,11 @@ function Dashboard({ data }) {
                   No members yet.
                 </p>
               ) : (
-                members.map((m, i) => (
-                  <div key={m.userId ?? i} className="flex flex-col gap-1 px-4 py-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span style={{ ...mono, fontSize: '13px', color: '#ffffff', letterSpacing: '0.05em' }}>
-                        {m.name || '—'}
-                      </span>
-                      <span style={{ ...mono, fontSize: '11px', color: '#555' }}>
-                        #{m.memberNumber}
-                      </span>
-                    </div>
-                    <span style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.03em' }}>
-                      {m.email}
-                    </span>
-                    <div className="flex items-center justify-between gap-2 mt-1">
-                      <span style={{ ...mono, fontSize: '10px', color: '#444' }}>
-                        {m.userId}
-                      </span>
-                      <span style={{ ...mono, fontSize: '10px', color: '#444' }}>
-                        {formatDate(m.timestamp)}
-                      </span>
-                    </div>
-                  </div>
-                ))
+                <AnimatePresence>
+                  {members.map((m) => (
+                    <MemberRow key={m.email} m={m} onDelete={handleDeleteMember} />
+                  ))}
+                </AnimatePresence>
               )}
             </div>
           </motion.div>
