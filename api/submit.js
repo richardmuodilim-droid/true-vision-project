@@ -53,7 +53,7 @@ export default async function handler(req, res) {
   // Send branded confirmation email (non-blocking)
   const firstName = normalisedName.split(' ')[0] || 'MEMBER'
   const emailResult = await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: 'archive@truevisionproject.com',
     to: normalised,
     subject: `[ ACCESS GRANTED ] — TRUE VISION PROJECT`,
     html: `<!DOCTYPE html>
