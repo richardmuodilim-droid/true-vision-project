@@ -41,13 +41,13 @@ function LoginForm({ onSuccess }) {
       })
       const data = await res.json()
       if (!res.ok) {
-        setError('[ ACCESS DENIED ]')
+        setError('Access denied. Check your password.')
         setLoading(false)
         return
       }
       onSuccess(data)
     } catch {
-      setError('[ CONNECTION ERROR ]')
+      setError('Connection error. Try again.')
       setLoading(false)
     }
   }
@@ -61,51 +61,71 @@ function LoginForm({ onSuccess }) {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-sm flex flex-col gap-8"
       >
-        <div className="flex flex-col gap-3">
-          <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }}>
+        <div className="flex flex-col gap-2">
+          <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.3em' }}>
             TRUE VISION PROJECT
           </p>
-          <p style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.2em' }}>
-            [ COMMAND CENTER ]
+          <p style={{ ...mono, fontSize: '18px', color: '#ffffff', letterSpacing: '0.1em' }}>
+            Command Center
           </p>
         </div>
 
-        <div className="w-full h-px bg-white/[0.06]" aria-hidden="true" />
+        <div className="w-full h-px bg-white/[0.08]" aria-hidden="true" />
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <label htmlFor="admin-pw" className="sr-only">Admin password</label>
           <input
             id="admin-pw"
             type="password"
-            placeholder="ACCESS CODE"
+            placeholder="Enter access code"
             value={password}
             onChange={(e) => { setPassword(e.target.value); setError('') }}
             style={{ ...mono }}
-            className="w-full h-[48px] bg-transparent border border-[#2a2a2a] rounded-none
-              text-white text-[11px] tracking-[0.2em] uppercase placeholder:text-white/15
-              px-4 outline-none focus:border-white/30 transition-colors duration-300"
+            className="w-full h-[52px] bg-transparent border border-[#2a2a2a] rounded-none
+              text-white text-[14px] tracking-[0.1em]
+              placeholder:text-white/20 px-4 outline-none
+              focus:border-white/40 transition-colors duration-300"
           />
           {error && (
-            <p style={{ ...mono, fontSize: '9px', color: 'rgba(248,113,113,0.7)', letterSpacing: '0.2em' }}>
+            <p style={{ ...mono, fontSize: '12px', color: 'rgba(248,113,113,0.8)', letterSpacing: '0.05em' }}>
               {error}
             </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.3em' }}
-            className="w-full h-[48px] border border-white/[0.1] text-white/30 uppercase
-              hover:border-white/25 hover:text-white/60 transition-all duration-300
+            style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em' }}
+            className="w-full h-[52px] border border-white/[0.15] text-white/50 uppercase
+              hover:border-white/40 hover:text-white/90 transition-all duration-300
               disabled:opacity-30 cursor-pointer"
           >
-            {loading ? '[ VERIFYING... ]' : '[ AUTHENTICATE ]'}
+            {loading ? 'Verifying...' : '[ Authenticate ]'}
           </button>
         </form>
 
-        <p style={{ ...mono, fontSize: '7px', color: '#2a2a2a', letterSpacing: '0.2em' }}>
+        <p style={{ ...mono, fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.15em' }}>
           TVP // RESTRICTED ACCESS
         </p>
       </motion.div>
+    </div>
+  )
+}
+
+function StatCard({ label, value, sub, highlight }) {
+  return (
+    <div className="border border-white/[0.07] p-5 flex flex-col gap-2">
+      <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+        {label}
+      </p>
+      <p style={{ ...mono, fontSize: '22px', letterSpacing: '0.05em',
+        color: highlight === 'green' ? '#22c55e' : highlight === 'red' ? 'rgba(248,113,113,0.8)' : '#ffffff' }}>
+        {value}
+      </p>
+      {sub && (
+        <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.1em' }}>
+          {sub}
+        </p>
+      )}
     </div>
   )
 }
@@ -114,18 +134,17 @@ function Dashboard({ data }) {
   const { count, members, financials } = data
   const f = financials ?? FINANCIALS
   const revenue = count * f.retailPrice
-  const cogs = count * f.unitCost
   const netProfit = revenue - f.initialInvestment
   const breakEvenPct = Math.min((count / f.breakEvenUnits) * 100, 100)
 
   const finRows = [
-    { label: 'INITIAL INVESTMENT', value: fmt(f.initialInvestment) },
-    { label: 'UNIT COST',          value: `${fmt(f.unitCost)} × ${f.totalUnits} UNITS` },
-    { label: 'RETAIL PRICE',       value: fmt(f.retailPrice) },
-    { label: 'BREAK-EVEN',         value: `${f.breakEvenUnits} UNITS SOLD` },
-    { label: 'PROJECTED PROFIT',   value: fmt(f.projectedProfit) },
-    { label: 'CURRENT REVENUE',    value: fmt(revenue) },
-    { label: 'CURRENT NET',        value: fmt(netProfit), highlight: netProfit >= 0 },
+    { label: 'Initial Investment', value: fmt(f.initialInvestment) },
+    { label: 'Unit Cost',          value: `${fmt(f.unitCost)} × ${f.totalUnits} units` },
+    { label: 'Retail Price',       value: fmt(f.retailPrice) },
+    { label: 'Break-Even',         value: `${f.breakEvenUnits} units sold` },
+    { label: 'Projected Profit',   value: fmt(f.projectedProfit) },
+    { label: 'Current Revenue',    value: fmt(revenue) },
+    { label: 'Current Net',        value: fmt(netProfit), highlight: netProfit >= 0 ? 'green' : 'red' },
   ]
 
   return (
@@ -133,49 +152,80 @@ function Dashboard({ data }) {
       <div className="grain" />
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-10"
-        style={{ height: '32px', background: '#000', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>[ TRUE VISION PROJECT ]</span>
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>[ COMMAND CENTER // RESTRICTED ]</span>
+      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-10 h-10"
+        style={{ background: '#000', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <span style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.15em' }}>
+          TRUE VISION PROJECT
+        </span>
+        <span style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.1em' }}>
+          COMMAND CENTER
+        </span>
       </div>
 
-      <main className="relative z-10 flex-1 px-6 sm:px-10 pt-16 pb-12 max-w-5xl mx-auto w-full">
+      <main className="relative z-10 flex-1 px-4 sm:px-10 pt-16 pb-12 max-w-5xl mx-auto w-full">
 
-        {/* Stat hero */}
+        {/* Page title */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-12 mb-12 pt-6"
+          transition={{ duration: 0.7 }}
+          className="pt-6 pb-8 border-b border-white/[0.06] mb-8"
         >
-          <div>
-            <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-3 uppercase">
-              Project Members
-            </p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(52px, 10vw, 88px)', color: '#fff', lineHeight: 1 }}>
-              {String(count).padStart(3, '0')}
-            </p>
-          </div>
-          <div className="flex flex-col gap-1 pb-2">
-            <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.2em' }}>
-              BREAK-EVEN PROGRESS
-            </p>
-            <div className="w-48 h-px bg-white/[0.07] relative">
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: breakEvenPct / 100 }}
-                transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-y-0 left-0 origin-left"
-                style={{ background: count >= f.breakEvenUnits ? '#22c55e' : '#fff', opacity: 0.6 }}
-              />
-            </div>
-            <p style={{ ...mono, fontSize: '7px', color: count >= f.breakEvenUnits ? '#22c55e' : '#555', letterSpacing: '0.2em' }}>
-              {count >= f.breakEvenUnits ? '[ BREAK-EVEN ACHIEVED ]' : `[ ${count} / ${f.breakEvenUnits} UNITS ]`}
-            </p>
-          </div>
+          <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.3em' }} className="mb-2 uppercase">
+            Dashboard
+          </p>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px, 6vw, 48px)', color: '#fff', lineHeight: 1.1 }}>
+            {String(count).padStart(3, '0')} Members
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Stat cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8"
+        >
+          <StatCard label="Total Members" value={count} />
+          <StatCard label="Current Revenue" value={fmt(revenue)} />
+          <StatCard
+            label="Net Position"
+            value={fmt(netProfit)}
+            highlight={netProfit >= 0 ? 'green' : 'red'}
+          />
+        </motion.div>
+
+        {/* Break-even bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="mb-8 p-5 border border-white/[0.07]"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <p style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.15em' }} className="uppercase">
+              Break-Even Progress
+            </p>
+            <p style={{ ...mono, fontSize: '13px', color: count >= f.breakEvenUnits ? '#22c55e' : '#ffffff' }}>
+              {count} / {f.breakEvenUnits} units
+            </p>
+          </div>
+          <div className="w-full h-[3px] bg-white/[0.07] rounded-full overflow-hidden">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: breakEvenPct / 100 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="h-full origin-left rounded-full"
+              style={{ background: count >= f.breakEvenUnits ? '#22c55e' : '#ffffff' }}
+            />
+          </div>
+          <p style={{ ...mono, fontSize: '10px', color: count >= f.breakEvenUnits ? '#22c55e' : '#555', letterSpacing: '0.1em' }}
+            className="mt-2">
+            {count >= f.breakEvenUnits ? '✓ Break-even achieved' : `${f.breakEvenUnits - count} more units to break even`}
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Financials */}
           <motion.div
@@ -183,17 +233,17 @@ function Dashboard({ data }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-5 uppercase">
+            <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="mb-4 uppercase">
               Financial Model
             </p>
-            <div className="flex flex-col border-t border-white/[0.06]">
+            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05]">
               {finRows.map(({ label, value, highlight }) => (
-                <div key={label} className="flex items-center justify-between py-3 border-b border-white/[0.05] gap-4">
-                  <span style={{ ...mono, fontSize: '8px', color: '#555', letterSpacing: '0.15em' }}>
-                    [ {label} ]
+                <div key={label} className="flex items-center justify-between px-4 py-3 gap-4">
+                  <span style={{ ...mono, fontSize: '11px', color: '#666', letterSpacing: '0.05em' }}>
+                    {label}
                   </span>
-                  <span style={{ ...mono, fontSize: '10px', letterSpacing: '0.08em',
-                    color: highlight ? '#22c55e' : highlight === false ? 'rgba(248,113,113,0.7)' : '#c8c8c8' }}>
+                  <span style={{ ...mono, fontSize: '13px', letterSpacing: '0.05em',
+                    color: highlight === 'green' ? '#22c55e' : highlight === 'red' ? 'rgba(248,113,113,0.8)' : '#ffffff' }}>
                     {value}
                   </span>
                 </div>
@@ -205,34 +255,38 @@ function Dashboard({ data }) {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-5 uppercase">
-              Member Registry
+            <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="mb-4 uppercase">
+              Member Registry — {count} total
             </p>
-            <div className="flex flex-col border-t border-white/[0.06] max-h-[420px] overflow-y-auto scrollbar-none">
+            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05] max-h-[480px] overflow-y-auto scrollbar-none">
               {members.length === 0 ? (
-                <p style={{ ...mono, fontSize: '9px', color: '#333', letterSpacing: '0.2em' }} className="py-4">
-                  [ NO MEMBERS YET ]
+                <p style={{ ...mono, fontSize: '13px', color: '#444' }} className="px-4 py-6 text-center">
+                  No members yet.
                 </p>
               ) : (
                 members.map((m, i) => (
-                  <div key={m.userId ?? i}
-                    className="flex flex-col gap-1 py-3 border-b border-white/[0.05]">
-                    <div className="flex items-center justify-between">
-                      <span style={{ ...mono, fontSize: '9px', color: '#d0d0d0', letterSpacing: '0.1em' }}>
-                        {m.userId}
+                  <div key={m.userId ?? i} className="flex flex-col gap-1 px-4 py-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <span style={{ ...mono, fontSize: '13px', color: '#ffffff', letterSpacing: '0.05em' }}>
+                        {m.name || '—'}
                       </span>
-                      <span style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.1em' }}>
+                      <span style={{ ...mono, fontSize: '11px', color: '#555' }}>
                         #{m.memberNumber}
                       </span>
                     </div>
-                    <span style={{ ...mono, fontSize: '8px', color: '#555', letterSpacing: '0.08em' }}>
+                    <span style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.03em' }}>
                       {m.email}
                     </span>
-                    <span style={{ ...mono, fontSize: '7px', color: '#333', letterSpacing: '0.08em' }}>
-                      {formatDate(m.timestamp)}
-                    </span>
+                    <div className="flex items-center justify-between gap-2 mt-1">
+                      <span style={{ ...mono, fontSize: '10px', color: '#444' }}>
+                        {m.userId}
+                      </span>
+                      <span style={{ ...mono, fontSize: '10px', color: '#444' }}>
+                        {formatDate(m.timestamp)}
+                      </span>
+                    </div>
                   </div>
                 ))
               )}
@@ -241,8 +295,8 @@ function Dashboard({ data }) {
         </div>
       </main>
 
-      <footer className="relative z-10 px-6 sm:px-10 py-5 border-t border-white/[0.05]">
-        <p style={{ ...mono, fontSize: '7px', color: '#333', letterSpacing: '0.2em' }}>
+      <footer className="relative z-10 px-4 sm:px-10 py-4 border-t border-white/[0.06]">
+        <p style={{ ...mono, fontSize: '10px', color: '#444', letterSpacing: '0.15em' }}>
           TVP // COMMAND CENTER // {new Date().getFullYear()}
         </p>
       </footer>
