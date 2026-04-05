@@ -45,7 +45,7 @@ function LoginForm({ onSuccess }) {
         setLoading(false)
         return
       }
-      onSuccess(data)
+      onSuccess(data, password)
     } catch {
       setError('Connection error. Try again.')
       setLoading(false)
@@ -197,14 +197,29 @@ function MemberRow({ m, onDelete }) {
   )
 }
 
-function Dashboard({ data }) {
+function Dashboard({ data, password }) {
   const { financials } = data
   const f = financials ?? FINANCIALS
   const [members, setMembers] = useState(data.members)
+  const [refreshing, setRefreshing] = useState(false)
   const count = members.length
 
   const handleDeleteMember = (email) => {
     setMembers(prev => prev.filter(m => m.email !== email))
+  }
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    try {
+      const res = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      const fresh = await res.json()
+      if (res.ok) setMembers(fresh.members)
+    } catch {}
+    setRefreshing(false)
   }
 
   const revenue = count * f.retailPrice
@@ -331,9 +346,19 @@ function Dashboard({ data }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="mb-4 uppercase">
-              Member Registry — {count} total
-            </p>
+            <div className="flex items-center justify-between mb-4">
+              <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+                Member Registry — {count} total
+              </p>
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
+                className="px-2 py-1 border border-white/[0.1] text-white/30 hover:border-white/30 hover:text-white/60 transition-all duration-200 cursor-pointer disabled:opacity-30"
+              >
+                {refreshing ? '...' : '↻ REFRESH'}
+              </button>
+            </div>
             <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05] max-h-[480px] overflow-y-auto scrollbar-none">
               {members.length === 0 ? (
                 <p style={{ ...mono, fontSize: '13px', color: '#444' }} className="px-4 py-6 text-center">
@@ -362,16 +387,17 @@ function Dashboard({ data }) {
 
 export default function AdminPage() {
   const [data, setData] = useState(null)
+  const [password, setPassword] = useState('')
 
   return (
     <AnimatePresence mode="wait">
       {data ? (
         <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <Dashboard data={data} />
+          <Dashboard data={data} password={password} />
         </motion.div>
       ) : (
         <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <LoginForm onSuccess={setData} />
+          <LoginForm onSuccess={(d, pw) => { setData(d); setPassword(pw) }} />
         </motion.div>
       )}
     </AnimatePresence>
