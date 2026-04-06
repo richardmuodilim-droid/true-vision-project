@@ -225,9 +225,56 @@ export default async function handler(req, res) {
 
           <!-- CTA Button -->
           <tr>
-            <td align="center" style="padding:48px 40px;" class="inner">
-              <a href="https://www.truevisionproject.com" target="_blank" style="display:inline-block;padding:16px 40px;background:#ffffff;color:#000000;font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;border-radius:1px;" class="cta-btn">
+            <td align="center" style="padding:40px 40px 0;" class="inner">
+              <a href="https://www.truevisionproject.com" target="_blank" style="display:inline-block;padding:18px 48px;background:#ffffff;color:#000000;font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;text-decoration:none;" class="cta-btn">
                 ENTER THE ARCHIVE
+              </a>
+            </td>
+          </tr>
+
+          <!-- Share block -->
+          <tr>
+            <td style="padding:40px 40px;" class="inner">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#161616;border:1px solid #222222;">
+                <tr>
+                  <td style="padding:28px 28px;">
+                    <p style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#ffffff;letter-spacing:0.3em;text-transform:uppercase;">Know someone who belongs here?</p>
+                    <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:15px;color:#888888;line-height:1.8;">This family grows through people, not ads. Send them to the archive — spots are limited and we never restock.</p>
+                    <a href="https://www.truevisionproject.com" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#aaaaaa;letter-spacing:0.2em;text-decoration:none;">
+                      → truevisionproject.com
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Instagram follow -->
+          <tr>
+            <td align="center" style="padding:0 40px 40px;" class="inner">
+              <a href="https://www.instagram.com/truevisionproject/" target="_blank" style="display:inline-table;text-decoration:none;">
+                <table role="presentation" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;background:#161616;">
+                  <tr>
+                    <td style="padding:16px 28px;">
+                      <table role="presentation" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding-right:12px;vertical-align:middle;">
+                            <!-- Instagram SVG icon -->
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+                              <rect x="2" y="2" width="20" height="20" rx="6" stroke="#888888" stroke-width="1.5"/>
+                              <circle cx="12" cy="12" r="4" stroke="#888888" stroke-width="1.5"/>
+                              <circle cx="17" cy="7" r="1" fill="#888888"/>
+                            </svg>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <p style="margin:0 0 2px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#555555;letter-spacing:0.2em;text-transform:uppercase;">Follow us</p>
+                            <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;color:#aaaaaa;letter-spacing:0.1em;">@truevisionproject</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </a>
             </td>
           </tr>
@@ -235,10 +282,10 @@ export default async function handler(req, res) {
           <!-- Quote -->
           <tr>
             <td align="center" style="padding:0 40px 48px;border-top:1px solid #1a1a1a;" class="inner">
-              <p style="margin:40px 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#2a2a2a;font-style:italic;line-height:1.8;">
+              <p style="margin:40px 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;color:#333333;font-style:italic;line-height:1.8;">
                 "Two small towns. One fire.<br/>Built from nothing."
               </p>
-              <p style="margin:16px 0 0;font-family:'Courier New',Courier,monospace;font-size:11px;color:#333333;letter-spacing:0.2em;text-transform:uppercase;">
+              <p style="margin:20px 0 0;font-family:'Courier New',Courier,monospace;font-size:11px;color:#444444;letter-spacing:0.2em;text-transform:uppercase;">
                 Richard — True Vision Project
               </p>
             </td>
@@ -246,19 +293,12 @@ export default async function handler(req, res) {
 
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;" class="inner">
-              <!-- Instagram icon -->
-              <p style="margin:0 0 16px;">
-                <a href="https://www.instagram.com/truevisionproject/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
-                  <span style="display:inline-block;width:28px;height:28px;border:1px solid #444444;border-radius:6px;text-align:center;line-height:28px;font-size:14px;color:#888888;">&#9312;</span>
-                  <span style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.15em;">@truevisionproject</span>
-                </a>
-              </p>
-              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#555555;line-height:1.9;">
+            <td style="padding:24px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;" class="inner">
+              <p style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#444444;line-height:1.9;">
                 You're receiving this because you registered at <a href="https://www.truevisionproject.com" style="color:#666666;">truevisionproject.com</a>.<br/>
                 To remove your data: reply with "DELETE" or email <a href="mailto:archive@truevisionproject.com" style="color:#666666;">archive@truevisionproject.com</a>
               </p>
-              <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:#333333;letter-spacing:0.1em;">
+              <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:#2a2a2a;letter-spacing:0.1em;">
                 TVP &nbsp;·&nbsp; truevisionproject.com &nbsp;·&nbsp; Ireland
               </p>
             </td>
