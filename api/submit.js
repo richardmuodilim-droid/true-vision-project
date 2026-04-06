@@ -56,6 +56,7 @@ export default async function handler(req, res) {
   await resend.emails.send({
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
+    replyTo: 'richardmuodilim@gmail.com',
     subject: `${capName}, you're part of something real — TVP`,
     html: `<!DOCTYPE html>
 <html lang="en">
