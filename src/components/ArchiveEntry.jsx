@@ -417,10 +417,20 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         transition={{ duration: 0.6, delay: 1.4 }}
         className="relative z-10 shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-12 py-4 sm:py-6 border-t border-white/[0.07]"
       >
-        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
-          className="text-center sm:text-left">
-          [SESSION: ACTIVE]
-        </p>
+        <div className="flex items-center gap-4 justify-center sm:justify-start">
+          <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
+            [SESSION: ACTIVE]
+          </p>
+          <a
+            href="https://www.instagram.com/truevisionproject/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
+            className="hover:text-white/50 transition-colors duration-300 uppercase"
+          >
+            [ @TRUEVISIONPROJECT ]
+          </a>
+        </div>
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <button
             onClick={handleDisconnect}

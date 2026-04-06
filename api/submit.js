@@ -247,9 +247,14 @@ export default async function handler(req, res) {
           <!-- Footer -->
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;" class="inner">
-              <p style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#333333;line-height:1.8;">
+              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#333333;line-height:1.8;">
                 You're receiving this because you registered at <a href="https://www.truevisionproject.com" style="color:#444444;">truevisionproject.com</a>.<br/>
                 To remove your data: reply with "DELETE" or email <a href="mailto:archive@truevisionproject.com" style="color:#444444;">archive@truevisionproject.com</a>
+              </p>
+              <p style="margin:0 0 12px;">
+                <a href="https://www.instagram.com/truevisionproject/" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;text-decoration:none;letter-spacing:0.15em;">
+                  &#x2192; FOLLOW ON INSTAGRAM @truevisionproject
+                </a>
               </p>
               <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:#222222;letter-spacing:0.1em;">
                 TVP &nbsp;·&nbsp; truevisionproject.com &nbsp;·&nbsp; Ireland
