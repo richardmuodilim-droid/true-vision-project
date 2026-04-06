@@ -138,24 +138,24 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="padding:32px 32px;" class="id-card">
 
-                    <p style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;letter-spacing:0.4em;text-transform:uppercase;">YOUR MEMBER IDENTITY</p>
+                    <p style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.4em;text-transform:uppercase;">YOUR MEMBER IDENTITY</p>
 
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td style="padding:14px 0;border-bottom:1px solid #1a1a1a;">
-                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;letter-spacing:0.25em;text-transform:uppercase;">Name</p>
+                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.25em;text-transform:uppercase;">Name</p>
                           <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;color:#ffffff;letter-spacing:0.08em;">${normalisedName || capName}</p>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding:14px 0;border-bottom:1px solid #1a1a1a;">
-                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;letter-spacing:0.25em;text-transform:uppercase;">Member ID</p>
+                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.25em;text-transform:uppercase;">Member ID</p>
                           <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;color:#aaaaaa;letter-spacing:0.15em;">${userId}</p>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding:14px 0;">
-                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;letter-spacing:0.25em;text-transform:uppercase;">Member Number</p>
+                          <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.25em;text-transform:uppercase;">Member Number</p>
                           <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;color:#666666;letter-spacing:0.1em;">#${String(memberNumber).padStart(3, '0')} <span style="font-size:12px;color:#333333;">of 20 founding members</span></p>
                         </td>
                       </tr>
@@ -171,7 +171,7 @@ export default async function handler(req, res) {
           <tr>
             <td style="padding:0 40px;" class="inner">
               <div style="height:1px;background:#1e1e1e;margin-bottom:40px;"></div>
-              <p style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;letter-spacing:0.4em;text-transform:uppercase;">WHAT HAPPENS NEXT</p>
+              <p style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.4em;text-transform:uppercase;">WHAT HAPPENS NEXT</p>
 
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
@@ -247,16 +247,18 @@ export default async function handler(req, res) {
           <!-- Footer -->
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;" class="inner">
-              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#333333;line-height:1.8;">
-                You're receiving this because you registered at <a href="https://www.truevisionproject.com" style="color:#444444;">truevisionproject.com</a>.<br/>
-                To remove your data: reply with "DELETE" or email <a href="mailto:archive@truevisionproject.com" style="color:#444444;">archive@truevisionproject.com</a>
-              </p>
-              <p style="margin:0 0 12px;">
-                <a href="https://www.instagram.com/truevisionproject/" target="_blank" style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#444444;text-decoration:none;letter-spacing:0.15em;">
-                  &#x2192; FOLLOW ON INSTAGRAM @truevisionproject
+              <!-- Instagram icon -->
+              <p style="margin:0 0 16px;">
+                <a href="https://www.instagram.com/truevisionproject/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
+                  <span style="display:inline-block;width:28px;height:28px;border:1px solid #444444;border-radius:6px;text-align:center;line-height:28px;font-size:14px;color:#888888;">&#9312;</span>
+                  <span style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.15em;">@truevisionproject</span>
                 </a>
               </p>
-              <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:#222222;letter-spacing:0.1em;">
+              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#555555;line-height:1.9;">
+                You're receiving this because you registered at <a href="https://www.truevisionproject.com" style="color:#666666;">truevisionproject.com</a>.<br/>
+                To remove your data: reply with "DELETE" or email <a href="mailto:archive@truevisionproject.com" style="color:#666666;">archive@truevisionproject.com</a>
+              </p>
+              <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:#333333;letter-spacing:0.1em;">
                 TVP &nbsp;·&nbsp; truevisionproject.com &nbsp;·&nbsp; Ireland
               </p>
             </td>

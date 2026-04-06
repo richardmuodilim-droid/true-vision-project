@@ -425,10 +425,14 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             href="https://www.instagram.com/truevisionproject/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
-            className="hover:text-white/50 transition-colors duration-300 uppercase"
+            aria-label="Instagram"
+            className="text-white/20 hover:text-white/60 transition-colors duration-300"
           >
-            [ @TRUEVISIONPROJECT ]
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+            </svg>
           </a>
         </div>
         <div className="flex items-center gap-4 w-full sm:w-auto">
