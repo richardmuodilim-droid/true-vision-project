@@ -3,7 +3,7 @@ import { ImageResponse } from '@vercel/og'
 export const config = { runtime: 'edge' }
 
 export default async function handler() {
-  const logoUrl = 'https://www.truevisionproject.com/og-logo.png'
+  const logoUrl = 'https://www.truevisionproject.com/og-logo.svg'
 
   return new ImageResponse(
     {
@@ -37,9 +37,9 @@ export default async function handler() {
             type: 'img',
             props: {
               src: logoUrl,
-              width: 150,
-              height: 150,
-              style: { objectFit: 'contain', filter: 'invert(1)', marginBottom: '28px' },
+              width: 200,
+              height: 200,
+              style: { objectFit: 'contain', marginBottom: '28px' },
             },
           },
           // Title
