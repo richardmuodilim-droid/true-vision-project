@@ -295,6 +295,9 @@ export default async function handler(req, res) {
           <!-- Footer -->
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;" class="inner">
+              <p style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#555555;line-height:1.9;border:1px solid #1e1e1e;padding:14px 16px;">
+                To make sure you don't miss Drop 001 — add <strong style="color:#888888;">archive@truevisionproject.com</strong> to your contacts now.
+              </p>
               <p style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#444444;line-height:1.9;">
                 You're receiving this because you registered at <a href="https://www.truevisionproject.com" style="color:#666666;">truevisionproject.com</a>.<br/>
                 To remove your data: reply with "DELETE" or email <a href="mailto:archive@truevisionproject.com" style="color:#666666;">archive@truevisionproject.com</a>
