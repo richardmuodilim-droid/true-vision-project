@@ -73,7 +73,7 @@ export const products = [
     ],
     stock: { 'One Size': 18 },
     image: null,
-    images: [null, null, null],
+    images: [null, null],
     description:
       'Six-panel structured cap. Heavy canvas shell, tonal embroidery at front, adjustable brass closure at rear.',
     material: 'Shell: 100% Heavy Canvas. Lining: 100% Cotton.',
@@ -93,7 +93,7 @@ export const products = [
     ],
     stock: { 'One Size': 9 },
     image: null,
-    images: [null, null, null],
+    images: [null, null],
     description:
       'Unstructured 5-panel. Washed canvas for a broken-in profile. Leather patch at rear, raw hem brim.',
     material: 'Shell: Washed Canvas. Patch: Full-grain leather.',
@@ -114,7 +114,7 @@ export const products = [
     ],
     stock: { 'S/M': 14, 'L/XL': 11 },
     image: null,
-    images: [null, null, null],
+    images: [null, null],
     description:
       'Technical mesh back panel with structured canvas front. Tonal logo mark embroidered at crown.',
     material: 'Front: Canvas. Back: Technical mesh.',
