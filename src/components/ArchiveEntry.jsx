@@ -32,8 +32,8 @@ const processItems = [
 ]
 
 const images = [
-  { src: '/product-1.png', label: 'FRONT' },
-  { src: '/product-3.png', label: '3/4' },
+  { src: '/cap-black.jpg', label: 'BLACK' },
+  { src: '/cap-white.jpg', label: 'WHITE' },
 ]
 
 const mono = { fontFamily: "'Space Mono', monospace" }
