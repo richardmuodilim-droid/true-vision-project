@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProduct, products } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import Footer from '../components/Footer'
 
-export default function Product({ onCartOpen }) {
+export default function Product() {
+  const { onCartOpen } = useOutletContext()
   const { id } = useParams()
   const navigate = useNavigate()
   const product = getProduct(id)
@@ -20,6 +21,10 @@ export default function Product({ onCartOpen }) {
   const [sizeError, setSizeError] = useState(false)
 
   const { dispatch } = useCart()
+
+  useEffect(() => {
+    if (product && product.sizes.length === 1) setSelectedSize(product.sizes[0])
+  }, [product?.id])
 
   if (!product) {
     return (
@@ -186,7 +191,11 @@ export default function Product({ onCartOpen }) {
                   {product.colors.map((c) => (
                     <button
                       key={c.name}
-                      onClick={() => setSelectedColor(c.name)}
+                      onClick={() => {
+                        setSelectedColor(c.name)
+                        const idx = product.colors.findIndex(cl => cl.name === c.name)
+                        if (idx >= 0 && idx < product.images.length) setActiveImage(idx)
+                      }}
                       aria-label={c.name}
                       aria-pressed={selectedColor === c.name}
                       className={`w-6 h-6 rounded-full border-2 transition-colors duration-300 cursor-pointer ${
