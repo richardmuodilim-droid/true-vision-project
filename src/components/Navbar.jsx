@@ -9,7 +9,7 @@ export default function Navbar({ onCartOpen }) {
   const { itemCount } = useCart()
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-  const isHome = location.pathname === '/'
+  const isHome = location.pathname === '/store'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -48,7 +48,7 @@ export default function Navbar({ onCartOpen }) {
         <div className="max-w-screen-xl mx-auto px-6 sm:px-10 h-14 flex items-center justify-between">
 
           {/* Logo */}
-          <Link to="/" aria-label="True Vision Project — Home">
+          <Link to="/" aria-label="True Vision Project — Entrance">
             <img
               src="/logo.svg"
               alt="True Vision Project"

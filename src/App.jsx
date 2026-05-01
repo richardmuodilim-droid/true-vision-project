@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Cart from './components/Cart'
+import Landing from './pages/Landing'
 import Home from './pages/Home'
 import Product from './pages/Product'
 import Category from './pages/Category'
@@ -55,14 +56,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Standalone — no navbar */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/archive" element={<ArchiveFlow />} />
+        <Route path="/archive-admin" element={<AdminPage />} />
+
+        {/* Store — with navbar + cart */}
         <Route element={<StoreShell />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/store" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/category/:slug" element={<Category />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
-        <Route path="/archive" element={<ArchiveFlow />} />
-        <Route path="/archive-admin" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   )
