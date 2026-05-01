@@ -54,7 +54,6 @@ export default function Navbar({ onCartOpen }) {
               alt="True Vision Project"
               width="400"
               height="400"
-              style={{ filter: 'invert(1)' }}
               className="h-11 sm:h-12 w-auto max-w-[140px] sm:max-w-[160px] object-contain select-none"
               draggable="false"
             />
