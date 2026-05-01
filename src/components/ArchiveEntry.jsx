@@ -5,7 +5,7 @@ const manifest = [
   { key: 'PROJECT ID',  value: '001' },
   { key: 'OBJECT',      value: 'THE FOUNDATION CAP' },
   { key: 'COMPOSITION', value: '300GSM WASHED CHINO TWILL' },
-  { key: 'HARDWARE',    value: 'CUSTOM METAL SLIDER' },
+  { key: 'EDITION',     value: 'DROP 001' },
   { key: 'ORIGIN',      value: 'IRELAND / ITALY' },
   { key: 'STATUS',      value: 'IN PRODUCTION', live: true },
 ]

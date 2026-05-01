@@ -14,9 +14,8 @@ const CAP_COLORS = [
 const MANIFEST = [
   { key: 'OBJECT',       value: 'THE FOUNDATION CAP' },
   { key: 'COMPOSITION',  value: '300GSM WASHED CHINO TWILL' },
-  { key: 'HARDWARE',     value: 'CUSTOM METAL SLIDER' },
   { key: 'ORIGIN',       value: 'IRELAND / ITALY' },
-  { key: 'EDITION',      value: 'DROP 001 — 20 UNITS' },
+  { key: 'EDITION',      value: 'DROP 001' },
 ]
 
 const CornerMarks = () =>
@@ -38,7 +37,7 @@ export default function Home() {
       item: {
         id: 'foundation-cap',
         name: 'Foundation Cap',
-        price: 40,
+        price: 32,
         size: 'One Size',
         color: CAP_COLORS[activeColor].name,
         qty: 1,
@@ -280,7 +279,7 @@ export default function Home() {
                 <span
                   style={{ fontFamily: "'Inter', sans-serif", fontSize: '17px', color: '#ffffff', fontWeight: 300, letterSpacing: '0.03em' }}
                 >
-                  $40
+                  €32
                 </span>
               </div>
             </div>
@@ -289,7 +288,7 @@ export default function Home() {
             <div className="mb-10">
               <div className="w-8 h-px bg-white/10 mb-6" aria-hidden="true" />
               <p style={{ ...serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.9 }}>
-                20 units. No restock. No compromise.<br />This is Drop 001.
+                No restock. No compromise.<br />This is Drop 001.
               </p>
             </div>
 
@@ -408,7 +407,7 @@ export default function Home() {
               key={i}
               style={{ ...mono, fontSize: '8px', color: '#ffffff', letterSpacing: '0.22em', whiteSpace: 'nowrap', paddingRight: '4rem' }}
             >
-              [ DROP 001 — NOW AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ 20 UNITS ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
+              [ DROP 001 — NOW AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
             </span>
           ))}
         </div>
