@@ -65,11 +65,11 @@ export default function Landing() {
           className="mb-9 sm:mb-11"
         >
           <img
-            src="/logo.svg"
+            src="/landing-logo.svg"
             alt="True Vision Project"
-            width="400"
-            height="400"
-            className="w-[62vw] max-w-[300px] sm:max-w-[380px] h-auto object-contain select-none"
+            width="600"
+            height="600"
+            className="w-[78vw] max-w-[380px] sm:max-w-[480px] h-auto object-contain select-none"
             draggable="false"
           />
         </motion.div>
