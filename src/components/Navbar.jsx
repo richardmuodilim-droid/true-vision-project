@@ -51,11 +51,11 @@ export default function Navbar({ onCartOpen }) {
           <Link to="/" aria-label="True Vision Project — Home">
             <img
               src="/logo.svg"
-              alt="TVP"
-              width="32"
-              height="32"
+              alt="True Vision Project"
+              width="400"
+              height="400"
               style={{ filter: 'invert(1)' }}
-              className="w-7 h-7 object-contain select-none"
+              className="h-11 sm:h-12 w-auto max-w-[140px] sm:max-w-[160px] object-contain select-none"
               draggable="false"
             />
           </Link>

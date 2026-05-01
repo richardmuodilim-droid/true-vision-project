@@ -27,5 +27,12 @@ export default async function handler(req, res) {
     typeof m === 'string' ? JSON.parse(m) : m
   )
 
-  return res.status(200).json({ count, members, financials: FINANCIALS })
+  // Attach last-seen timestamps
+  const lastSeenMap = (await kv.hgetall('tvp:lastseen')) ?? {}
+  const membersWithActivity = members.map((m) => ({
+    ...m,
+    lastSeen: lastSeenMap[m.userId] || null,
+  }))
+
+  return res.status(200).json({ count, members: membersWithActivity, financials: FINANCIALS })
 }
