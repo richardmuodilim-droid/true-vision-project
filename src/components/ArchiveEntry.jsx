@@ -443,6 +443,17 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           >
             [ switch member ]
           </button>
+          <a
+            href="/store"
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em' }}
+            className="btn-archive flex-1 sm:flex-none text-white/40 uppercase border border-white/[0.12] px-4 sm:px-6 min-h-[44px] flex items-center justify-center
+              hover:border-white/30 hover:text-white/70
+              transition-all duration-300 cursor-pointer"
+            aria-label="Shop Drop 001"
+          >
+            <span className="scanline" aria-hidden="true" />
+            [ SHOP DROP 001 ]
+          </a>
           <button
             onClick={onLogout}
             aria-label="Exit Archive"

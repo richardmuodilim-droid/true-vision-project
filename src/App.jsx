@@ -11,6 +11,7 @@ import Vault from './components/Vault'
 import DecryptionScreen from './components/DecryptionScreen'
 import ArchiveEntry from './components/ArchiveEntry'
 import AdminPage from './components/AdminPage'
+import OrderSuccess from './pages/OrderSuccess'
 
 function StoreShell() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -66,7 +67,8 @@ export default function App() {
           <Route path="/store" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/category/:slug" element={<Category />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout"      element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
         </Route>
       </Routes>
     </BrowserRouter>
