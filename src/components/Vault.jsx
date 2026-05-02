@@ -54,9 +54,11 @@ async function pingAccess(userId) {
 }
 
 export default function Vault({ onSuccess, glitching }) {
-  // 'check' → lookup in progress, 'email' → enter email, 'name' → enter name (new), 'returning' → recognized member
+  // 'email' → enter email, 'name' → enter name (new), 'returning' → recognized member, 'sent' → email sent confirmation
   const [step, setStep] = useState('email')
   const [returning, setReturning] = useState(null)
+  const [sentTo, setSentTo] = useState('')
+  const [newMemberData, setNewMemberData] = useState(null)
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -160,7 +162,9 @@ export default function Vault({ onSuccess, glitching }) {
       const member = { userId: data.userId, name: resolvedName, email: email.trim() }
       saveMember(member)
       await pingAccess(data.userId)
-      onSuccess?.(data.userId, resolvedName)
+      setSentTo(email.trim())
+      setNewMemberData({ userId: data.userId, name: resolvedName })
+      setStep('sent')
     } catch {
       setErrorMsg('Connection error. Try again.')
       setStatus('error')
@@ -440,7 +444,63 @@ export default function Vault({ onSuccess, glitching }) {
                   ← back
                 </button>
               </motion.form>
-            )}
+
+            ) : step === 'sent' ? (
+
+              /* ── Email sent confirmation ── */
+              <motion.div
+                key="step-sent"
+                className="flex flex-col items-center gap-6 w-full text-center"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="flex flex-col gap-3">
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#555', letterSpacing: '0.35em' }} className="uppercase">
+                    [ Access Granted ]
+                  </p>
+                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '22px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
+                    Welcome, {newMemberData ? getFirstName(newMemberData.name) : 'Member'}.
+                  </p>
+                </div>
+
+                <div className="w-full border border-white/[0.07] p-5 flex flex-col gap-3">
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#666', letterSpacing: '0.25em' }} className="uppercase">
+                    Confirmation sent to
+                  </p>
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.08em' }}>
+                    {sentTo}
+                  </p>
+                  <div className="w-full h-px bg-white/[0.06] my-1" />
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#555', letterSpacing: '0.18em', lineHeight: 1.9 }} className="uppercase">
+                    Not in your inbox?<br />
+                    <span style={{ color: 'rgba(255,255,255,0.35)' }}>Check your spam folder</span> and move it to inbox.<br />
+                    Then save <span style={{ color: 'rgba(255,255,255,0.4)' }}>archive@truevisionproject.com</span> to your contacts.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => onSuccess?.(newMemberData?.userId, newMemberData?.name)}
+                  onMouseEnter={handleBtnEnter}
+                  onMouseLeave={handleBtnLeave}
+                  aria-label="Enter the archive"
+                  className={`
+                    btn-vault w-full h-[52px]
+                    border border-white/[0.12] rounded-none
+                    text-[11px] tracking-[0.45em] uppercase
+                    transition-all duration-500 cursor-pointer
+                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
+                    ${scanning ? 'scanning' : ''}
+                  `}
+                  style={{ fontFamily: "'Space Mono', monospace" }}
+                >
+                  <span className="scanline" aria-hidden="true" />
+                  [ Enter the Archive ]
+                </button>
+              </motion.div>
+
+            ) : null}
           </AnimatePresence>
         </motion.div>
       </div>

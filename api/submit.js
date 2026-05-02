@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
-    subject: `Welcome to the Archive — True Vision Project`,
+    subject: `${capName} — you're in the archive`,
     headers: {
       'List-Unsubscribe': '<mailto:archive@truevisionproject.com?subject=unsubscribe>',
       'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
