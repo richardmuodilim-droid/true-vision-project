@@ -56,8 +56,32 @@ export default async function handler(req, res) {
   await resend.emails.send({
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
-    replyTo: 'truevisionstore2@gmail.com',
-    subject: `${capName}, you're part of something real — TVP`,
+    replyTo: 'archive@truevisionproject.com',
+    subject: `Welcome to the Archive — True Vision Project`,
+    headers: {
+      'List-Unsubscribe': '<mailto:archive@truevisionproject.com?subject=unsubscribe>',
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
+    text: `Welcome to the True Vision Project Archive, ${capName}.
+
+You are now Member #${String(memberNumber).padStart(3, '0')}.
+Member ID: ${userId}
+
+This isn't a brand. It's a statement.
+
+Two people. Two small towns. One shared belief that you don't need permission to build something real.
+
+Drop 001 — The Foundation Cap
+300GSM washed chino twill. Made between Ireland and Italy. No restock.
+
+Enter the Archive: https://www.truevisionproject.com
+
+Add archive@truevisionproject.com to your contacts to make sure you get the drop notification.
+
+— Richard, True Vision Project
+
+You received this because you registered at truevisionproject.com.
+To unsubscribe reply with DELETE to archive@truevisionproject.com`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,7 +181,7 @@ export default async function handler(req, res) {
                       <tr>
                         <td style="padding:14px 0;">
                           <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#666666;letter-spacing:0.25em;text-transform:uppercase;">Member Number</p>
-                          <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;color:#666666;letter-spacing:0.1em;">#${String(memberNumber).padStart(3, '0')} <span style="font-size:12px;color:#333333;">of 20 founding members</span></p>
+                          <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:16px;color:#666666;letter-spacing:0.1em;">#${String(memberNumber).padStart(3, '0')}</p>
                         </td>
                       </tr>
                     </table>
@@ -184,7 +208,7 @@ export default async function handler(req, res) {
                         </td>
                         <td>
                           <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#ffffff;letter-spacing:0.15em;text-transform:uppercase;">DROP 001 — THE FOUNDATION CAP</p>
-                          <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy. 20 units. No restock. No compromise.</p>
+                          <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy. No restock. No compromise.</p>
                         </td>
                       </tr>
                     </table>
