@@ -117,7 +117,7 @@ function buildEmail(member) {
                     <td style="padding-right:16px;vertical-align:top;"><p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:18px;color:#333333;">01</p></td>
                     <td>
                       <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#ffffff;letter-spacing:0.15em;text-transform:uppercase;">DROP 001 — THE FOUNDATION CAP</p>
-                      <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy. 20 units. No restock. No compromise.</p>
+                      <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy.</p>
                     </td>
                   </tr></table>
                 </td></tr>

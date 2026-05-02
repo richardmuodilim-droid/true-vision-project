@@ -288,7 +288,7 @@ export default function Home() {
             <div className="mb-10">
               <div className="w-8 h-px bg-white/10 mb-6" aria-hidden="true" />
               <p style={{ ...serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.9 }}>
-                No restock. No compromise.<br />This is Drop 001.
+                Built between Ireland and Italy.
               </p>
             </div>
 

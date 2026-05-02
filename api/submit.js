@@ -72,7 +72,7 @@ This isn't a brand. It's a statement.
 Two people. Two small towns. One shared belief that you don't need permission to build something real.
 
 Drop 001 — The Foundation Cap
-300GSM washed chino twill. Made between Ireland and Italy. No restock.
+300GSM washed chino twill. Made between Ireland and Italy.
 
 Enter the Archive: https://www.truevisionproject.com
 
@@ -208,7 +208,7 @@ To unsubscribe reply with DELETE to archive@truevisionproject.com`,
                         </td>
                         <td>
                           <p style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#ffffff;letter-spacing:0.15em;text-transform:uppercase;">DROP 001 — THE FOUNDATION CAP</p>
-                          <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy. No restock. No compromise.</p>
+                          <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#666666;line-height:1.7;">300GSM washed chino twill. Made between Ireland and Italy.</p>
                         </td>
                       </tr>
                     </table>

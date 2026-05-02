@@ -272,7 +272,7 @@ export default function Landing() {
                         The Foundation Cap.<br />Ireland × Italy.
                       </p>
                       <p style={{ ...mono, fontSize: '9px', color: '#444', letterSpacing: '0.28em' }} className="uppercase">
-                        [ €32 · No restock ]
+                        [ €32 ]
                       </p>
                       <motion.p
                         animate={{ color: hoveredDoor === 'store' ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}

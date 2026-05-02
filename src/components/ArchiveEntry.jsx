@@ -264,7 +264,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             }}
             className="text-center md:text-left"
           >
-            20 units. No restock. No compromise. This is Drop 001.
+            The Foundation Cap. Built between Ireland and Italy.
           </motion.p>
 
         </motion.div>
