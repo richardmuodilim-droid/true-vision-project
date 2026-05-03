@@ -54,27 +54,25 @@ async function pingAccess(userId) {
 }
 
 export default function Vault({ onSuccess, glitching }) {
-  // 'email' → enter email, 'name' → enter name (new), 'returning' → recognized member, 'sent' → email sent confirmation
-  const [step, setStep] = useState('email')
-  const [returning, setReturning] = useState(null)
-  const [sentTo, setSentTo] = useState('')
+  const [step, setStep]               = useState('email')
+  const [returning, setReturning]     = useState(null)
+  const [sentTo, setSentTo]           = useState('')
   const [newMemberData, setNewMemberData] = useState(null)
 
-  const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
-  const [status, setStatus] = useState('idle') // idle | loading | error
+  const [email, setEmail]   = useState('')
+  const [name, setName]     = useState('')
+  const [status, setStatus] = useState('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   const [btnHovered, setBtnHovered] = useState(false)
-  const [scanning, setScanning] = useState(false)
+  const [scanning, setScanning]     = useState(false)
   const scanTimeout = useRef(null)
 
   const [memberCount, setMemberCount] = useState(null)
-  const [syncing, setSyncing] = useState(false)
+  const [syncing, setSyncing]         = useState(false)
 
   const footerText = useTyping(FOOTER_TEXT, { startDelay: 2800, charInterval: 45 })
 
-  // Check localStorage on mount
   useEffect(() => {
     const member = loadMember()
     if (member?.userId && member?.name) {
@@ -83,7 +81,6 @@ export default function Vault({ onSuccess, glitching }) {
     }
   }, [])
 
-  // Fetch live member count
   useEffect(() => {
     fetch('/api/count').then(r => r.json()).then(d => setMemberCount(d.count)).catch(() => {})
   }, [])
@@ -99,7 +96,6 @@ export default function Vault({ onSuccess, glitching }) {
     setScanning(false)
   }
 
-  // Step 1: submit email — look up whether they already exist
   const handleEmailSubmit = async (e) => {
     e.preventDefault()
     const trimmed = email.trim()
@@ -111,31 +107,27 @@ export default function Vault({ onSuccess, glitching }) {
     setErrorMsg('')
     setStatus('loading')
     try {
-      const res = await fetch('/api/lookup', {
-        method: 'POST',
+      const res  = await fetch('/api/lookup', {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: trimmed }),
+        body:    JSON.stringify({ email: trimmed }),
       })
       const data = await res.json()
       setStatus('idle')
       if (data.found) {
-        // Existing member — save locally and go straight to resume
         const member = { userId: data.userId, name: data.name, email: trimmed }
         saveMember(member)
         setReturning(member)
         setStep('returning')
       } else {
-        // New — ask for their name
         setStep('name')
       }
     } catch {
       setStatus('idle')
-      // If lookup fails, fall through to name step
       setStep('name')
     }
   }
 
-  // Step 2: submit name — register new member
   const handleNameSubmit = async (e) => {
     e.preventDefault()
     const trimmedName = name.trim()
@@ -147,10 +139,10 @@ export default function Vault({ onSuccess, glitching }) {
     setStatus('loading')
     setErrorMsg('')
     try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
+      const res  = await fetch('/api/submit', {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), name: trimmedName }),
+        body:    JSON.stringify({ email: email.trim(), name: trimmedName }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -171,7 +163,6 @@ export default function Vault({ onSuccess, glitching }) {
     }
   }
 
-  // Returning member: log the access and enter
   const handleResume = () => {
     setSyncing(true)
     pingAccess(returning.userId)
@@ -180,7 +171,6 @@ export default function Vault({ onSuccess, glitching }) {
     }, 550)
   }
 
-  // Switch to a different account
   const handleSwitch = () => {
     setReturning(null)
     setStep('email')
@@ -189,15 +179,22 @@ export default function Vault({ onSuccess, glitching }) {
     setStatus('idle')
   }
 
-  return (
-    <main className={`relative min-h-[100dvh] w-full bg-[#000000] flex flex-col items-center overflow-hidden${glitching ? ' vault-glitch' : ''}`}>
+  const inputCls = `
+    w-full h-[52px]
+    bg-transparent border rounded-none
+    text-[12px] tracking-[0.15em] uppercase
+    px-5 text-center outline-none
+    transition-colors duration-300
+  `
 
-      {/* Background layers */}
+  return (
+    <main className={`relative min-h-[100dvh] w-full bg-[#F5F3EE] flex flex-col items-center overflow-hidden${glitching ? ' vault-glitch' : ''}`}>
+
+      <div className="grain" aria-hidden="true" />
+
+      {/* Subtle vignette */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 70% 55% at 50% -5%, rgba(255,255,255,0.05) 0%, transparent 100%)' }} />
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.92) 100%)' }} />
-      <div aria-hidden="true" className="grain" />
+        style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 35%, rgba(0,0,0,0.02) 70%, rgba(0,0,0,0.05) 100%)' }} />
 
       {/* Centre */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-6 sm:px-10 py-12 sm:py-16"
@@ -217,15 +214,16 @@ export default function Vault({ onSuccess, glitching }) {
             width="400"
             height="400"
             className="w-[75vw] max-w-[384px] sm:max-w-[494px] h-auto object-contain select-none"
+            style={{ filter: 'invert(1)' }}
             draggable="false"
           />
           {step === 'returning' && returning && (
             <motion.p
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.45 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="uppercase text-center"
-              style={{ fontFamily: "'Space Mono', monospace", fontSize: '10px', color: '#ffffff', letterSpacing: '0.25em' }}
+              style={{ fontFamily: "'Space Mono', monospace", fontSize: '10px', color: '#111111', letterSpacing: '0.25em' }}
             >
               RECOGNIZED: MEMBER_{getFirstName(returning.name)}. ACCESS PENDING.
             </motion.p>
@@ -243,7 +241,7 @@ export default function Vault({ onSuccess, glitching }) {
         >
           <AnimatePresence mode="wait">
 
-            {/* ── Returning member ── */}
+            {/* Returning member */}
             {step === 'returning' ? (
               <motion.div
                 key="returning"
@@ -258,15 +256,12 @@ export default function Vault({ onSuccess, glitching }) {
                   aria-label="Resume archive access"
                   onMouseEnter={handleBtnEnter}
                   onMouseLeave={handleBtnLeave}
-                  className={`
-                    btn-vault w-full h-[52px]
-                    border border-white/[0.12] rounded-none
-                    text-[11px] tracking-[0.45em] uppercase
-                    transition-all duration-500 cursor-pointer
-                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
-                    ${scanning ? 'scanning' : ''}
-                  `}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
+                  className={`btn-vault w-full h-[52px] border rounded-none text-[11px] tracking-[0.45em] uppercase transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                  style={{
+                    fontFamily: "'Space Mono', monospace",
+                    borderColor: btnHovered ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.14)',
+                    color:       btnHovered ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.40)',
+                  }}
                 >
                   <span className="scanline" aria-hidden="true" />
                   [ RESUME ARCHIVE ACCESS ]
@@ -274,8 +269,8 @@ export default function Vault({ onSuccess, glitching }) {
 
                 <button
                   onClick={handleSwitch}
-                  className="text-center uppercase cursor-pointer transition-colors duration-300 hover:opacity-60"
-                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#444', letterSpacing: '0.2em' }}
+                  className="text-center uppercase cursor-pointer transition-opacity duration-300 hover:opacity-50"
+                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.2em' }}
                 >
                   not {getFirstName(returning.name)}? switch member
                 </button>
@@ -283,7 +278,7 @@ export default function Vault({ onSuccess, glitching }) {
 
             ) : step === 'email' ? (
 
-              /* ── Email step ── */
+              /* Email step */
               <motion.form
                 key="step-email"
                 onSubmit={handleEmailSubmit}
@@ -308,22 +303,21 @@ export default function Vault({ onSuccess, glitching }) {
                   }}
                   aria-describedby={errorMsg ? 'vault-email-error' : undefined}
                   aria-invalid={status === 'error' ? 'true' : undefined}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
-                  className="
-                    w-full h-[52px]
-                    bg-transparent border border-[#333333] rounded-none
-                    text-white text-[12px] tracking-[0.15em] uppercase
-                    placeholder:text-white/20
-                    px-5 text-center outline-none
-                    focus:border-white transition-colors duration-300
-                  "
+                  style={{
+                    fontFamily:    "'Space Mono', monospace",
+                    borderColor:   status === 'error' ? 'rgba(220,38,38,0.4)' : 'rgba(0,0,0,0.16)',
+                    color:         '#111111',
+                    caretColor:    '#111111',
+                    '--placeholder-color': 'rgba(0,0,0,0.22)',
+                  }}
+                  className={inputCls + ' placeholder:text-black/22 focus:border-black/40'}
                 />
                 {errorMsg && (
                   <p
                     id="vault-email-error"
                     role="alert"
                     className="-mt-1 text-center uppercase"
-                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(248,113,113,0.7)', letterSpacing: '0.1em' }}
+                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(220,38,38,0.7)', letterSpacing: '0.1em' }}
                   >
                     {errorMsg}
                   </p>
@@ -334,30 +328,26 @@ export default function Vault({ onSuccess, glitching }) {
                   aria-label="Continue"
                   onMouseEnter={handleBtnEnter}
                   onMouseLeave={handleBtnLeave}
-                  className={`
-                    btn-vault w-full h-[52px]
-                    border border-white/[0.12] rounded-none
-                    text-[11px] tracking-[0.45em] uppercase
-                    disabled:opacity-20 disabled:cursor-not-allowed
-                    transition-all duration-500 cursor-pointer
-                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
-                    ${scanning ? 'scanning' : ''}
-                  `}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
+                  className={`btn-vault w-full h-[52px] border rounded-none text-[11px] tracking-[0.45em] uppercase disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                  style={{
+                    fontFamily:  "'Space Mono', monospace",
+                    borderColor: btnHovered ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.14)',
+                    color:       btnHovered ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.40)',
+                  }}
                 >
                   <span className="scanline" aria-hidden="true" />
                   {status === 'loading' ? (
                     <span className="inline-flex items-center justify-center gap-3">
-                      <span className="w-3 h-3 border border-white/25 border-t-white/55 rounded-full animate-spin" aria-hidden="true" />
+                      <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Checking</span>
                     </span>
                   ) : btnHovered ? '[ Continue ]' : 'Join the Project'}
                 </button>
               </motion.form>
 
-            ) : (
+            ) : step === 'name' ? (
 
-              /* ── Name step (new member only) ── */
+              /* Name step */
               <motion.form
                 key="step-name"
                 onSubmit={handleNameSubmit}
@@ -370,7 +360,7 @@ export default function Vault({ onSuccess, glitching }) {
               >
                 <p
                   className="text-center uppercase"
-                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#555', letterSpacing: '0.25em' }}
+                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.25em' }}
                 >
                   New member detected — enter your name
                 </p>
@@ -389,22 +379,20 @@ export default function Vault({ onSuccess, glitching }) {
                   }}
                   aria-describedby={errorMsg ? 'vault-name-error' : undefined}
                   aria-invalid={status === 'error' ? 'true' : undefined}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
-                  className="
-                    w-full h-[52px]
-                    bg-transparent border border-[#333333] rounded-none
-                    text-white text-[11px] tracking-[0.12em] uppercase
-                    placeholder:text-white/15
-                    px-5 text-center outline-none
-                    focus:border-white transition-colors duration-300
-                  "
+                  style={{
+                    fontFamily:  "'Space Mono', monospace",
+                    borderColor: status === 'error' ? 'rgba(220,38,38,0.4)' : 'rgba(0,0,0,0.16)',
+                    color:       '#111111',
+                    caretColor:  '#111111',
+                  }}
+                  className={inputCls + ' placeholder:text-black/22 focus:border-black/40'}
                 />
                 {errorMsg && (
                   <p
                     id="vault-name-error"
                     role="alert"
                     className="-mt-1 text-center uppercase"
-                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(248,113,113,0.7)', letterSpacing: '0.1em' }}
+                    style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(220,38,38,0.7)', letterSpacing: '0.1em' }}
                   >
                     {errorMsg}
                   </p>
@@ -415,21 +403,17 @@ export default function Vault({ onSuccess, glitching }) {
                   aria-label="Register and enter the archive"
                   onMouseEnter={handleBtnEnter}
                   onMouseLeave={handleBtnLeave}
-                  className={`
-                    btn-vault w-full h-[52px]
-                    border border-white/[0.12] rounded-none
-                    text-[11px] tracking-[0.45em] uppercase
-                    disabled:opacity-20 disabled:cursor-not-allowed
-                    transition-all duration-500 cursor-pointer
-                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
-                    ${scanning ? 'scanning' : ''}
-                  `}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
+                  className={`btn-vault w-full h-[52px] border rounded-none text-[11px] tracking-[0.45em] uppercase disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                  style={{
+                    fontFamily:  "'Space Mono', monospace",
+                    borderColor: btnHovered ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.14)',
+                    color:       btnHovered ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.40)',
+                  }}
                 >
                   <span className="scanline" aria-hidden="true" />
                   {status === 'loading' ? (
                     <span className="inline-flex items-center justify-center gap-3">
-                      <span className="w-3 h-3 border border-white/25 border-t-white/55 rounded-full animate-spin" aria-hidden="true" />
+                      <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Verifying</span>
                     </span>
                   ) : btnHovered ? '[ Access Granted ]' : 'Enter the Archive'}
@@ -438,8 +422,8 @@ export default function Vault({ onSuccess, glitching }) {
                 <button
                   type="button"
                   onClick={() => { setStep('email'); setErrorMsg(''); setStatus('idle') }}
-                  className="text-center uppercase cursor-pointer transition-colors duration-300 hover:opacity-60"
-                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#444', letterSpacing: '0.2em' }}
+                  className="text-center uppercase cursor-pointer transition-opacity duration-300 hover:opacity-50"
+                  style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.2em' }}
                 >
                   ← back
                 </button>
@@ -447,7 +431,7 @@ export default function Vault({ onSuccess, glitching }) {
 
             ) : step === 'sent' ? (
 
-              /* ── Email sent confirmation ── */
+              /* Email sent confirmation */
               <motion.div
                 key="step-sent"
                 className="flex flex-col items-center gap-6 w-full text-center"
@@ -457,26 +441,26 @@ export default function Vault({ onSuccess, glitching }) {
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="flex flex-col gap-3">
-                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#555', letterSpacing: '0.35em' }} className="uppercase">
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.35em' }} className="uppercase">
                     [ Access Granted ]
                   </p>
-                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '22px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
+                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '22px', color: 'rgba(0,0,0,0.80)', lineHeight: 1.5 }}>
                     Welcome, {newMemberData ? getFirstName(newMemberData.name) : 'Member'}.
                   </p>
                 </div>
 
-                <div className="w-full border border-white/[0.07] p-5 flex flex-col gap-3">
-                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#666', letterSpacing: '0.25em' }} className="uppercase">
+                <div className="w-full p-5 flex flex-col gap-3" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.25em' }} className="uppercase">
                     Confirmation sent to
                   </p>
-                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.08em' }}>
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px', color: 'rgba(0,0,0,0.60)', letterSpacing: '0.08em' }}>
                     {sentTo}
                   </p>
-                  <div className="w-full h-px bg-white/[0.06] my-1" />
-                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#555', letterSpacing: '0.18em', lineHeight: 1.9 }} className="uppercase">
+                  <div className="w-full h-px bg-black/[0.07] my-1" />
+                  <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.18em', lineHeight: 1.9 }} className="uppercase">
                     Not in your inbox?<br />
-                    <span style={{ color: 'rgba(255,255,255,0.35)' }}>Check your spam folder</span> and move it to inbox.<br />
-                    Then save <span style={{ color: 'rgba(255,255,255,0.4)' }}>archive@truevisionproject.com</span> to your contacts.
+                    <span style={{ color: 'rgba(0,0,0,0.55)' }}>Check your spam folder</span> and move it to inbox.<br />
+                    Then save <span style={{ color: 'rgba(0,0,0,0.60)' }}>archive@truevisionproject.com</span> to your contacts.
                   </p>
                 </div>
 
@@ -485,15 +469,12 @@ export default function Vault({ onSuccess, glitching }) {
                   onMouseEnter={handleBtnEnter}
                   onMouseLeave={handleBtnLeave}
                   aria-label="Enter the archive"
-                  className={`
-                    btn-vault w-full h-[52px]
-                    border border-white/[0.12] rounded-none
-                    text-[11px] tracking-[0.45em] uppercase
-                    transition-all duration-500 cursor-pointer
-                    ${btnHovered ? 'text-white/80 border-white/25' : 'text-white/40'}
-                    ${scanning ? 'scanning' : ''}
-                  `}
-                  style={{ fontFamily: "'Space Mono', monospace" }}
+                  className={`btn-vault w-full h-[52px] border rounded-none text-[11px] tracking-[0.45em] uppercase transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                  style={{
+                    fontFamily:  "'Space Mono', monospace",
+                    borderColor: btnHovered ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.14)',
+                    color:       btnHovered ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.40)',
+                  }}
                 >
                   <span className="scanline" aria-hidden="true" />
                   [ Enter the Archive ]
@@ -512,13 +493,13 @@ export default function Vault({ onSuccess, glitching }) {
           animate={{ opacity: 0.35 }}
           transition={{ duration: 1, delay: 1.4 }}
           className="relative z-10 text-center uppercase px-6 pb-4"
-          style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#ffffff', letterSpacing: '0.25em' }}
+          style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#111111', letterSpacing: '0.25em' }}
         >
           [ {String(memberCount).padStart(2, '0')} MEMBERS HAVE JOINED THE PROJECT ]
         </motion.p>
       )}
 
-      {/* Sync progress bar for returning member resume */}
+      {/* Sync progress bar */}
       <AnimatePresence>
         {syncing && (
           <motion.div
@@ -527,13 +508,13 @@ export default function Vault({ onSuccess, glitching }) {
             animate={{ opacity: 1 }}
             className="fixed bottom-0 left-0 right-0 z-50 flex flex-col gap-1 px-6 pb-5"
           >
-            <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }}
+            <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.3em' }}
               className="uppercase">
               [ SYNCING... ]
             </p>
-            <div className="w-full h-px bg-white/[0.08] overflow-hidden">
+            <div className="w-full h-px bg-black/[0.08] overflow-hidden">
               <motion.div
-                className="h-full bg-white/50"
+                className="h-full bg-black/40"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.5, ease: 'linear' }}
@@ -547,12 +528,12 @@ export default function Vault({ onSuccess, glitching }) {
       {/* Typing footer */}
       <p
         className="relative z-10 w-full text-center px-4 pb-7 pt-2 min-h-[1em] shrink-0"
-        style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#555', letterSpacing: '0.12em' }}
+        style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.12em' }}
         aria-label={FOOTER_TEXT}
       >
         <span aria-hidden="true">{footerText}</span>
         {footerText.length < FOOTER_TEXT.length && (
-          <span aria-hidden="true" className="inline-block w-[1ch] animate-pulse" style={{ color: '#555' }}>_</span>
+          <span aria-hidden="true" className="inline-block w-[1ch] animate-pulse" style={{ color: 'rgba(0,0,0,0.22)' }}>_</span>
         )}
       </p>
     </main>

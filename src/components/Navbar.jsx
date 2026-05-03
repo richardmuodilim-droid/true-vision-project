@@ -21,18 +21,18 @@ export default function Navbar({ onCartOpen }) {
     <>
       {/* Technical status strip */}
       <div
-        className="fixed top-0 left-0 right-0 z-50 h-[22px] flex items-center justify-between px-4 sm:px-8 bg-black"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+        className="fixed top-0 left-0 right-0 z-50 h-[22px] flex items-center justify-between px-4 sm:px-8 bg-[#F5F3EE]"
+        style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}
         aria-hidden="true"
       >
-        <span style={{ ...mono, fontSize: '7px', color: '#4a4a4a', letterSpacing: '0.22em' }}>
+        <span style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <span className="hidden sm:block" style={{ ...mono, fontSize: '7px', color: '#4a4a4a', letterSpacing: '0.22em' }}>
+        <span className="hidden sm:block" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
           [ DROP 001 — LIVE ]
         </span>
-        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#4a4a4a', letterSpacing: '0.18em' }}>
-          [ STATUS:&nbsp;<span style={{ color: '#777' }}>AVAILABLE</span>&nbsp;]
+        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.18em' }}>
+          [ STATUS:&nbsp;<span style={{ color: '#888' }}>AVAILABLE</span>&nbsp;]
           <span className="status-dot" />
         </span>
       </div>
@@ -41,9 +41,10 @@ export default function Navbar({ onCartOpen }) {
       <header
         className={`fixed top-[22px] left-0 right-0 z-50 transition-all duration-700 ${
           scrolled || !isHome
-            ? 'bg-black/92 backdrop-blur-sm border-b border-white/[0.04]'
+            ? 'bg-[#F5F3EE]/95 backdrop-blur-sm'
             : 'bg-transparent'
         }`}
+        style={{ borderBottom: scrolled || !isHome ? '1px solid rgba(0,0,0,0.06)' : 'none' }}
       >
         <div className="max-w-screen-xl mx-auto px-6 sm:px-10 h-14 flex items-center justify-between">
 
@@ -55,6 +56,7 @@ export default function Navbar({ onCartOpen }) {
               width="400"
               height="400"
               className="h-11 sm:h-12 w-auto max-w-[140px] sm:max-w-[160px] object-contain select-none"
+              style={{ filter: 'invert(1)' }}
               draggable="false"
             />
           </Link>
@@ -63,8 +65,8 @@ export default function Navbar({ onCartOpen }) {
           <div className="flex items-center gap-7">
             <Link
               to="/archive"
-              style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em' }}
-              className="text-white/25 uppercase hover:text-white/55 transition-colors duration-500 hidden sm:block"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)' }}
+              className="uppercase hover:opacity-70 transition-opacity duration-500 hidden sm:block"
             >
               [ Archive ]
             </Link>
@@ -73,7 +75,8 @@ export default function Navbar({ onCartOpen }) {
             <button
               onClick={onCartOpen}
               aria-label={`Open cart — ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
-              className="relative flex items-center justify-center w-8 h-8 text-white/40 hover:text-white/80 transition-colors duration-500 cursor-pointer"
+              className="relative flex items-center justify-center w-8 h-8 transition-opacity duration-500 hover:opacity-60 cursor-pointer"
+              style={{ color: 'rgba(0,0,0,0.50)' }}
             >
               <svg
                 width="17"
@@ -95,7 +98,7 @@ export default function Navbar({ onCartOpen }) {
                   key={itemCount}
                   initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-white rounded-full flex items-center justify-center text-[7px] text-black font-medium leading-none"
+                  className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-[#111111] rounded-full flex items-center justify-center text-[7px] text-[#F5F3EE] font-medium leading-none"
                   aria-hidden="true"
                 >
                   {itemCount > 9 ? '9+' : itemCount}
@@ -106,8 +109,8 @@ export default function Navbar({ onCartOpen }) {
             {/* Archive link on mobile */}
             <Link
               to="/archive"
-              style={{ ...mono, fontSize: '8px', letterSpacing: '0.3em' }}
-              className="text-white/20 uppercase hover:text-white/50 transition-colors duration-500 sm:hidden"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(0,0,0,0.28)' }}
+              className="uppercase hover:opacity-70 transition-opacity duration-500 sm:hidden"
               aria-label="Archive"
             >
               [ Arc ]

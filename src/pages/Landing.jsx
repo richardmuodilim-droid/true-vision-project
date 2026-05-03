@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const mono = { fontFamily: "'Space Mono', monospace" }
+const mono  = { fontFamily: "'Space Mono', monospace" }
 const serif = { fontFamily: "'Cormorant Garamond', serif" }
 
 const LS_KEY = 'TrueVisionMember'
@@ -20,7 +20,7 @@ function getFirstName(name) {
 }
 
 export default function Landing() {
-  const [member, setMember] = useState(null)
+  const [member, setMember]         = useState(null)
   const [memberCount, setMemberCount] = useState(null)
   const [hoveredDoor, setHoveredDoor] = useState(null)
   const [showAllDoors, setShowAllDoors] = useState(false)
@@ -33,20 +33,17 @@ export default function Landing() {
   const isReturning = member && !showAllDoors
 
   return (
-    <main className="relative min-h-[100dvh] w-full bg-[#000000] text-white flex flex-col" aria-label="True Vision Project">
+    <main className="relative min-h-[100dvh] w-full bg-[#F5F3EE] flex flex-col" aria-label="True Vision Project">
 
-      {/* Grain */}
       <div className="grain" aria-hidden="true" />
 
-      {/* Atmospheric gradients */}
+      {/* Subtle vignette */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -8%, rgba(255,255,255,0.055) 0%, transparent 100%)' }} />
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 28%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0.97) 100%)' }} />
+        style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 35%, rgba(0,0,0,0.03) 70%, rgba(0,0,0,0.07) 100%)' }} />
 
       <div className="relative z-10 flex-1 flex flex-col items-center px-6 pt-16 pb-12 sm:pt-20">
 
-        {/* ── Logo ── */}
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -59,22 +56,23 @@ export default function Landing() {
             width="600"
             height="600"
             className="w-[72vw] max-w-[340px] sm:max-w-[440px] h-auto object-contain select-none"
+            style={{ filter: 'invert(1)' }}
             draggable="false"
           />
         </motion.div>
 
-        {/* ── Manifesto ── */}
+        {/* Manifesto */}
         <motion.p
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 0.55 }}
+          animate={{ opacity: 0.5 }}
           transition={{ duration: 1.2, delay: 0.9, ease: 'easeOut' }}
           className="text-center mb-14 sm:mb-16 px-2"
-          style={{ ...serif, fontStyle: 'italic', fontSize: 'clamp(18px, 3.8vw, 26px)', color: '#ffffff', lineHeight: 1.45, maxWidth: '520px' }}
+          style={{ ...serif, fontStyle: 'italic', fontSize: 'clamp(18px, 3.8vw, 26px)', color: '#111111', lineHeight: 1.45, maxWidth: '520px' }}
         >
           We are not building a brand.<br />We are documenting a mission.
         </motion.p>
 
-        {/* ── Cap image strip ── */}
+        {/* Cap image strip */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,11 +84,10 @@ export default function Landing() {
               <div
                 key={i}
                 className="relative overflow-hidden"
-                style={{ aspectRatio: '3/4', filter: 'saturate(0.12) brightness(0.88)' }}
+                style={{ aspectRatio: '3/4', filter: 'saturate(0.18) brightness(0.95)' }}
               >
-                {/* Corner marks */}
-                <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/25 z-10" />
-                <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/25 z-10" />
+                <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l border-black/12 z-10" />
+                <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-black/12 z-10" />
                 <img
                   src={src}
                   alt={i === 0 ? 'Foundation Cap — Black' : 'Foundation Cap — White'}
@@ -100,7 +97,7 @@ export default function Landing() {
                   draggable="false"
                 />
                 <div className="absolute bottom-3 left-4 z-10">
-                  <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.28em' }}>
+                  <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.28em' }}>
                     {i === 0 ? 'BLACK' : 'WHITE'}
                   </p>
                 </div>
@@ -108,29 +105,28 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Caption below images */}
           <div className="flex items-center justify-between mt-4 px-1">
-            <p style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.28em' }} className="uppercase">
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.28em' }} className="uppercase">
               The Foundation Cap — Drop 001
             </p>
-            <p style={{ ...mono, fontSize: '9px', color: '#444', letterSpacing: '0.22em' }}>
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }}>
               €32
             </p>
           </div>
         </motion.div>
 
-        {/* ── Divider ── */}
+        {/* Divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          className="origin-center w-16 h-px bg-white/15 mb-12 sm:mb-14"
+          className="origin-center w-16 h-px bg-black/12 mb-12 sm:mb-14"
           aria-hidden="true"
         />
 
         <AnimatePresence mode="wait">
 
-          {/* ── Returning member fast-track ── */}
+          {/* Returning member fast-track */}
           {isReturning ? (
             <motion.div
               key="returning"
@@ -140,16 +136,17 @@ export default function Landing() {
               transition={{ duration: 0.75, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center gap-5 w-full max-w-sm"
             >
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.35em' }} className="uppercase text-center">
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.35em' }} className="uppercase text-center">
                 [ MEMBER_{getFirstName(member.name)} — RECOGNIZED ]
               </p>
 
               <Link
                 to="/archive"
                 className="w-full h-[56px] flex items-center justify-center
-                  border border-white/20 text-white/55 hover:text-white/90 hover:border-white/40
-                  transition-all duration-500 cursor-pointer"
-                style={{ ...mono, fontSize: '12px', letterSpacing: '0.42em' }}
+                  border transition-all duration-500 cursor-pointer"
+                style={{ ...mono, fontSize: '12px', letterSpacing: '0.42em', borderColor: 'rgba(0,0,0,0.15)', color: 'rgba(0,0,0,0.50)' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.35)'; e.currentTarget.style.color = 'rgba(0,0,0,0.80)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)'; e.currentTarget.style.color = 'rgba(0,0,0,0.50)' }}
               >
                 [ ENTER ARCHIVE ]
               </Link>
@@ -157,18 +154,19 @@ export default function Landing() {
               <div className="flex w-full gap-3">
                 <Link
                   to="/store"
-                  className="flex-1 h-12 flex items-center justify-center
-                    border border-white/10 text-white/35 hover:text-white/65 hover:border-white/25
-                    transition-all duration-400 cursor-pointer"
-                  style={{ ...mono, fontSize: '10px', letterSpacing: '0.3em' }}
+                  className="flex-1 h-12 flex items-center justify-center border transition-all duration-400 cursor-pointer"
+                  style={{ ...mono, fontSize: '10px', letterSpacing: '0.3em', borderColor: 'rgba(0,0,0,0.10)', color: 'rgba(0,0,0,0.35)' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.22)'; e.currentTarget.style.color = 'rgba(0,0,0,0.60)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.10)'; e.currentTarget.style.color = 'rgba(0,0,0,0.35)' }}
                 >
                   Drop 001
                 </Link>
                 <button
                   onClick={() => setShowAllDoors(true)}
-                  className="flex-1 h-12 flex items-center justify-center
-                    text-white/20 hover:text-white/45 transition-colors duration-400 cursor-pointer"
-                  style={{ ...mono, fontSize: '9px', letterSpacing: '0.22em' }}
+                  className="flex-1 h-12 flex items-center justify-center transition-colors duration-400 cursor-pointer"
+                  style={{ ...mono, fontSize: '9px', letterSpacing: '0.22em', color: 'rgba(0,0,0,0.20)' }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(0,0,0,0.45)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(0,0,0,0.20)'}
                 >
                   Not you?
                 </button>
@@ -177,7 +175,7 @@ export default function Landing() {
 
           ) : (
 
-            /* ── Two doors ── */
+            /* Two doors */
             <motion.div
               key="doors"
               initial={{ opacity: 0, y: 14 }}
@@ -198,35 +196,35 @@ export default function Landing() {
                 >
                   <motion.div
                     animate={{
-                      opacity: hoveredDoor === 'store' ? 0.22 : 1,
-                      backgroundColor: hoveredDoor === 'archive' ? 'rgba(255,255,255,0.03)' : 'transparent',
+                      opacity: hoveredDoor === 'store' ? 0.28 : 1,
+                      backgroundColor: hoveredDoor === 'archive' ? 'rgba(0,0,0,0.02)' : 'transparent',
                     }}
                     transition={{ duration: 0.35 }}
-                    className="relative flex flex-col justify-between p-8 sm:p-10 border border-white/10 min-h-[240px] sm:min-h-[280px] cursor-pointer"
+                    className="relative flex flex-col justify-between p-8 sm:p-10 border border-black/10 min-h-[240px] sm:min-h-[280px] cursor-pointer"
                   >
-                    <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l border-white/25" />
-                    <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-white/25" />
+                    <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l border-black/18" />
+                    <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-black/18" />
 
                     <div>
-                      <p style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.4em' }} className="mb-5 uppercase">
+                      <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.4em' }} className="mb-5 uppercase">
                         Members only
                       </p>
-                      <h2 style={{ ...serif, fontWeight: 500, fontSize: 'clamp(28px, 5vw, 42px)', color: '#ffffff', lineHeight: 1.1 }}>
+                      <h2 style={{ ...serif, fontWeight: 500, fontSize: 'clamp(28px, 5vw, 42px)', color: '#111111', lineHeight: 1.1 }}>
                         The Archive
                       </h2>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <p style={{ ...mono, fontSize: '10px', color: '#606060', letterSpacing: '0.14em', lineHeight: 1.9 }}>
+                      <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.14em', lineHeight: 1.9 }}>
                         Join the project.<br />Track every drop.
                       </p>
                       {memberCount !== null && (
-                        <p style={{ ...mono, fontSize: '9px', color: '#444', letterSpacing: '0.28em' }} className="uppercase">
+                        <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.28em' }} className="uppercase">
                           [ {String(memberCount).padStart(2, '0')} members ]
                         </p>
                       )}
                       <motion.p
-                        animate={{ color: hoveredDoor === 'archive' ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}
+                        animate={{ color: hoveredDoor === 'archive' ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.28)' }}
                         transition={{ duration: 0.3 }}
                         style={{ ...mono, fontSize: '11px', letterSpacing: '0.32em' }}
                         className="uppercase"
@@ -247,35 +245,35 @@ export default function Landing() {
                 >
                   <motion.div
                     animate={{
-                      opacity: hoveredDoor === 'archive' ? 0.22 : 1,
-                      backgroundColor: hoveredDoor === 'store' ? 'rgba(255,255,255,0.03)' : 'transparent',
+                      opacity: hoveredDoor === 'archive' ? 0.28 : 1,
+                      backgroundColor: hoveredDoor === 'store' ? 'rgba(0,0,0,0.02)' : 'transparent',
                     }}
                     transition={{ duration: 0.35 }}
                     className="relative flex flex-col justify-between p-8 sm:p-10
-                      border border-white/10 border-t-0 sm:border-t sm:border-l-0
+                      border border-black/10 border-t-0 sm:border-t sm:border-l-0
                       min-h-[240px] sm:min-h-[280px] cursor-pointer"
                   >
-                    <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r border-white/25" />
-                    <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-white/25" />
+                    <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r border-black/18" />
+                    <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-black/18" />
 
                     <div>
-                      <p style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.4em' }} className="mb-5 uppercase">
+                      <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.4em' }} className="mb-5 uppercase">
                         Open to all
                       </p>
-                      <h2 style={{ ...serif, fontWeight: 500, fontSize: 'clamp(28px, 5vw, 42px)', color: '#ffffff', lineHeight: 1.1 }}>
+                      <h2 style={{ ...serif, fontWeight: 500, fontSize: 'clamp(28px, 5vw, 42px)', color: '#111111', lineHeight: 1.1 }}>
                         Drop 001
                       </h2>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <p style={{ ...mono, fontSize: '10px', color: '#606060', letterSpacing: '0.14em', lineHeight: 1.9 }}>
+                      <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.14em', lineHeight: 1.9 }}>
                         The Foundation Cap.<br />Ireland × Italy.
                       </p>
-                      <p style={{ ...mono, fontSize: '9px', color: '#444', letterSpacing: '0.28em' }} className="uppercase">
+                      <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.28em' }} className="uppercase">
                         [ €32 ]
                       </p>
                       <motion.p
-                        animate={{ color: hoveredDoor === 'store' ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}
+                        animate={{ color: hoveredDoor === 'store' ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.28)' }}
                         transition={{ duration: 0.3 }}
                         style={{ ...mono, fontSize: '11px', letterSpacing: '0.32em' }}
                         className="uppercase"
@@ -297,7 +295,7 @@ export default function Landing() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, delay: 3.2 }}
         className="relative z-10 w-full text-center px-4 pb-8 pt-4 shrink-0"
-        style={{ ...mono, fontSize: '9px', color: '#3a3a3a', letterSpacing: '0.16em' }}
+        style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.16em' }}
       >
         [PROJECT: 001] // TVP // EST. 2026
       </motion.p>

@@ -64,16 +64,14 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
   return (
     <motion.div
-      className={`relative min-h-[100dvh] w-full bg-[#000] text-white flex flex-col${flickering ? ' vault-glitch' : ''}`}
+      className={`relative min-h-[100dvh] w-full bg-[#F5F3EE] flex flex-col${flickering ? ' vault-glitch' : ''}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.9, ease: 'easeOut' }}
     >
       {/* Background */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 100%)' }} />
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.8) 90%, #000 100%)' }} />
+        style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 35%, rgba(0,0,0,0.02) 70%, rgba(0,0,0,0.05) 100%)' }} />
       <div aria-hidden="true" className="grain" />
 
       {/* ── Sticky Technical Header ── */}
@@ -81,21 +79,18 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 h-[26px] sm:h-8"
-        style={{
-          background: '#000',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-        }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 h-[26px] sm:h-8 bg-[#F5F3EE]"
+        style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}
         aria-label="Technical status bar"
       >
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
+        <span style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.2em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <span style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}
+        <span style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.2em' }}
           className="hidden sm:block">
           [ PROJECT_MEMBER: {formatMemberTag(memberName)} ]
         </span>
-        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.18em' }}>
+        <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.18em' }}>
           [ STATUS:&nbsp;
           <span style={{ color: '#888' }}>LIVE</span>
           &nbsp;]
@@ -113,8 +108,9 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         <img src="/logo-archive.svg" alt="True Vision Project"
           width="80" height="80"
           className="w-16 h-16 sm:w-14 sm:h-14 object-contain select-none mb-3 sm:mb-2"
+          style={{ filter: 'invert(1)' }}
           draggable="false" />
-        <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.2em' }}>
           ARCHIVE // ENTRY_001
         </p>
       </motion.header>
@@ -122,11 +118,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
       {/* ── Welcome Greeting ── */}
       <motion.p
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
+        animate={{ opacity: 0.55 }}
         transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
         className="relative z-10 text-center uppercase px-4 sm:px-0"
-        style={{ ...mono, fontSize: 'clamp(10px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#ffffff', paddingBottom: '4px',
-          textShadow: '0 0 12px rgba(255,255,255,0.35), 0 0 28px rgba(255,255,255,0.12)' }}
+        style={{ ...mono, fontSize: 'clamp(10px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#111111', paddingBottom: '4px' }}
       >
         WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
       </motion.p>
@@ -142,13 +137,14 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           className="flex flex-col gap-2 md:pr-10 mb-8 md:mb-0"
         >
           {/* Main image */}
-          <div className="relative w-full aspect-square sm:aspect-[3/2] md:aspect-[4/5] overflow-hidden bg-[#050505]"
-            style={{ filter: 'saturate(0.15) brightness(0.92)' }}>
+          <div className="relative w-full aspect-square sm:aspect-[3/2] md:aspect-[4/5] overflow-hidden bg-[#E8E6E1]"
+            style={{ filter: 'saturate(0.18) brightness(0.95)' }}>
 
             {/* Corner marks */}
             {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
               'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c,i)=>(
-              <span key={i} aria-hidden="true" className={`absolute w-5 h-5 border-white/10 z-10 ${c}`}/>
+              <span key={i} aria-hidden="true" className={`absolute w-5 h-5 z-10 ${c}`}
+                style={{ borderColor: 'rgba(0,0,0,0.12)' }}/>
             ))}
 
             <AnimatePresence mode="wait">
@@ -168,12 +164,12 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
             {/* Labels */}
             <div className="absolute bottom-3 left-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.25em' }}>
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.25em' }}>
                 {images[activeImg].label}
               </p>
             </div>
             <div className="absolute bottom-3 right-4 z-10">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.2em' }}>
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.2em' }}>
                 {String(activeImg+1).padStart(2,'0')} / {String(images.length).padStart(2,'0')}
               </p>
             </div>
@@ -184,9 +180,13 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             {images.map((img, i) => (
               <button key={i} onClick={() => setActiveImg(i)}
                 aria-label={`View ${img.label}`} aria-pressed={activeImg === i}
-                className={`relative flex-1 aspect-square overflow-hidden border transition-all duration-300 cursor-pointer
-                  ${activeImg === i ? 'border-white/30 opacity-100' : 'border-white/[0.05] opacity-35 hover:opacity-65 hover:border-white/15'}`}
-                style={{ filter: 'saturate(0.1)' }}
+                className={`relative flex-1 aspect-square overflow-hidden transition-all duration-300 cursor-pointer ${
+                  activeImg === i ? 'opacity-100' : 'opacity-40 hover:opacity-65'
+                }`}
+                style={{
+                  border: `1px solid ${activeImg === i ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.08)'}`,
+                  filter: 'saturate(0.1)',
+                }}
               >
                 <img src={img.src} alt={img.label} loading="lazy"
                   width="200" height="200"
@@ -202,11 +202,11 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col justify-center md:pl-10 md:border-l border-white/[0.04]"
+          className="flex flex-col justify-center md:pl-10 md:border-l"
+          style={{ borderColor: 'rgba(0,0,0,0.06)' }}
         >
-
           {/* Section label */}
-          <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-8 uppercase">
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="mb-8 uppercase">
             Product Manifest
           </p>
 
@@ -218,12 +218,13 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 + i * 0.07, ease: 'easeOut' }}
-                className="flex items-start py-[16px] border-b border-white/[0.07] gap-4"
+                className="flex items-start py-[16px] gap-4"
+                style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
               >
                 {/* Key */}
                 <span
                   className="shrink-0 leading-snug"
-                  style={{ ...mono, fontSize: '8px', color: '#606060', letterSpacing: '0.25em', minWidth: 'min(140px, 38vw)' }}
+                  style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.25em', minWidth: 'min(140px, 38vw)' }}
                 >
                   [ {key} ]
                 </span>
@@ -233,7 +234,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                     {value}
                   </span>
                 ) : (
-                  <span className="leading-snug" style={{ ...mono, fontSize: '11px', color: '#d0d0d0', letterSpacing: '0.06em' }}>
+                  <span className="leading-snug" style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.72)', letterSpacing: '0.06em' }}>
                     {value}
                   </span>
                 )}
@@ -246,7 +247,8 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.6, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            className="origin-left w-10 h-px bg-white/10 mb-10"
+            className="origin-left w-10 h-px mb-10"
+            style={{ background: 'rgba(0,0,0,0.12)' }}
             aria-hidden="true"
           />
 
@@ -259,7 +261,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               fontFamily: "'Cormorant Garamond', serif",
               fontStyle: 'italic',
               fontSize: '17px',
-              color: '#ffffff',
+              color: '#111111',
               lineHeight: '1.85',
             }}
             className="text-center md:text-left"
@@ -280,10 +282,11 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
       >
         {/* Top rule */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
           transition={{ duration: 0.8, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
-          className="origin-center w-px h-10 bg-white/10 mb-14"
+          className="origin-top w-px h-10 mb-14"
+          style={{ background: 'rgba(0,0,0,0.12)' }}
           aria-hidden="true"
         />
 
@@ -297,7 +300,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             fontWeight: 500,
             fontStyle: 'normal',
             fontSize: 'clamp(22px, 5.5vw, 42px)',
-            color: '#ffffff',
+            color: '#111111',
             lineHeight: '1.25',
             letterSpacing: '-0.03em',
             maxWidth: '780px',
@@ -315,7 +318,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             fontFamily: "'Inter', sans-serif",
             fontWeight: 300,
             fontSize: '11px',
-            color: '#ffffff',
+            color: '#111111',
             letterSpacing: '0.2em',
             marginTop: '28px',
           }}
@@ -326,10 +329,11 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
         {/* Bottom rule */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
           transition={{ duration: 0.8, delay: 2.0, ease: [0.16, 1, 0.3, 1] }}
-          className="origin-center w-px h-10 bg-white/10 mt-14"
+          className="origin-top w-px h-10 mt-14"
+          style={{ background: 'rgba(0,0,0,0.12)' }}
           aria-hidden="true"
         />
       </motion.section>
@@ -343,7 +347,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         aria-label="Process Archive"
       >
         {/* Section label */}
-        <p style={{ ...mono, fontSize: '7px', color: '#444', letterSpacing: '0.45em' }} className="mb-5 uppercase">
+        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="mb-5 uppercase">
           Process Archive
         </p>
 
@@ -358,16 +362,17 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               {/* Image frame */}
               <div
                 className="w-full relative overflow-hidden"
-                style={{ aspectRatio: '4/3', border: '1px solid #1a1a1a' }}
+                style={{ aspectRatio: '4/3', border: '1px solid rgba(0,0,0,0.08)' }}
               >
                 {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
                   'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, j) => (
-                  <span key={j} aria-hidden="true" className={`absolute w-3 h-3 border-white/10 z-10 ${c}`} />
+                  <span key={j} aria-hidden="true" className={`absolute w-3 h-3 z-10 ${c}`}
+                    style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
                 ))}
                 <span
                   aria-hidden="true"
                   className="absolute top-3 left-3 z-10"
-                  style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em' }}
+                  style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.2em' }}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -379,12 +384,12 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                   height="420"
                   className="w-full h-full object-cover object-center select-none"
                   draggable="false"
-                  style={{ filter: 'saturate(0.08) brightness(0.82) contrast(1.1)' }}
+                  style={{ filter: 'saturate(0.10) brightness(0.92) contrast(1.05)' }}
                 />
               </div>
 
               {/* Caption */}
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', lineHeight: '1.6' }}>
+              <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.2em', lineHeight: '1.6' }}>
                 {item.caption}
               </p>
             </div>
@@ -394,14 +399,15 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
       {/* ── Live Archive Feed ── */}
       <div
-        className="relative z-10 shrink-0 w-full overflow-hidden border-t border-white/[0.05] py-2"
+        className="relative z-10 shrink-0 w-full overflow-hidden py-2"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
         aria-hidden="true"
       >
-        <div className="marquee-track" style={{ opacity: 0.4 }}>
+        <div className="marquee-track" style={{ opacity: 0.35 }}>
           {[0, 1].map(i => (
             <span
               key={i}
-              style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: '#ffffff', letterSpacing: '0.2em', whiteSpace: 'nowrap', paddingRight: '4rem' }}
+              style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.55)', letterSpacing: '0.2em', whiteSpace: 'nowrap', paddingRight: '4rem' }}
             >
               [ CONNECTION_SECURE ] &nbsp;&nbsp;...&nbsp;&nbsp; [ WEXFORD_ARCHIVE_SYNCED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ BERGAMO_TEXTILE_VERIFIED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ DROP_001_PENDING ] &nbsp;&nbsp;...&nbsp;&nbsp; [ RELENTLESS_EFFORT_REQUIRED ] &nbsp;&nbsp;...&nbsp;&nbsp;
             </span>
@@ -414,10 +420,11 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1.4 }}
-        className="relative z-10 shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-12 py-4 sm:py-6 border-t border-white/[0.07]"
+        className="relative z-10 shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-12 py-4 sm:py-6"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
       >
         <div className="flex items-center gap-4 justify-center sm:justify-start">
-          <p style={{ ...mono, fontSize: '7px', color: '#555', letterSpacing: '0.2em' }}>
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.2em' }}>
             [SESSION: ACTIVE]
           </p>
           <a
@@ -425,7 +432,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="text-white/20 hover:text-white/60 transition-colors duration-300"
+            className="transition-colors duration-300"
+            style={{ color: 'rgba(0,0,0,0.22)' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'rgba(0,0,0,0.55)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(0,0,0,0.22)'}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -438,31 +448,31 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           <button
             onClick={handleDisconnect}
             aria-label="Disconnect member and clear access"
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.1em' }}
-            className="text-white/15 uppercase hover:text-red-400/50 transition-colors duration-300 cursor-pointer min-h-[44px] flex items-center"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.22)' }}
+            className="uppercase transition-colors duration-300 cursor-pointer min-h-[44px] flex items-center hover:text-red-500/60"
           >
             [ switch member ]
           </button>
           <a
             href="/store"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em' }}
-            className="btn-archive flex-1 sm:flex-none text-white/40 uppercase border border-white/[0.12] px-4 sm:px-6 min-h-[44px] flex items-center justify-center
-              hover:border-white/30 hover:text-white/70
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
+            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] flex items-center justify-center
               transition-all duration-300 cursor-pointer"
             aria-label="Shop Drop 001"
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >
-            <span className="scanline" aria-hidden="true" />
             [ SHOP DROP 001 ]
           </a>
           <button
             onClick={onLogout}
             aria-label="Exit Archive"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em' }}
-            className="btn-archive flex-1 sm:flex-none text-white/40 uppercase border border-white/[0.12] px-4 sm:px-6 min-h-[44px]
-              hover:border-white/30 hover:text-white/70
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
+            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px]
               transition-all duration-300 cursor-pointer"
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >
-            <span className="scanline" aria-hidden="true" />
             [ EXIT ARCHIVE ]
           </button>
         </div>

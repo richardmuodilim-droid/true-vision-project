@@ -41,8 +41,8 @@
   #root {
     height: 100%;
     width: 100%;
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #F5F3EE;
+    color: #111111;
   }
 
   body {
@@ -53,14 +53,13 @@
 }
 
 @layer utilities {
-  /* Hide browser autofill background */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
-    -webkit-text-fill-color: #ffffff;
+    -webkit-box-shadow: 0 0 0px 1000px #F5F3EE inset;
+    -webkit-text-fill-color: #111111;
     transition: background-color 5000s ease-in-out 0s;
-    caret-color: #ffffff;
+    caret-color: #111111;
   }
 }
 
@@ -104,9 +103,9 @@
   }
 }
 
-/* Button: scanline sweep — plays once on hover trigger */
+/* Button: scanline sweep */
 @keyframes scanline {
-  0%   { top: -100%; opacity: 0.6; }
+  0%   { top: -100%; opacity: 0.5; }
   100% { top: 200%;  opacity: 0;   }
 }
 
@@ -123,9 +122,9 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.09) 50%,
-    rgba(255, 255, 255, 0.05) 60%,
+    rgba(0,0,0,0.03) 40%,
+    rgba(0,0,0,0.06) 50%,
+    rgba(0,0,0,0.03) 60%,
     transparent 100%
   );
   pointer-events: none;
@@ -137,12 +136,11 @@
   animation: scanline 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Glow — box-shadow on hover */
 .btn-vault:hover:not(:disabled) {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 0 12px rgba(255, 255, 255, 0.06),
-    0 0 28px rgba(255, 255, 255, 0.03);
+    0 0 0 1px rgba(0,0,0,0.15),
+    0 0 12px rgba(0,0,0,0.04),
+    0 0 28px rgba(0,0,0,0.02);
 }
 
 /* Animated film grain */
@@ -163,10 +161,10 @@
 .grain {
   pointer-events: none;
   position: fixed;
-  inset: -50%;          /* oversized so translate never reveals an edge */
+  inset: -50%;
   width: 200%;
   height: 200%;
-  opacity: 0.04;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
@@ -174,12 +172,11 @@
   z-index: 1;
 }
 
-/* Honour reduced-motion — freeze the grain but keep the texture */
 @media (prefers-reduced-motion: reduce) {
   .grain { animation: none; }
 }
 
-/* Archive footer buttons — scanline + dark hover */
+/* Archive footer buttons */
 .btn-archive {
   position: relative;
   overflow: hidden;
@@ -193,9 +190,9 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255, 255, 255, 0.04) 40%,
-    rgba(255, 255, 255, 0.07) 50%,
-    rgba(255, 255, 255, 0.04) 60%,
+    rgba(0,0,0,0.03) 40%,
+    rgba(0,0,0,0.05) 50%,
+    rgba(0,0,0,0.03) 60%,
     transparent 100%
   );
   pointer-events: none;
@@ -209,7 +206,7 @@
 }
 
 .btn-archive:hover {
-  background-color: #0A0A0A;
+  background-color: rgba(0,0,0,0.04);
 }
 
 /* Pulsing green for live status */
@@ -219,7 +216,7 @@
 }
 
 .status-live {
-  color: #22c55e;
+  color: #16a34a;
   animation: pulse-green 2.2s ease-in-out infinite;
 }
 

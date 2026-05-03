@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 
+const mono = { fontFamily: "'Space Mono', monospace" }
 const STEPS = ['Contact', 'Shipping', 'Review']
 
 function Field({ label, id, type = 'text', autoComplete, value, onChange, error, half }) {
   return (
     <div className={half ? 'flex-1 min-w-0' : 'w-full'}>
-      <label htmlFor={id} className="block text-[8px] tracking-[0.3em] text-white/25 uppercase mb-2">
+      <label htmlFor={id}
+        className="block text-[8px] tracking-[0.3em] uppercase mb-2"
+        style={{ ...mono, color: 'rgba(0,0,0,0.38)' }}>
         {label}
       </label>
       <input
@@ -20,15 +23,18 @@ function Field({ label, id, type = 'text', autoComplete, value, onChange, error,
         onChange={onChange}
         className={`
           w-full bg-transparent border-b py-3 outline-none
-          text-[11px] tracking-[0.1em] text-white/80
-          placeholder:text-white/15
+          text-[11px] tracking-[0.1em]
           transition-colors duration-500
-          ${error ? 'border-red-400/40' : 'border-white/[0.1] focus:border-white/35'}
+          placeholder:text-black/20
+          ${error ? 'border-red-500/40' : 'border-black/[0.10] focus:border-black/30'}
         `}
+        style={{ ...mono, color: 'rgba(0,0,0,0.72)', caretColor: '#111111' }}
         aria-describedby={error ? `${id}-error` : undefined}
       />
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1.5 text-[7px] tracking-[0.25em] text-red-400/50 uppercase">
+        <p id={`${id}-error`} role="alert"
+          className="mt-1.5 text-[7px] tracking-[0.25em] text-red-500/55 uppercase"
+          style={mono}>
           {error}
         </p>
       )}
@@ -84,7 +90,6 @@ export default function Checkout() {
       return
     }
 
-    // Step 2 — redirect to Stripe
     setLoading(true)
     setApiError('')
 
@@ -117,10 +122,15 @@ export default function Checkout() {
 
   if (items.length === 0 && !loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center px-6">
+      <div className="min-h-screen bg-[#F5F3EE] flex items-center justify-center px-6">
         <div className="flex flex-col items-center gap-6 text-center">
-          <p className="text-[8px] tracking-[0.4em] text-white/25 uppercase">Your bag is empty</p>
-          <Link to="/" className="text-[8px] tracking-[0.35em] text-white/20 uppercase border-b border-white/10 pb-px hover:text-white/45 transition-colors duration-300">
+          <p className="text-[8px] tracking-[0.4em] uppercase"
+            style={{ ...mono, color: 'rgba(0,0,0,0.28)' }}>
+            Your bag is empty
+          </p>
+          <Link to="/"
+            className="text-[8px] tracking-[0.35em] uppercase pb-px hover:opacity-50 transition-opacity duration-300"
+            style={{ ...mono, color: 'rgba(0,0,0,0.35)', borderBottom: '1px solid rgba(0,0,0,0.12)' }}>
             Back to Store
           </Link>
         </div>
@@ -129,13 +139,14 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#F5F3EE]">
       <div className="max-w-screen-lg mx-auto px-6 sm:px-10 pt-28 pb-32">
 
         {/* Back link */}
         <Link
           to="/store"
-          className="inline-flex items-center gap-2 text-[8px] tracking-[0.35em] text-white/20 uppercase hover:text-white/45 transition-colors duration-300 mb-16"
+          className="inline-flex items-center gap-2 text-[8px] tracking-[0.35em] uppercase hover:opacity-50 transition-opacity duration-300 mb-16"
+          style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}
         >
           <span aria-hidden="true">←</span> Back to Store
         </Link>
@@ -147,14 +158,21 @@ export default function Checkout() {
               <button
                 type="button"
                 onClick={() => i < step && setStep(i)}
-                className={`text-[7px] tracking-[0.35em] uppercase transition-colors duration-500 ${
-                  i === step ? 'text-white/60' : i < step ? 'text-white/30 hover:text-white/50 cursor-pointer' : 'text-white/15 cursor-default'
-                }`}
+                className="text-[7px] tracking-[0.35em] uppercase transition-colors duration-500"
+                style={{
+                  ...mono,
+                  color: i === step
+                    ? 'rgba(0,0,0,0.60)'
+                    : i < step
+                      ? 'rgba(0,0,0,0.32)'
+                      : 'rgba(0,0,0,0.16)',
+                  cursor: i < step ? 'pointer' : 'default',
+                }}
               >
                 {label}
               </button>
               {i < STEPS.length - 1 && (
-                <span className="text-white/10 text-[8px]" aria-hidden="true">/</span>
+                <span aria-hidden="true" style={{ ...mono, color: 'rgba(0,0,0,0.14)', fontSize: '8px' }}>/</span>
               )}
             </div>
           ))}
@@ -166,8 +184,8 @@ export default function Checkout() {
           <form onSubmit={handleNext} noValidate>
 
             {apiError && (
-              <div className="mb-8 border border-white/10 px-5 py-4">
-                <p className="text-[8px] tracking-[0.2em] text-red-400/60 uppercase">{apiError}</p>
+              <div className="mb-8 px-5 py-4" style={{ border: '1px solid rgba(0,0,0,0.10)' }}>
+                <p className="text-[8px] tracking-[0.2em] text-red-500/60 uppercase" style={mono}>{apiError}</p>
               </div>
             )}
 
@@ -207,7 +225,9 @@ export default function Checkout() {
                       <Field label="ZIP / Eircode" id="zip" autoComplete="postal-code" half
                         value={form.zip} onChange={set('zip')} error={errors.zip} />
                       <div className="flex-1 min-w-0">
-                        <label htmlFor="country" className="block text-[8px] tracking-[0.3em] text-white/25 uppercase mb-2">
+                        <label htmlFor="country"
+                          className="block text-[8px] tracking-[0.3em] uppercase mb-2"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.38)' }}>
                           Country
                         </label>
                         <select
@@ -215,18 +235,19 @@ export default function Checkout() {
                           value={form.country}
                           onChange={set('country')}
                           autoComplete="country"
-                          className="w-full bg-transparent border-b border-white/[0.1] py-3 outline-none text-[11px] tracking-[0.1em] text-white/80 focus:border-white/35 transition-colors duration-500 appearance-none"
+                          className="w-full bg-transparent border-b border-black/[0.10] py-3 outline-none focus:border-black/30 transition-colors duration-500 appearance-none cursor-pointer"
+                          style={{ ...mono, fontSize: '11px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.72)' }}
                         >
-                          <option value="IE" className="bg-black">Ireland</option>
-                          <option value="GB" className="bg-black">United Kingdom</option>
-                          <option value="US" className="bg-black">United States</option>
-                          <option value="CA" className="bg-black">Canada</option>
-                          <option value="AU" className="bg-black">Australia</option>
-                          <option value="DE" className="bg-black">Germany</option>
-                          <option value="FR" className="bg-black">France</option>
-                          <option value="IT" className="bg-black">Italy</option>
-                          <option value="ES" className="bg-black">Spain</option>
-                          <option value="NL" className="bg-black">Netherlands</option>
+                          <option value="IE" style={{ background: '#F5F3EE' }}>Ireland</option>
+                          <option value="GB" style={{ background: '#F5F3EE' }}>United Kingdom</option>
+                          <option value="US" style={{ background: '#F5F3EE' }}>United States</option>
+                          <option value="CA" style={{ background: '#F5F3EE' }}>Canada</option>
+                          <option value="AU" style={{ background: '#F5F3EE' }}>Australia</option>
+                          <option value="DE" style={{ background: '#F5F3EE' }}>Germany</option>
+                          <option value="FR" style={{ background: '#F5F3EE' }}>France</option>
+                          <option value="IT" style={{ background: '#F5F3EE' }}>Italy</option>
+                          <option value="ES" style={{ background: '#F5F3EE' }}>Spain</option>
+                          <option value="NL" style={{ background: '#F5F3EE' }}>Netherlands</option>
                         </select>
                       </div>
                     </div>
@@ -238,38 +259,53 @@ export default function Checkout() {
                   <div className="flex flex-col gap-6">
 
                     {/* Contact summary */}
-                    <div className="border border-white/[0.07] p-5">
+                    <div className="p-5" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-[7px] tracking-[0.35em] text-white/25 uppercase">Contact</span>
+                        <span className="text-[7px] tracking-[0.35em] uppercase"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.35)' }}>Contact</span>
                         <button type="button" onClick={() => setStep(0)}
-                          className="text-[7px] tracking-[0.25em] text-white/20 uppercase hover:text-white/45 transition-colors duration-300 cursor-pointer">
+                          className="text-[7px] tracking-[0.25em] uppercase hover:opacity-50 transition-opacity duration-300 cursor-pointer"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}>
                           Edit
                         </button>
                       </div>
-                      <p className="text-[11px] tracking-[0.08em] text-white/60">{form.email}</p>
+                      <p style={{ ...mono, fontSize: '11px', letterSpacing: '0.08em', color: 'rgba(0,0,0,0.60)' }}>
+                        {form.email}
+                      </p>
                     </div>
 
                     {/* Shipping summary */}
-                    <div className="border border-white/[0.07] p-5">
+                    <div className="p-5" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-[7px] tracking-[0.35em] text-white/25 uppercase">Ship to</span>
+                        <span className="text-[7px] tracking-[0.35em] uppercase"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.35)' }}>Ship to</span>
                         <button type="button" onClick={() => setStep(1)}
-                          className="text-[7px] tracking-[0.25em] text-white/20 uppercase hover:text-white/45 transition-colors duration-300 cursor-pointer">
+                          className="text-[7px] tracking-[0.25em] uppercase hover:opacity-50 transition-opacity duration-300 cursor-pointer"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}>
                           Edit
                         </button>
                       </div>
-                      <p className="text-[11px] tracking-[0.08em] text-white/60">{form.firstName} {form.lastName}</p>
-                      <p className="text-[10px] tracking-[0.06em] text-white/30 mt-1">{form.address}</p>
-                      <p className="text-[10px] tracking-[0.06em] text-white/30">{form.city}, {form.state} {form.zip}</p>
+                      <p style={{ ...mono, fontSize: '11px', letterSpacing: '0.08em', color: 'rgba(0,0,0,0.60)' }}>
+                        {form.firstName} {form.lastName}
+                      </p>
+                      <p style={{ ...mono, fontSize: '10px', letterSpacing: '0.06em', color: 'rgba(0,0,0,0.35)', marginTop: '4px' }}>
+                        {form.address}
+                      </p>
+                      <p style={{ ...mono, fontSize: '10px', letterSpacing: '0.06em', color: 'rgba(0,0,0,0.35)' }}>
+                        {form.city}, {form.state} {form.zip}
+                      </p>
                     </div>
 
                     {/* Secure notice */}
-                    <div className="flex items-center gap-3 border border-white/[0.05] px-5 py-4">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="text-white/20 shrink-0" aria-hidden="true">
+                    <div className="flex items-center gap-3 px-5 py-4"
+                      style={{ border: '1px solid rgba(0,0,0,0.06)' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25"
+                        className="shrink-0" style={{ color: 'rgba(0,0,0,0.28)' }} aria-hidden="true">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                         <path d="M7 11V7a5 5 0 0110 0v4" />
                       </svg>
-                      <span className="text-[7px] tracking-[0.25em] text-white/20 uppercase">
+                      <span className="text-[7px] tracking-[0.25em] uppercase"
+                        style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}>
                         Secure payment powered by Stripe. Your card details never touch our servers.
                       </span>
                     </div>
@@ -285,7 +321,8 @@ export default function Checkout() {
                 <button
                   type="button"
                   onClick={() => setStep((s) => s - 1)}
-                  className="text-[8px] tracking-[0.35em] text-white/20 uppercase hover:text-white/45 transition-colors duration-300 cursor-pointer"
+                  className="text-[8px] tracking-[0.35em] uppercase hover:opacity-50 transition-opacity duration-300 cursor-pointer"
+                  style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}
                   disabled={loading}
                 >
                   ← Back
@@ -295,7 +332,8 @@ export default function Checkout() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-12 py-4 bg-white text-black text-[9px] tracking-[0.45em] uppercase font-medium hover:bg-white/90 transition-colors duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-12 py-4 bg-[#111111] text-[#F5F3EE] text-[9px] tracking-[0.45em] uppercase font-medium hover:bg-[#2a2a2a] transition-colors duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                style={mono}
               >
                 {step < STEPS.length - 1
                   ? 'Continue'
@@ -311,12 +349,16 @@ export default function Checkout() {
 
             <button
               onClick={() => setSummaryOpen((v) => !v)}
-              className="lg:hidden flex items-center justify-between w-full py-4 border-b border-white/[0.06] cursor-pointer"
+              className="lg:hidden flex items-center justify-between w-full py-4 cursor-pointer"
+              style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
             >
-              <span className="text-[8px] tracking-[0.4em] text-white/30 uppercase">
+              <span className="text-[8px] tracking-[0.4em] uppercase"
+                style={{ ...mono, color: 'rgba(0,0,0,0.32)' }}>
                 {summaryOpen ? 'Hide' : 'Show'} Summary
               </span>
-              <span className="text-[10px] tracking-[0.15em] text-white/50">€{total.toFixed(2)}</span>
+              <span style={{ ...mono, fontSize: '10px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.50)' }}>
+                €{total.toFixed(2)}
+              </span>
             </button>
 
             <div className={`lg:block ${summaryOpen ? 'block' : 'hidden'}`}>
@@ -324,36 +366,53 @@ export default function Checkout() {
                 <ul className="flex flex-col gap-4">
                   {items.map((item) => (
                     <li key={item.key} className="flex items-start gap-4">
-                      <div className="w-14 h-16 bg-[#0d0d0d] shrink-0 overflow-hidden">
+                      <div className="w-14 h-16 bg-[#E8E6E1] shrink-0 overflow-hidden flex items-center justify-center">
                         {item.imgSrc
-                          ? <img src={item.imgSrc} alt={item.name} className="w-full h-full object-cover" style={{ filter: 'saturate(0.12)' }} />
-                          : <span className="w-full h-full flex items-center justify-center text-[6px] tracking-[0.3em] text-white/10 uppercase">Img</span>
+                          ? <img src={item.imgSrc} alt={item.name} className="w-full h-full object-cover" style={{ filter: 'saturate(0.14)' }} />
+                          : <span className="text-[6px] tracking-[0.3em] uppercase"
+                              style={{ ...mono, color: 'rgba(0,0,0,0.18)' }}>Img</span>
                         }
                       </div>
                       <div className="flex-1">
-                        <p className="text-[9px] tracking-[0.25em] text-white/60 uppercase">{item.name}</p>
-                        <p className="text-[7px] tracking-[0.2em] text-white/20 uppercase mt-1">{item.size} / {item.color}</p>
-                        <p className="text-[7px] tracking-[0.2em] text-white/20 mt-1">Qty {item.qty}</p>
+                        <p className="text-[9px] tracking-[0.25em] uppercase"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.60)' }}>{item.name}</p>
+                        <p className="text-[7px] tracking-[0.2em] uppercase mt-1"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.28)' }}>{item.size} / {item.color}</p>
+                        <p className="text-[7px] tracking-[0.2em] mt-1"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.28)' }}>Qty {item.qty}</p>
                       </div>
-                      <p className="text-[9px] tracking-[0.1em] text-white/40">€{(item.price * item.qty).toFixed(2)}</p>
+                      <p style={{ ...mono, fontSize: '9px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.45)' }}>
+                        €{(item.price * item.qty).toFixed(2)}
+                      </p>
                     </li>
                   ))}
                 </ul>
 
-                <div className="border-t border-white/[0.05] pt-5 flex flex-col gap-3">
+                <div className="pt-5 flex flex-col gap-3"
+                  style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
                   <div className="flex justify-between">
-                    <span className="text-[8px] tracking-[0.3em] text-white/25 uppercase">Subtotal</span>
-                    <span className="text-[8px] tracking-[0.1em] text-white/40">€{subtotal.toFixed(2)}</span>
+                    <span className="text-[8px] tracking-[0.3em] uppercase"
+                      style={{ ...mono, color: 'rgba(0,0,0,0.35)' }}>Subtotal</span>
+                    <span style={{ ...mono, fontSize: '8px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.50)' }}>
+                      €{subtotal.toFixed(2)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[8px] tracking-[0.3em] text-white/25 uppercase">Shipping</span>
-                    <span className="text-[8px] tracking-[0.1em] text-white/40">€{shipping.toFixed(2)}</span>
+                    <span className="text-[8px] tracking-[0.3em] uppercase"
+                      style={{ ...mono, color: 'rgba(0,0,0,0.35)' }}>Shipping</span>
+                    <span style={{ ...mono, fontSize: '8px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.50)' }}>
+                      €{shipping.toFixed(2)}
+                    </span>
                   </div>
                 </div>
 
-                <div className="border-t border-white/[0.05] pt-4 flex justify-between">
-                  <span className="text-[9px] tracking-[0.35em] text-white/50 uppercase">Total</span>
-                  <span className="text-[9px] tracking-[0.1em] text-white/70">€{total.toFixed(2)}</span>
+                <div className="pt-4 flex justify-between"
+                  style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+                  <span className="text-[9px] tracking-[0.35em] uppercase"
+                    style={{ ...mono, color: 'rgba(0,0,0,0.50)' }}>Total</span>
+                  <span style={{ ...mono, fontSize: '9px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.72)' }}>
+                    €{total.toFixed(2)}
+                  </span>
                 </div>
               </div>
             </div>
