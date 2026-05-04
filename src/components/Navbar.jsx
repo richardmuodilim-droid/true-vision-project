@@ -64,6 +64,13 @@ export default function Navbar({ onCartOpen }) {
           {/* Right actions */}
           <div className="flex items-center gap-7">
             <Link
+              to="/our-story"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)' }}
+              className="uppercase hover:opacity-70 transition-opacity duration-500 hidden sm:block"
+            >
+              [ Our Story ]
+            </Link>
+            <Link
               to="/archive"
               style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)' }}
               className="uppercase hover:opacity-70 transition-opacity duration-500 hidden sm:block"

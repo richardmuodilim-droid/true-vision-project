@@ -12,6 +12,7 @@ import DecryptionScreen from './components/DecryptionScreen'
 import ArchiveEntry from './components/ArchiveEntry'
 import AdminPage from './components/AdminPage'
 import OrderSuccess from './pages/OrderSuccess'
+import OurStory from './pages/OurStory'
 
 function StoreShell() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -69,6 +70,7 @@ export default function App() {
           <Route path="/category/:slug" element={<Category />} />
           <Route path="/checkout"      element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/our-story"     element={<OurStory />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -66,8 +66,9 @@ export default function Footer() {
                 className="uppercase mb-5">Project</p>
               <ul className="flex flex-col gap-3">
                 {[
-                  { to: '/archive', label: 'Archive' },
-                  { to: '/contact', label: 'Contact' },
+                  { to: '/our-story', label: 'Our Story' },
+                  { to: '/archive',   label: 'Archive' },
+                  { to: '/contact',   label: 'Contact' },
                 ].map(({ to, label }) => (
                   <li key={to}>
                     <Link to={to}
