@@ -63,7 +63,7 @@ export default function Checkout() {
   })
   const [errors, setErrors] = useState({})
 
-  const shipping = 6
+  const shipping = 0
   const total    = subtotal + shipping
 
   const set = (field) => (e) => {

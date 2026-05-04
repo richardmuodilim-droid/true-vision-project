@@ -28,7 +28,7 @@ export default function Cart({ open, onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const shipping = 6
+  const shipping = 0
   const total    = subtotal + shipping
   const itemCount = items.reduce((s, i) => s + i.qty, 0)
 
