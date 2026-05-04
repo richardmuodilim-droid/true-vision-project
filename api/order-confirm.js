@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const resend  = new Resend(process.env.RESEND_API_KEY)
 
-const BUSINESS_EMAIL = 'richardmuodilim@gmail.com'
+const BUSINESS_EMAIL = 'truevisionstore2@gmail.com'
 
 function customerEmail({ ref, email, items, shipping, total }) {
   const itemRows = items.map(item => `
