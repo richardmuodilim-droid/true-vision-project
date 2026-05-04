@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const manifest = [
@@ -453,23 +454,29 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           >
             [ switch member ]
           </button>
-          <a
-            href="/store"
+          <Link
+            to="/our-story"
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.35)', borderColor: 'rgba(0,0,0,0.08)' }}
+            className="hidden sm:flex flex-none uppercase border px-4 sm:px-5 min-h-[44px] items-center justify-center transition-all duration-300"
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.22)'; e.currentTarget.style.color = 'rgba(0,0,0,0.65)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.color = 'rgba(0,0,0,0.35)' }}
+          >
+            [ OUR STORY ]
+          </Link>
+          <Link
+            to="/"
             style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
-            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] flex items-center justify-center
-              transition-all duration-300 cursor-pointer"
-            aria-label="Shop Drop 001"
+            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] flex items-center justify-center transition-all duration-300"
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >
             [ SHOP DROP 001 ]
-          </a>
+          </Link>
           <button
             onClick={onLogout}
             aria-label="Exit Archive"
             style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
-            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px]
-              transition-all duration-300 cursor-pointer"
+            className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] transition-all duration-300 cursor-pointer"
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >

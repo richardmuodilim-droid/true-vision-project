@@ -46,7 +46,7 @@ export default function Footer() {
                 className="uppercase mb-5">Shop</p>
               <ul className="flex flex-col gap-3">
                 {[
-                  { to: '/store',           label: 'Drop 001' },
+                  { to: '/',                label: 'Drop 001' },
                   { to: '/category/hats',   label: 'Hats' },
                   { to: '/category/t-shirts', label: 'T-Shirts' },
                 ].map(({ to, label }) => (

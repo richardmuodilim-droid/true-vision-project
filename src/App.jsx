@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Cart from './components/Cart'
 import Landing from './pages/Landing'
@@ -59,18 +59,19 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         {/* Standalone — no navbar */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/archive" element={<ArchiveFlow />} />
+        <Route path="/intro"         element={<Landing />} />
+        <Route path="/archive"       element={<ArchiveFlow />} />
         <Route path="/archive-admin" element={<AdminPage />} />
 
         {/* Store — with navbar + cart */}
         <Route element={<StoreShell />}>
-          <Route path="/store" element={<Home />} />
+          <Route path="/"            element={<Home />} />
+          <Route path="/store"       element={<Navigate to="/" replace />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/category/:slug" element={<Category />} />
-          <Route path="/checkout"      element={<Checkout />} />
+          <Route path="/checkout"    element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/our-story"     element={<OurStory />} />
+          <Route path="/our-story"   element={<OurStory />} />
         </Route>
       </Routes>
     </BrowserRouter>

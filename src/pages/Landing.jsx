@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { getProduct } from '../data/products'
 
+const CAP  = getProduct('foundation-cap')
 const mono  = { fontFamily: "'Space Mono', monospace" }
 const serif = { fontFamily: "'Cormorant Garamond', serif" }
 
@@ -110,7 +112,7 @@ export default function Landing() {
               The Foundation Cap — Drop 001
             </p>
             <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }}>
-              €32
+              €{CAP.price}
             </p>
           </div>
         </motion.div>
@@ -133,7 +135,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.75, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.75, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center gap-5 w-full max-w-sm"
             >
               <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.35em' }} className="uppercase text-center">
@@ -153,7 +155,7 @@ export default function Landing() {
 
               <div className="flex w-full gap-3">
                 <Link
-                  to="/store"
+                  to="/"
                   className="flex-1 h-12 flex items-center justify-center border transition-all duration-400 cursor-pointer"
                   style={{ ...mono, fontSize: '10px', letterSpacing: '0.3em', borderColor: 'rgba(0,0,0,0.10)', color: 'rgba(0,0,0,0.35)' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.22)'; e.currentTarget.style.color = 'rgba(0,0,0,0.60)' }}
@@ -181,7 +183,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.85, delay: showAllDoors ? 0.05 : 2.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.85, delay: showAllDoors ? 0.05 : 1.2, ease: [0.16, 1, 0.3, 1] }}
               className="w-full max-w-2xl"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2">
@@ -237,7 +239,7 @@ export default function Landing() {
 
                 {/* Door — Drop 001 */}
                 <Link
-                  to="/store"
+                  to="/"
                   onMouseEnter={() => setHoveredDoor('store')}
                   onMouseLeave={() => setHoveredDoor(null)}
                   aria-label="View Drop 001 — The Foundation Cap"
@@ -293,7 +295,7 @@ export default function Landing() {
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 3.2 }}
+        transition={{ duration: 1.2, delay: 1.8 }}
         className="relative z-10 w-full text-center px-4 pb-8 pt-4 shrink-0"
         style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.16em' }}
       >

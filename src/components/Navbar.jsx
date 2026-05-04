@@ -9,7 +9,7 @@ export default function Navbar({ onCartOpen }) {
   const { itemCount } = useCart()
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-  const isHome = location.pathname === '/store'
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
