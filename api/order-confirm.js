@@ -164,7 +164,7 @@ export default async function handler(req, res) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items', 'shipping_details'],
+      expand: ['line_items'],
     })
 
     if (session.payment_status !== 'paid') {
