@@ -238,16 +238,116 @@ export default function Checkout() {
                           className="w-full bg-transparent border-b border-black/[0.10] py-3 outline-none focus:border-black/30 transition-colors duration-500 appearance-none cursor-pointer"
                           style={{ ...mono, fontSize: '11px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.72)' }}
                         >
-                          <option value="IE" style={{ background: '#F5F3EE' }}>Ireland</option>
-                          <option value="GB" style={{ background: '#F5F3EE' }}>United Kingdom</option>
-                          <option value="US" style={{ background: '#F5F3EE' }}>United States</option>
-                          <option value="CA" style={{ background: '#F5F3EE' }}>Canada</option>
-                          <option value="AU" style={{ background: '#F5F3EE' }}>Australia</option>
-                          <option value="DE" style={{ background: '#F5F3EE' }}>Germany</option>
-                          <option value="FR" style={{ background: '#F5F3EE' }}>France</option>
-                          <option value="IT" style={{ background: '#F5F3EE' }}>Italy</option>
-                          <option value="ES" style={{ background: '#F5F3EE' }}>Spain</option>
-                          <option value="NL" style={{ background: '#F5F3EE' }}>Netherlands</option>
+                          <option value="IE">Ireland</option>
+                          <option value="GB">United Kingdom</option>
+                          <option value="US">United States</option>
+                          <option value="CA">Canada</option>
+                          <option value="AU">Australia</option>
+                          <option value="NZ">New Zealand</option>
+                          <option disabled>──────────</option>
+                          <option value="AT">Austria</option>
+                          <option value="BE">Belgium</option>
+                          <option value="BG">Bulgaria</option>
+                          <option value="HR">Croatia</option>
+                          <option value="CY">Cyprus</option>
+                          <option value="CZ">Czech Republic</option>
+                          <option value="DK">Denmark</option>
+                          <option value="EE">Estonia</option>
+                          <option value="FI">Finland</option>
+                          <option value="FR">France</option>
+                          <option value="DE">Germany</option>
+                          <option value="GR">Greece</option>
+                          <option value="HU">Hungary</option>
+                          <option value="IS">Iceland</option>
+                          <option value="IT">Italy</option>
+                          <option value="LV">Latvia</option>
+                          <option value="LI">Liechtenstein</option>
+                          <option value="LT">Lithuania</option>
+                          <option value="LU">Luxembourg</option>
+                          <option value="MT">Malta</option>
+                          <option value="MC">Monaco</option>
+                          <option value="NL">Netherlands</option>
+                          <option value="NO">Norway</option>
+                          <option value="PL">Poland</option>
+                          <option value="PT">Portugal</option>
+                          <option value="RO">Romania</option>
+                          <option value="SK">Slovakia</option>
+                          <option value="SI">Slovenia</option>
+                          <option value="ES">Spain</option>
+                          <option value="SE">Sweden</option>
+                          <option value="CH">Switzerland</option>
+                          <option disabled>──────────</option>
+                          <option value="AE">United Arab Emirates</option>
+                          <option value="BH">Bahrain</option>
+                          <option value="IL">Israel</option>
+                          <option value="JO">Jordan</option>
+                          <option value="KW">Kuwait</option>
+                          <option value="OM">Oman</option>
+                          <option value="QA">Qatar</option>
+                          <option value="SA">Saudi Arabia</option>
+                          <option value="TR">Turkey</option>
+                          <option disabled>──────────</option>
+                          <option value="AR">Argentina</option>
+                          <option value="BO">Bolivia</option>
+                          <option value="BR">Brazil</option>
+                          <option value="CL">Chile</option>
+                          <option value="CO">Colombia</option>
+                          <option value="CR">Costa Rica</option>
+                          <option value="DO">Dominican Republic</option>
+                          <option value="EC">Ecuador</option>
+                          <option value="SV">El Salvador</option>
+                          <option value="GT">Guatemala</option>
+                          <option value="HN">Honduras</option>
+                          <option value="MX">Mexico</option>
+                          <option value="PA">Panama</option>
+                          <option value="PY">Paraguay</option>
+                          <option value="PE">Peru</option>
+                          <option value="UY">Uruguay</option>
+                          <option value="VE">Venezuela</option>
+                          <option disabled>──────────</option>
+                          <option value="BD">Bangladesh</option>
+                          <option value="CN">China</option>
+                          <option value="HK">Hong Kong</option>
+                          <option value="IN">India</option>
+                          <option value="ID">Indonesia</option>
+                          <option value="JP">Japan</option>
+                          <option value="MY">Malaysia</option>
+                          <option value="NP">Nepal</option>
+                          <option value="PK">Pakistan</option>
+                          <option value="PH">Philippines</option>
+                          <option value="SG">Singapore</option>
+                          <option value="KR">South Korea</option>
+                          <option value="LK">Sri Lanka</option>
+                          <option value="TW">Taiwan</option>
+                          <option value="TH">Thailand</option>
+                          <option value="VN">Vietnam</option>
+                          <option disabled>──────────</option>
+                          <option value="DZ">Algeria</option>
+                          <option value="EG">Egypt</option>
+                          <option value="GH">Ghana</option>
+                          <option value="KE">Kenya</option>
+                          <option value="MA">Morocco</option>
+                          <option value="NG">Nigeria</option>
+                          <option value="ZA">South Africa</option>
+                          <option value="TN">Tunisia</option>
+                          <option value="UG">Uganda</option>
+                          <option value="TZ">Tanzania</option>
+                          <option value="ZM">Zambia</option>
+                          <option value="ZW">Zimbabwe</option>
+                          <option disabled>──────────</option>
+                          <option value="AL">Albania</option>
+                          <option value="AM">Armenia</option>
+                          <option value="AZ">Azerbaijan</option>
+                          <option value="BY">Belarus</option>
+                          <option value="BA">Bosnia and Herzegovina</option>
+                          <option value="GE">Georgia</option>
+                          <option value="KZ">Kazakhstan</option>
+                          <option value="KG">Kyrgyzstan</option>
+                          <option value="MD">Moldova</option>
+                          <option value="MK">North Macedonia</option>
+                          <option value="RS">Serbia</option>
+                          <option value="UA">Ukraine</option>
+                          <option value="UZ">Uzbekistan</option>
                         </select>
                       </div>
                     </div>

@@ -44,7 +44,16 @@ export default async function handler(req, res) {
       mode: 'payment',
       customer_email: email || undefined,
       shipping_address_collection: {
-        allowed_countries: ['IE', 'GB', 'US', 'CA', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL'],
+        allowed_countries: [
+          'IE','GB','US','CA','AU','NZ',
+          'AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IT',
+          'LV','LI','LT','LU','MT','MC','NL','NO','PL','PT','RO','SK','SI','ES','SE','CH',
+          'AE','BH','IL','JO','KW','OM','QA','SA','TR',
+          'AR','BO','BR','CL','CO','CR','DO','EC','SV','GT','HN','MX','PA','PY','PE','UY',
+          'BD','CN','HK','IN','ID','JP','MY','NP','PK','PH','SG','KR','LK','TW','TH','VN',
+          'DZ','EG','GH','KE','MA','NG','ZA','TN','UG','TZ','ZM','ZW',
+          'AL','AM','AZ','BY','BA','GE','KZ','KG','MD','MK','RS','UA','UZ',
+        ],
       },
       success_url: `${req.headers.origin}/order-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/checkout`,
