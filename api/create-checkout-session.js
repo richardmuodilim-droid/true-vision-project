@@ -29,14 +29,7 @@ export default async function handler(req, res) {
       quantity: item.qty,
     }))
 
-    line_items.push({
-      price_data: {
-        currency: 'eur',
-        product_data: { name: 'Standard Shipping' },
-        unit_amount: shippingCost * 100,
-      },
-      quantity: 1,
-    })
+    // shipping removed for test — re-enable after
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

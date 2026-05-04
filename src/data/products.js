@@ -3,7 +3,7 @@ export const products = [
     id: 'foundation-cap',
     name: 'Foundation Cap',
     category: 'Hats',
-    price: 1,
+    price: 0.50,
     sizes: ['One Size'],
     colors: [
       { name: 'Black', hex: '#0a0a0a' },
