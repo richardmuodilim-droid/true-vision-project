@@ -262,7 +262,7 @@ export default async function handler(req, res) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items'],
+      expand: ['line_items', 'line_items.data.price.product'],
     })
 
     if (session.payment_status !== 'paid') {
@@ -282,7 +282,7 @@ export default async function handler(req, res) {
 
     const items = rawItems.map(li => ({
       name:    li.description || 'Item',
-      variant: '',
+      variant: li.price?.product?.description || '',
       qty:     li.quantity,
       price:   li.amount_total / 100 / li.quantity,
     }))
