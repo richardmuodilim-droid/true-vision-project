@@ -39,8 +39,9 @@ export default function Home() {
         name:  'Foundation Cap',
         price: 32,
         size:  'One Size',
-        color: CAP_COLORS[activeColor].name,
-        qty:   1,
+        color:  CAP_COLORS[activeColor].name,
+        imgSrc: CAP_COLORS[activeColor].imgSrc,
+        qty:    1,
       },
     })
     setAddedFeedback(true)
