@@ -14,8 +14,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0)
-    const shippingCost = 6
+    const subtotal    = items.reduce((sum, i) => sum + i.price * i.qty, 0)
+    const totalQty    = items.reduce((sum, i) => sum + i.qty, 0)
+    const shippingCost = totalQty * 6
 
     const line_items = items.map(item => ({
       price_data: {
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
         product_data: { name: 'Shipping' },
         unit_amount: 600,
       },
-      quantity: 1,
+      quantity: totalQty,
     })
 
     const session = await stripe.checkout.sessions.create({

@@ -63,8 +63,9 @@ export default function Checkout() {
   })
   const [errors, setErrors] = useState({})
 
-  const shipping = 6
-  const total    = subtotal + shipping
+  const itemCount = items.reduce((s, i) => s + i.qty, 0)
+  const shipping  = itemCount * 6
+  const total     = subtotal + shipping
 
   const set = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }))
