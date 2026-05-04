@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
+import { getProduct } from '../data/products'
+
+const CAP = getProduct('foundation-cap')
 
 const mono  = { fontFamily: "'Space Mono', monospace" }
 const serif = { fontFamily: "'Cormorant Garamond', serif" }
@@ -37,7 +40,7 @@ export default function Home() {
       item: {
         id:    'foundation-cap',
         name:  'Foundation Cap',
-        price: 32,
+        price: CAP.price,
         size:  'One Size',
         color:  CAP_COLORS[activeColor].name,
         imgSrc: CAP_COLORS[activeColor].imgSrc,
@@ -273,7 +276,7 @@ export default function Home() {
                 <span
                   style={{ fontFamily: "'Inter', sans-serif", fontSize: '17px', color: '#111111', fontWeight: 300, letterSpacing: '0.03em' }}
                 >
-                  €32
+                  €{CAP.price}
                 </span>
               </div>
             </div>
