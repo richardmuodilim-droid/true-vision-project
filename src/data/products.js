@@ -3,7 +3,7 @@ export const products = [
     id: 'foundation-cap',
     name: 'Foundation Cap',
     category: 'Hats',
-    price: 40,
+    price: 1,
     sizes: ['One Size'],
     colors: [
       { name: 'Black', hex: '#0a0a0a' },
@@ -13,10 +13,10 @@ export const products = [
     image: '/cap-black.jpg',
     images: ['/cap-black.jpg', '/cap-white.jpg'],
     description:
-      '300GSM washed chino twill. Custom metal slider closure. Produced in a single limited run — 20 units, no restock.',
-    material: '300GSM Washed Chino Twill. Custom metal slider hardware.',
+      '300GSM washed chino twill. Produced in a single limited run — 20 units, no restock.',
+    material: '300GSM Washed Chino Twill.',
     care: 'Spot clean only. Do not submerge.',
-    fit: 'One size. Adjustable metal slider closure.',
+    fit: 'One size. Adjustable closure.',
     featured: true,
     bestSeller: true,
   },
