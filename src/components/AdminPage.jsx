@@ -218,6 +218,224 @@ function MemberRow({ m, onDelete }) {
   )
 }
 
+function PromoSection({ password }) {
+  const [promos, setPromos]     = useState(null)
+  const [loading, setLoading]   = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [copied, setCopied]     = useState(null)
+  const [form, setForm] = useState({ promoterName: '', code: '', percentOff: '15', maxRedemptions: '50' })
+  const [formError, setFormError] = useState('')
+  const [success, setSuccess]   = useState(null)
+
+  const loadPromos = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/list-promos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      const data = await res.json()
+      if (res.ok) setPromos(data.promos)
+    } catch {}
+    setLoading(false)
+  }
+
+  const handleCreate = async (e) => {
+    e.preventDefault()
+    setFormError('')
+    setSuccess(null)
+    if (!form.promoterName.trim() || !form.code.trim()) {
+      setFormError('Promoter name and code are required.')
+      return
+    }
+    setCreating(true)
+    try {
+      const res = await fetch('/api/create-promo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, ...form }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setFormError(data.error || 'Failed to create code.'); setCreating(false); return }
+      setSuccess(data)
+      setForm({ promoterName: '', code: '', percentOff: '15', maxRedemptions: '50' })
+      loadPromos()
+    } catch { setFormError('Connection error.') }
+    setCreating(false)
+  }
+
+  const suggestCode = (name) => {
+    const clean = name.trim().toUpperCase().replace(/\s+/g, '').slice(0, 8)
+    setForm(f => ({ ...f, promoterName: name, code: clean + f.percentOff }))
+  }
+
+  const copyCode = (code) => {
+    navigator.clipboard.writeText(code)
+    setCopied(code)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.35 }}
+      className="mt-8"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+          Promo Codes — Promoters
+        </p>
+        <button
+          onClick={loadPromos}
+          disabled={loading}
+          style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
+          className="px-2 py-1 border border-white/[0.1] text-white/30 hover:border-white/30 hover:text-white/60 transition-all duration-200 cursor-pointer disabled:opacity-30"
+        >
+          {loading ? '...' : promos ? '↻ REFRESH' : 'LOAD'}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* Create form */}
+        <div className="border border-white/[0.07] p-5">
+          <p style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.2em' }} className="uppercase mb-5">
+            Generate New Code
+          </p>
+          <form onSubmit={handleCreate} className="flex flex-col gap-4">
+            <div>
+              <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                Promoter Name
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. John Smith"
+                value={form.promoterName}
+                onChange={e => suggestCode(e.target.value)}
+                style={{ ...mono }}
+                className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] tracking-[0.06em] px-3 outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
+              />
+            </div>
+            <div>
+              <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                Code
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. JOHN15"
+                value={form.code}
+                onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))}
+                style={{ ...mono }}
+                className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] tracking-[0.12em] px-3 outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
+              />
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                  Discount %
+                </label>
+                <input
+                  type="number" min="1" max="100"
+                  value={form.percentOff}
+                  onChange={e => setForm(f => ({ ...f, percentOff: e.target.value }))}
+                  style={{ ...mono }}
+                  className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] px-3 outline-none focus:border-white/30 transition-colors"
+                />
+              </div>
+              <div className="flex-1">
+                <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                  Max Uses
+                </label>
+                <input
+                  type="number" min="1"
+                  value={form.maxRedemptions}
+                  onChange={e => setForm(f => ({ ...f, maxRedemptions: e.target.value }))}
+                  style={{ ...mono }}
+                  className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] px-3 outline-none focus:border-white/30 transition-colors"
+                />
+              </div>
+            </div>
+
+            {formError && (
+              <p style={{ ...mono, fontSize: '10px', color: 'rgba(248,113,113,0.8)', letterSpacing: '0.05em' }}>{formError}</p>
+            )}
+            {success && (
+              <div className="border border-green-500/30 px-3 py-2 flex items-center justify-between gap-3">
+                <p style={{ ...mono, fontSize: '11px', color: '#22c55e', letterSpacing: '0.12em' }}>
+                  ✓ {success.code} — {success.percentOff}% off — {success.maxRedemptions} uses
+                </p>
+                <button type="button" onClick={() => copyCode(success.code)}
+                  style={{ ...mono, fontSize: '9px', color: '#22c55e', letterSpacing: '0.1em' }}
+                  className="hover:opacity-70 cursor-pointer">
+                  {copied === success.code ? 'COPIED' : 'COPY'}
+                </button>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={creating}
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.2em' }}
+              className="h-10 border border-white/[0.15] text-white/50 uppercase hover:border-white/40 hover:text-white/90 transition-all duration-300 disabled:opacity-30 cursor-pointer"
+            >
+              {creating ? '...' : '[ Generate Code ]'}
+            </button>
+          </form>
+        </div>
+
+        {/* Code list */}
+        <div>
+          {!promos ? (
+            <div className="border border-white/[0.07] p-5 flex items-center justify-center min-h-[200px]">
+              <p style={{ ...mono, fontSize: '11px', color: '#444', letterSpacing: '0.1em' }}>
+                Click LOAD to view codes
+              </p>
+            </div>
+          ) : promos.length === 0 ? (
+            <div className="border border-white/[0.07] p-5 flex items-center justify-center min-h-[200px]">
+              <p style={{ ...mono, fontSize: '11px', color: '#444', letterSpacing: '0.1em' }}>
+                No codes yet
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05] max-h-[480px] overflow-y-auto scrollbar-none">
+              {promos.map(p => (
+                <div key={p.id} className="px-4 py-3 flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span style={{ ...mono, fontSize: '13px', color: p.active ? '#ffffff' : '#444', letterSpacing: '0.1em' }}>
+                      {p.code}
+                    </span>
+                    <button
+                      onClick={() => copyCode(p.code)}
+                      style={{ ...mono, fontSize: '9px', letterSpacing: '0.12em', color: copied === p.code ? '#22c55e' : 'rgba(255,255,255,0.25)' }}
+                      className="hover:opacity-70 cursor-pointer transition-colors"
+                    >
+                      {copied === p.code ? 'COPIED' : 'COPY'}
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.05em' }}>
+                      {p.promoter} &nbsp;·&nbsp; {p.percentOff}% off
+                    </span>
+                    <span style={{ ...mono, fontSize: '10px', color: p.timesRedeemed > 0 ? '#22c55e' : '#555', letterSpacing: '0.05em' }}>
+                      {p.timesRedeemed} / {p.maxRedemptions ?? '∞'} used
+                    </span>
+                  </div>
+                  {!p.active && (
+                    <span style={{ ...mono, fontSize: '9px', color: 'rgba(248,113,113,0.6)', letterSpacing: '0.1em' }}>EXPIRED / INACTIVE</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 function Dashboard({ data, password }) {
   const { financials } = data
   const f = financials ?? FINANCIALS
@@ -395,6 +613,9 @@ function Dashboard({ data, password }) {
             </div>
           </motion.div>
         </div>
+
+        <PromoSection password={password} />
+
       </main>
 
       <footer className="relative z-10 px-4 sm:px-10 py-4 border-t border-white/[0.06]">
