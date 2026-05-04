@@ -5,95 +5,126 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const resend  = new Resend(process.env.RESEND_API_KEY)
 
 const BUSINESS_EMAIL = 'truevisionstore2@gmail.com'
+const FROM_ADDRESS   = 'True Vision Project <archive@truevisionproject.com>'
 
-function customerEmail({ ref, email, items, shipping, total }) {
+function calcShipping(total, items) {
+  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0)
+  const amount   = parseFloat(total) - subtotal
+  return amount > 0.01 ? `€${amount.toFixed(2)}` : 'Free'
+}
+
+function addressText(shipping) {
+  if (!shipping) return 'Provided at checkout'
+  const a = shipping.address
+  return [
+    shipping.name,
+    a.line1,
+    a.line2 || null,
+    `${a.city}${a.state ? ', ' + a.state : ''} ${a.postal_code}`,
+    a.country,
+  ].filter(Boolean).join('\n')
+}
+
+function addressHtml(shipping) {
+  if (!shipping) return 'Provided at checkout'
+  const a = shipping.address
+  return [
+    shipping.name,
+    a.line1,
+    a.line2 || null,
+    `${a.city}${a.state ? ', ' + a.state : ''} ${a.postal_code}`,
+    a.country,
+  ].filter(Boolean).join('<br>')
+}
+
+// ─── Customer email ──────────────────────────────────────────────────────────
+
+function customerEmailHtml({ ref, email, items, shipping, total }) {
+  const shippingCost = calcShipping(total, items)
+
   const itemRows = items.map(item => `
     <tr>
-      <td style="padding:12px 0;border-bottom:1px solid #e8e5e0;font-family:'Courier New',monospace;font-size:12px;color:#333;letter-spacing:0.04em;">
+      <td style="padding:12px 0;border-bottom:1px solid #eeebe6;font-family:'Courier New',monospace;font-size:12px;color:#333;letter-spacing:0.03em;">
         ${item.name}${item.variant ? ' — ' + item.variant : ''}
       </td>
-      <td style="padding:12px 0;border-bottom:1px solid #e8e5e0;font-family:'Courier New',monospace;font-size:12px;color:#666;text-align:right;white-space:nowrap;">
-        ×${item.qty} &nbsp; €${(item.price * item.qty).toFixed(2)}
+      <td style="padding:12px 0;border-bottom:1px solid #eeebe6;font-family:'Courier New',monospace;font-size:12px;color:#666;text-align:right;white-space:nowrap;">
+        x${item.qty} &nbsp; €${(item.price * item.qty).toFixed(2)}
       </td>
-    </tr>
-  `).join('')
-
-  const shippingBlock = shipping
-    ? `${shipping.name}<br>${shipping.address.line1}${shipping.address.line2 ? '<br>' + shipping.address.line2 : ''}<br>${shipping.address.city}${shipping.address.state ? ', ' + shipping.address.state : ''} ${shipping.address.postal_code}<br>${shipping.address.country}`
-    : 'Provided at checkout'
+    </tr>`).join('')
 
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f5f3ee;">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Order Confirmed — TVP-${ref}</title>
+</head>
+<body style="margin:0;padding:0;background:#f5f3ee;font-family:'Helvetica Neue',Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f3ee;padding:48px 16px;">
 <tr><td align="center">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #e0ddd8;">
 
-  <!-- Header -->
   <tr><td style="padding:36px 40px 28px;border-bottom:1px solid #eeebe6;">
-    <p style="margin:0 0 6px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.48em;color:#bbb;text-transform:uppercase;">TRUE VISION PROJECT</p>
-    <p style="margin:0;font-family:Georgia,serif;font-size:24px;color:#111;font-style:italic;line-height:1.2;">Order Confirmed.</p>
+    <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.44em;color:#bbb;text-transform:uppercase;">True Vision Project</p>
+    <p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#111;font-style:italic;line-height:1.2;">Order Confirmed.</p>
   </td></tr>
 
-  <!-- Body -->
-  <tr><td style="padding:32px 40px;">
-
-    <p style="margin:0 0 6px;font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.1em;">
-      Reference: <strong style="color:#444;">TVP-${ref}</strong>
+  <tr><td style="padding:32px 40px 0;">
+    <p style="margin:0 0 4px;font-family:'Courier New',monospace;font-size:10px;color:#999;letter-spacing:0.08em;">
+      Reference: <strong style="color:#444;letter-spacing:0.12em;">TVP-${ref}</strong>
     </p>
-    <p style="margin:0 0 28px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#999;line-height:1.7;">
-      A copy of this confirmation has been sent to <strong style="color:#666;">${email}</strong>.
+    <p style="margin:12px 0 28px;font-size:14px;color:#888;line-height:1.75;">
+      Thank you for your order. A copy of this confirmation has been sent to <strong style="color:#555;">${email}</strong>.
     </p>
+  </td></tr>
 
-    <!-- Items table -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-      <tr><td colspan="2" style="padding-bottom:12px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.42em;color:#bbb;text-transform:uppercase;border-bottom:1px solid #eeebe6;">
-        Items Ordered
-      </td></tr>
+  <tr><td style="padding:0 40px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td colspan="2" style="padding-bottom:12px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.4em;color:#bbb;text-transform:uppercase;border-bottom:1px solid #eeebe6;">Items Ordered</td></tr>
       ${itemRows}
       <tr>
-        <td style="padding:10px 0 4px;font-family:'Courier New',monospace;font-size:9px;color:#bbb;letter-spacing:0.22em;text-transform:uppercase;">Shipping</td>
-        <td style="padding:10px 0 4px;font-family:'Courier New',monospace;font-size:11px;color:#aaa;text-align:right;">€6.00</td>
+        <td style="padding:10px 0 4px;font-family:'Courier New',monospace;font-size:9px;color:#bbb;letter-spacing:0.2em;text-transform:uppercase;">Shipping</td>
+        <td style="padding:10px 0 4px;font-family:'Courier New',monospace;font-size:11px;color:#aaa;text-align:right;">${shippingCost}</td>
       </tr>
       <tr>
-        <td style="padding:14px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.28em;color:#555;text-transform:uppercase;border-top:1px solid #eeebe6;">Total Paid</td>
+        <td style="padding:14px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.26em;color:#555;text-transform:uppercase;border-top:1px solid #eeebe6;">Total Paid</td>
         <td style="padding:14px 0 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:18px;font-weight:300;color:#111;text-align:right;border-top:1px solid #eeebe6;">€${total}</td>
       </tr>
     </table>
+  </td></tr>
 
-    <!-- Ship to -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+  ${shipping ? `
+  <tr><td style="padding:0 40px 28px;">
+    <table width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding:16px 20px;background:#f9f8f6;border:1px solid #eeebe6;">
-        <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.42em;color:#bbb;text-transform:uppercase;">Ships To</p>
-        <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:#666;line-height:1.9;">${shippingBlock}</p>
+        <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.4em;color:#bbb;text-transform:uppercase;">Ships To</p>
+        <p style="margin:0;font-size:13px;color:#666;line-height:1.9;">${addressHtml(shipping)}</p>
       </td></tr>
     </table>
+  </td></tr>` : ''}
 
-    <!-- Next steps -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
-      <tr><td style="padding-bottom:14px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.42em;color:#bbb;text-transform:uppercase;">What Happens Next</td></tr>
+  <tr><td style="padding:0 40px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td style="padding-bottom:12px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.4em;color:#bbb;text-transform:uppercase;">What Happens Next</td></tr>
       ${[
-        ['01', 'Your order is being prepared and carefully packaged.'],
-        ['02', 'You\'ll receive a shipping notification with your tracking number.'],
-        ['03', 'Estimated delivery: 3–7 business days depending on location.'],
+        ['01', 'Your order is being carefully prepared and packaged.'],
+        ['02', 'You will receive a shipping notification with your tracking number once dispatched.'],
+        ['03', 'Estimated delivery: 3 to 7 business days depending on your location.'],
       ].map(([n, t]) => `
       <tr><td style="padding:10px 0;border-bottom:1px solid #f5f3ee;">
         <span style="font-family:'Courier New',monospace;font-size:9px;color:#ccc;margin-right:14px;">${n}</span>
-        <span style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#888;">${t}</span>
+        <span style="font-size:12px;color:#888;">${t}</span>
       </td></tr>`).join('')}
     </table>
-
-    <p style="margin:0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#bbb;line-height:1.9;">
-      Any questions? Email us: <a href="mailto:archive@truevisionproject.com" style="color:#888;text-decoration:underline;text-underline-offset:3px;">archive@truevisionproject.com</a>
-    </p>
-
   </td></tr>
 
-  <!-- Footer -->
+  <tr><td style="padding:0 40px 32px;">
+    <p style="margin:0;font-size:12px;color:#bbb;line-height:1.9;">
+      Questions? Contact us at <a href="mailto:archive@truevisionproject.com" style="color:#777;text-decoration:underline;">archive@truevisionproject.com</a>
+    </p>
+  </td></tr>
+
   <tr><td style="padding:20px 40px;border-top:1px solid #eeebe6;">
-    <p style="margin:0;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.28em;color:#ccc;text-transform:uppercase;">
-      TRUE VISION PROJECT &nbsp;·&nbsp; WEXFORD / IRELAND &nbsp;·&nbsp; BUILT FROM NOTHING
+    <p style="margin:0;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.24em;color:#ccc;text-transform:uppercase;">
+      True Vision Project &nbsp;·&nbsp; Wexford, Ireland &nbsp;·&nbsp; Built From Nothing
     </p>
   </td></tr>
 
@@ -104,48 +135,90 @@ function customerEmail({ ref, email, items, shipping, total }) {
 </html>`
 }
 
-function internalEmail({ ref, email, items, shipping, total, sessionId }) {
-  const itemList = items.map(i =>
-    `• ${i.name}${i.variant ? ' — ' + i.variant : ''} ×${i.qty} — €${(i.price * i.qty).toFixed(2)}`
-  ).join('\n')
+function customerEmailText({ ref, email, items, shipping, total }) {
+  const shippingCost = calcShipping(total, items)
+  const itemLines = items.map(i => `  ${i.name}${i.variant ? ' - ' + i.variant : ''} x${i.qty}  €${(i.price * i.qty).toFixed(2)}`).join('\n')
+  const addr = addressText(shipping)
+  return `TRUE VISION PROJECT — ORDER CONFIRMED
+======================================
 
-  const addr = shipping
-    ? `${shipping.name}\n${shipping.address.line1}${shipping.address.line2 ? '\n' + shipping.address.line2 : ''}\n${shipping.address.city}${shipping.address.state ? ', ' + shipping.address.state : ''} ${shipping.address.postal_code}\n${shipping.address.country}`
-    : 'Not captured'
+Reference: TVP-${ref}
+Confirmation sent to: ${email}
+
+ITEMS ORDERED
+-------------
+${itemLines}
+
+Shipping: ${shippingCost}
+Total Paid: €${total}
+
+${shipping ? `SHIPS TO\n--------\n${addr}\n` : ''}
+WHAT HAPPENS NEXT
+-----------------
+01  Your order is being carefully prepared and packaged.
+02  You will receive a shipping notification with your tracking number once dispatched.
+03  Estimated delivery: 3 to 7 business days depending on your location.
+
+Questions? Email us: archive@truevisionproject.com
+
+True Vision Project · Wexford, Ireland · Built From Nothing
+`
+}
+
+// ─── Internal notification ────────────────────────────────────────────────────
+
+function internalEmailHtml({ ref, email, items, shipping, total, sessionId }) {
+  const itemList = items.map(i =>
+    `<tr>
+      <td style="padding:8px 0;border-bottom:1px solid #1a1a1a;font-family:'Courier New',monospace;font-size:12px;color:#ddd;">
+        ${i.name}${i.variant ? ' — ' + i.variant : ''} &nbsp;<span style="color:#555;">x${i.qty}</span>
+      </td>
+      <td style="padding:8px 0;border-bottom:1px solid #1a1a1a;font-family:'Courier New',monospace;font-size:12px;color:#888;text-align:right;">
+        €${(i.price * i.qty).toFixed(2)}
+      </td>
+    </tr>`
+  ).join('')
 
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#0a0a0a;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:40px 16px;">
+<head><meta charset="UTF-8"><title>New Order TVP-${ref}</title></head>
+<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Courier New',monospace;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 16px;">
 <tr><td align="center">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#111;border:1px solid #222;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:540px;background:#111111;border:1px solid #1e1e1e;">
 
-  <tr><td style="padding:28px 32px 20px;border-bottom:1px solid #222;">
-    <p style="margin:0 0 4px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.45em;color:#444;text-transform:uppercase;">TVP // COMMAND CENTER</p>
-    <p style="margin:0;font-family:'Courier New',monospace;font-size:16px;color:#22c55e;letter-spacing:0.1em;">NEW ORDER — TVP-${ref}</p>
+  <tr><td style="padding:24px 32px 20px;border-bottom:1px solid #1e1e1e;">
+    <p style="margin:0 0 6px;font-size:9px;letter-spacing:0.42em;color:#444;text-transform:uppercase;">TVP Order Notification</p>
+    <p style="margin:0;font-size:18px;color:#22c55e;letter-spacing:0.06em;font-weight:normal;">New Order — TVP-${ref}</p>
   </td></tr>
 
-  <tr><td style="padding:24px 32px;font-family:'Courier New',monospace;font-size:12px;color:#aaa;line-height:2;">
-    <p style="margin:0 0 4px;color:#555;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;">Customer</p>
-    <p style="margin:0 0 20px;color:#ddd;">${email}</p>
+  <tr><td style="padding:24px 32px;">
 
-    <p style="margin:0 0 4px;color:#555;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;">Items</p>
-    <p style="margin:0 0 20px;color:#ddd;white-space:pre-line;">${itemList}</p>
+    <p style="margin:0 0 4px;font-size:8px;letter-spacing:0.32em;color:#444;text-transform:uppercase;">Customer</p>
+    <p style="margin:0 0 6px;font-size:14px;color:#eeeeee;">${email}</p>
+    ${shipping?.name ? `<p style="margin:0 0 24px;font-size:13px;color:#888;">${shipping.name}</p>` : '<p style="margin:0 0 24px;"></p>'}
 
-    <p style="margin:0 0 4px;color:#555;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;">Ship To</p>
-    <p style="margin:0 0 20px;color:#ddd;white-space:pre-line;">${addr}</p>
+    ${shipping ? `
+    <p style="margin:0 0 4px;font-size:8px;letter-spacing:0.32em;color:#444;text-transform:uppercase;">Ship To</p>
+    <p style="margin:0 0 24px;font-size:13px;color:#aaa;line-height:1.9;white-space:pre-line;">${addressText(shipping)}</p>
+    ` : ''}
 
-    <p style="margin:0 0 4px;color:#555;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;">Total Paid</p>
-    <p style="margin:0 0 20px;color:#22c55e;font-size:18px;">€${total}</p>
+    <p style="margin:0 0 4px;font-size:8px;letter-spacing:0.32em;color:#444;text-transform:uppercase;">Items</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      ${itemList}
+    </table>
 
-    <p style="margin:0 0 4px;color:#555;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;">Stripe Session</p>
-    <p style="margin:0;color:#444;font-size:10px;word-break:break-all;">${sessionId}</p>
+    <p style="margin:0 0 4px;font-size:8px;letter-spacing:0.32em;color:#444;text-transform:uppercase;">Total Charged</p>
+    <p style="margin:0 0 24px;font-size:22px;color:#22c55e;font-weight:normal;">€${total}</p>
+
+    <p style="margin:0 0 4px;font-size:8px;letter-spacing:0.32em;color:#333;text-transform:uppercase;">Stripe Session</p>
+    <p style="margin:0;font-size:10px;color:#333;word-break:break-all;">${sessionId}</p>
+
   </td></tr>
 
-  <tr><td style="padding:16px 32px;border-top:1px solid #222;">
-    <p style="margin:0;font-family:'Courier New',monospace;font-size:8px;color:#333;letter-spacing:0.2em;text-transform:uppercase;">
-      TVP // ${new Date().toISOString()}
+  <tr><td style="padding:14px 32px;border-top:1px solid #1e1e1e;">
+    <p style="margin:0;font-size:8px;color:#2a2a2a;letter-spacing:0.18em;text-transform:uppercase;">
+      TVP &nbsp;·&nbsp; ${new Date().toUTCString()}
     </p>
   </td></tr>
 
@@ -155,6 +228,31 @@ function internalEmail({ ref, email, items, shipping, total, sessionId }) {
 </body>
 </html>`
 }
+
+function internalEmailText({ ref, email, items, shipping, total, sessionId }) {
+  const itemLines = items.map(i => `  ${i.name}${i.variant ? ' - ' + i.variant : ''} x${i.qty}  €${(i.price * i.qty).toFixed(2)}`).join('\n')
+  const addr = addressText(shipping)
+  return `NEW ORDER — TVP-${ref}
+========================
+
+CUSTOMER
+--------
+${email}${shipping?.name ? '\n' + shipping.name : ''}
+
+${shipping ? `SHIP TO\n-------\n${addr}\n` : ''}
+ITEMS ORDERED
+-------------
+${itemLines}
+
+Total Charged: €${total}
+
+Stripe Session: ${sessionId}
+
+TVP · ${new Date().toUTCString()}
+`
+}
+
+// ─── Handler ──────────────────────────────────────────────────────────────────
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -178,10 +276,9 @@ export default async function handler(req, res) {
     const total = (session.amount_total / 100).toFixed(2)
     const ref   = session_id.slice(-8).toUpperCase()
 
-    const rawItems = (session.line_items?.data ?? []).filter(li => {
-      const name = li.description || ''
-      return !name.toLowerCase().includes('shipping')
-    })
+    const rawItems = (session.line_items?.data ?? []).filter(li =>
+      !(li.description || '').toLowerCase().includes('shipping')
+    )
 
     const items = rawItems.map(li => ({
       name:    li.description || 'Item',
@@ -195,22 +292,24 @@ export default async function handler(req, res) {
     if (email) {
       emailPromises.push(
         resend.emails.send({
-          from:    'Richard @ TVP <archive@truevisionproject.com>',
+          from:    FROM_ADDRESS,
           to:      email,
           replyTo: 'archive@truevisionproject.com',
-          subject: `Order Confirmed — TVP-${ref}`,
-          html:    customerEmail({ ref, email, items, shipping, total }),
+          subject: `Your order is confirmed — TVP-${ref}`,
+          html:    customerEmailHtml({ ref, email, items, shipping, total }),
+          text:    customerEmailText({ ref, email, items, shipping, total }),
         }).catch(err => console.error('Customer email error:', err.message))
       )
     }
 
     emailPromises.push(
       resend.emails.send({
-        from:    'TVP Orders <archive@truevisionproject.com>',
+        from:    FROM_ADDRESS,
         to:      BUSINESS_EMAIL,
         replyTo: email || 'archive@truevisionproject.com',
-        subject: `[NEW ORDER] TVP-${ref} — €${total} — ${email}`,
-        html:    internalEmail({ ref, email, items, shipping, total, sessionId: session_id }),
+        subject: `New order TVP-${ref} — €${total}${shipping?.name ? ' — ' + shipping.name : ''}`,
+        html:    internalEmailHtml({ ref, email, items, shipping, total, sessionId: session_id }),
+        text:    internalEmailText({ ref, email, items, shipping, total, sessionId: session_id }),
       }).catch(err => console.error('Internal email error:', err.message))
     )
 
