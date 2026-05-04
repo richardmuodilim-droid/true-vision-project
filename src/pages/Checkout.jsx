@@ -49,10 +49,17 @@ export default function Checkout() {
   const [loading, setLoading]         = useState(false)
   const [apiError, setApiError]       = useState('')
 
-  const [form, setForm] = useState({
-    email: '',
-    firstName: '', lastName: '',
-    address: '', city: '', state: '', zip: '', country: 'IE',
+  const [form, setForm] = useState(() => {
+    try {
+      const member = JSON.parse(localStorage.getItem('TrueVisionMember') || 'null')
+      return {
+        email: member?.email || '',
+        firstName: '', lastName: '',
+        address: '', city: '', state: '', zip: '', country: 'IE',
+      }
+    } catch {
+      return { email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', country: 'IE' }
+    }
   })
   const [errors, setErrors] = useState({})
 
