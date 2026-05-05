@@ -53,14 +53,25 @@ function customerEmailHtml({ ref, email, items, shipping, total }) {
     </tr>`).join('')
 
   return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<meta name="google" content="notranslate">
 <title>Order Confirmed — TVP-${ref}</title>
+<style>
+  :root { color-scheme: light; }
+  body, .body-wrap { background-color: #f5f3ee !important; }
+  .card { background-color: #ffffff !important; }
+  * { -webkit-text-size-adjust: 100%; }
+</style>
 </head>
-<body style="margin:0;padding:0;background:#f5f3ee;font-family:'Helvetica Neue',Arial,sans-serif;">
+<body class="body-wrap" style="margin:0;padding:0;background:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f3ee;padding:48px 16px;">
 <tr><td align="center">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #e0ddd8;">
+<table class="card" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #e0ddd8;">
 
   <tr><td style="padding:36px 40px 28px;border-bottom:1px solid #eeebe6;">
     <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.44em;color:#bbb;text-transform:uppercase;">True Vision Project</p>
@@ -91,15 +102,16 @@ function customerEmailHtml({ ref, email, items, shipping, total }) {
     </table>
   </td></tr>
 
-  ${shipping ? `
   <tr><td style="padding:0 40px 28px;">
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding:16px 20px;background:#f9f8f6;border:1px solid #eeebe6;">
         <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.4em;color:#bbb;text-transform:uppercase;">Ships To</p>
-        <p style="margin:0;font-size:13px;color:#666;line-height:1.9;">${addressHtml(shipping)}</p>
+        <p style="margin:0;font-size:13px;color:#555;line-height:1.9;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;">
+          ${shipping ? addressHtml(shipping) : 'Your shipping address was collected at checkout.<br>Questions? Reply to this email.'}
+        </p>
       </td></tr>
     </table>
-  </td></tr>` : ''}
+  </td></tr>
 
   <tr><td style="padding:0 40px 32px;">
     <table width="100%" cellpadding="0" cellspacing="0">

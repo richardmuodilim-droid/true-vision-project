@@ -84,8 +84,8 @@ export default function Home() {
             style={{
               ...serif,
               fontWeight: 500,
-              fontSize: 'clamp(28px, 6.5vw, 56px)',
-              lineHeight: 1.15,
+              fontSize: 'clamp(46px, 9vw, 78px)',
+              lineHeight: 1.08,
               letterSpacing: '-0.02em',
               color: '#111111',
             }}
@@ -95,9 +95,9 @@ export default function Home() {
 
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.50 }}
+            animate={{ opacity: 0.55 }}
             transition={{ duration: 1.1, delay: 1.0, ease: 'easeOut' }}
-            style={{ ...mono, fontSize: '9px', color: '#111111', letterSpacing: '0.28em' }}
+            style={{ ...mono, fontSize: '11px', color: '#111111', letterSpacing: '0.32em' }}
             className="uppercase"
           >
             We Are Documenting A Mission.

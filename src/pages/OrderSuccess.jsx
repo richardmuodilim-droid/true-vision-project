@@ -223,7 +223,7 @@ export default function OrderSuccess() {
                     archive@truevisionproject.com
                   </a>
                 </p>
-                <Link to="/store"
+                <Link to="/"
                   style={{ ...mono, fontSize: '8px', letterSpacing: '0.4em', color: 'rgba(0,0,0,0.38)', borderBottom: '1px solid rgba(0,0,0,0.12)' }}
                   className="uppercase pb-px hover:opacity-50 transition-opacity duration-300">
                   Back to Store
@@ -250,7 +250,7 @@ export default function OrderSuccess() {
                   archive@truevisionproject.com
                 </a>
               </p>
-              <Link to="/store"
+              <Link to="/"
                 style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)', borderBottom: '1px solid rgba(0,0,0,0.12)' }}
                 className="uppercase pb-px hover:opacity-50 transition-opacity duration-300">
                 Back to Store

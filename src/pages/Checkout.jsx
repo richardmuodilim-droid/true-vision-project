@@ -152,7 +152,7 @@ export default function Checkout() {
 
         {/* Back link */}
         <Link
-          to="/store"
+          to="/"
           className="inline-flex items-center gap-2 text-[8px] tracking-[0.35em] uppercase hover:opacity-50 transition-opacity duration-300 mb-16"
           style={{ ...mono, color: 'rgba(0,0,0,0.30)' }}
         >
@@ -402,6 +402,22 @@ export default function Checkout() {
                       <p style={{ ...mono, fontSize: '10px', letterSpacing: '0.06em', color: 'rgba(0,0,0,0.35)' }}>
                         {form.city}, {form.state} {form.zip}
                       </p>
+                    </div>
+
+                    {/* Promo code notice */}
+                    <div className="flex items-start gap-3 px-5 py-4"
+                      style={{ border: '1px solid rgba(0,0,0,0.10)', background: 'rgba(0,0,0,0.015)' }}>
+                      <span style={{ ...mono, fontSize: '12px', color: 'rgba(0,0,0,0.40)', marginTop: '1px', flexShrink: 0 }}>%</span>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[8px] tracking-[0.28em] uppercase"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.55)' }}>
+                          Have a promo code?
+                        </span>
+                        <span className="text-[7px] tracking-[0.18em]"
+                          style={{ ...mono, color: 'rgba(0,0,0,0.32)' }}>
+                          Enter it on the next screen — you'll see a field to apply your discount before paying.
+                        </span>
+                      </div>
                     </div>
 
                     {/* Secure notice */}
