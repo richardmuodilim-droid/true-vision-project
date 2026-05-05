@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const mono = { fontFamily: "'Space Mono', monospace" }
+const serif = { fontFamily: "'Cormorant Garamond', serif" }
 
 const FINANCIALS = {
   initialInvestment: 500,
@@ -12,14 +13,11 @@ const FINANCIALS = {
   projectedProfit: 600,
 }
 
-function fmt(n) {
-  return `€${Number(n).toFixed(2)}`
-}
+function fmt(n) { return `€${Number(n).toFixed(2)}` }
 
 function formatDate(iso) {
   if (!iso) return '—'
-  const d = new Date(iso)
-  return d.toLocaleDateString('en-IE', {
+  return new Date(iso).toLocaleDateString('en-IE', {
     day: '2-digit', month: 'short', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
   })
@@ -33,31 +31,23 @@ function timeAgo(iso) {
   if (mins < 60) return `${mins}m ago`
   const hours = Math.floor(mins / 60)
   if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  return `${days}d ago`
+  return `${Math.floor(hours / 24)}d ago`
 }
+
+// ─── Login ────────────────────────────────────────────────────────────────────
 
 function LoginForm({ onSuccess }) {
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [error, setError]       = useState('')
+  const [loading, setLoading]   = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     try {
-      const res = await fetch('/api/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
+      const res  = await fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
       const data = await res.json()
-      if (!res.ok) {
-        setError('Access denied. Check your password.')
-        setLoading(false)
-        return
-      }
+      if (!res.ok) { setError('Access denied. Check your password.'); setLoading(false); return }
       onSuccess(data, password)
     } catch {
       setError('Connection error. Try again.')
@@ -66,7 +56,7 @@ function LoginForm({ onSuccess }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#000] flex flex-col items-center justify-center px-6">
+    <div className="fixed inset-0 bg-[#F5F3EE] flex flex-col items-center justify-center px-6">
       <div className="grain" />
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -75,15 +65,15 @@ function LoginForm({ onSuccess }) {
         className="w-full max-w-sm flex flex-col gap-8"
       >
         <div className="flex flex-col gap-2">
-          <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.3em' }}>
+          <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.4em' }}>
             TRUE VISION PROJECT
           </p>
-          <p style={{ ...mono, fontSize: '18px', color: '#ffffff', letterSpacing: '0.1em' }}>
+          <p style={{ ...serif, fontSize: '28px', color: '#111111', lineHeight: 1.1 }}>
             Command Center
           </p>
         </div>
 
-        <div className="w-full h-px bg-white/[0.08]" aria-hidden="true" />
+        <div className="w-full h-px" style={{ background: 'rgba(0,0,0,0.08)' }} aria-hidden="true" />
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <label htmlFor="admin-pw" className="sr-only">Admin password</label>
@@ -93,30 +83,30 @@ function LoginForm({ onSuccess }) {
             placeholder="Enter access code"
             value={password}
             onChange={(e) => { setPassword(e.target.value); setError('') }}
-            style={{ ...mono }}
-            className="w-full h-[52px] bg-transparent border border-[#2a2a2a] rounded-none
-              text-white text-[14px] tracking-[0.1em]
-              placeholder:text-white/20 px-4 outline-none
-              focus:border-white/40 transition-colors duration-300"
+            style={{ ...mono, color: '#111111', caretColor: '#111111' }}
+            className="w-full h-[52px] bg-transparent border-b outline-none
+              text-[13px] tracking-[0.1em] px-0
+              placeholder:text-black/20
+              border-black/10 focus:border-black/35 transition-colors duration-300"
           />
           {error && (
-            <p style={{ ...mono, fontSize: '12px', color: 'rgba(248,113,113,0.8)', letterSpacing: '0.05em' }}>
+            <p style={{ ...mono, fontSize: '11px', color: 'rgba(220,38,38,0.7)', letterSpacing: '0.05em' }}>
               {error}
             </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            style={{ ...mono, fontSize: '12px', letterSpacing: '0.2em' }}
-            className="w-full h-[52px] border border-white/[0.15] text-white/50 uppercase
-              hover:border-white/40 hover:text-white/90 transition-all duration-300
+            style={{ ...mono, fontSize: '11px', letterSpacing: '0.3em' }}
+            className="w-full h-[52px] bg-[#111111] text-[#F5F3EE] uppercase
+              hover:bg-[#2a2a2a] transition-colors duration-300
               disabled:opacity-30 cursor-pointer"
           >
             {loading ? 'Verifying...' : '[ Authenticate ]'}
           </button>
         </form>
 
-        <p style={{ ...mono, fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.15em' }}>
+        <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.18)', letterSpacing: '0.2em' }}>
           TVP // RESTRICTED ACCESS
         </p>
       </motion.div>
@@ -124,43 +114,35 @@ function LoginForm({ onSuccess }) {
   )
 }
 
-function StatCard({ label, value, sub, highlight }) {
+// ─── Stat card ────────────────────────────────────────────────────────────────
+
+function StatCard({ label, value, highlight }) {
   return (
-    <div className="border border-white/[0.07] p-5 flex flex-col gap-2">
-      <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+    <div className="p-5 flex flex-col gap-2" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+      <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.3em' }} className="uppercase">
         {label}
       </p>
-      <p style={{ ...mono, fontSize: '22px', letterSpacing: '0.05em',
-        color: highlight === 'green' ? '#22c55e' : highlight === 'red' ? 'rgba(248,113,113,0.8)' : '#ffffff' }}>
+      <p style={{ ...mono, fontSize: '20px', letterSpacing: '0.04em',
+        color: highlight === 'green' ? '#16a34a' : highlight === 'red' ? '#dc2626' : '#111111' }}>
         {value}
       </p>
-      {sub && (
-        <p style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.1em' }}>
-          {sub}
-        </p>
-      )}
     </div>
   )
 }
 
+// ─── Member row ───────────────────────────────────────────────────────────────
+
 function MemberRow({ m, onDelete }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const [deleting, setDeleting] = useState(false)
+  const [deleting, setDeleting]           = useState(false)
 
   const handleDelete = async () => {
     if (!confirmDelete) { setConfirmDelete(true); return }
     setDeleting(true)
     try {
-      await fetch('/api/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: m.email }),
-      })
+      await fetch('/api/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: m.email }) })
       onDelete(m.email)
-    } catch {
-      setDeleting(false)
-      setConfirmDelete(false)
-    }
+    } catch { setDeleting(false); setConfirmDelete(false) }
   }
 
   return (
@@ -172,45 +154,42 @@ function MemberRow({ m, onDelete }) {
       className="flex flex-col gap-1 px-4 py-4"
     >
       <div className="flex items-center justify-between gap-2">
-        <span style={{ ...mono, fontSize: '13px', color: '#ffffff', letterSpacing: '0.05em' }}>
+        <span style={{ ...mono, fontSize: '13px', color: '#111111', letterSpacing: '0.04em' }}>
           {m.name || '—'}
         </span>
         <div className="flex items-center gap-3">
-          <span style={{ ...mono, fontSize: '11px', color: '#555' }}>#{m.memberNumber}</span>
+          <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.35)' }}>#{m.memberNumber}</span>
           <button
             onClick={handleDelete}
             disabled={deleting}
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.12em' }}
             className={`px-2 py-1 border transition-all duration-200 cursor-pointer disabled:opacity-30 ${
               confirmDelete
-                ? 'border-red-500/60 text-red-400 hover:border-red-400 hover:text-red-300'
-                : 'border-white/[0.1] text-white/20 hover:border-white/30 hover:text-white/50'
+                ? 'border-red-500/50 text-red-500 hover:border-red-400'
+                : 'border-black/[0.10] text-black/25 hover:border-black/30 hover:text-black/55'
             }`}
           >
             {deleting ? '...' : confirmDelete ? 'CONFIRM' : '×'}
           </button>
         </div>
       </div>
-      <span style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.03em' }}>
+      <span style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.50)', letterSpacing: '0.02em' }}>
         {m.email}
       </span>
       <div className="flex items-center justify-between gap-2 mt-1">
-        <span style={{ ...mono, fontSize: '10px', color: '#444' }}>{m.userId}</span>
-        <span style={{ ...mono, fontSize: '10px', color: '#444' }}>Joined {formatDate(m.timestamp)}</span>
+        <span style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)' }}>{m.userId}</span>
+        <span style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)' }}>Joined {formatDate(m.timestamp)}</span>
       </div>
       <div className="flex items-center justify-between gap-2 mt-0.5">
-        <span style={{ ...mono, fontSize: '10px', color: m.lastSeen ? '#22c55e' : '#333' }}>
+        <span style={{ ...mono, fontSize: '9px', color: m.lastSeen ? '#16a34a' : 'rgba(0,0,0,0.22)' }}>
           {m.lastSeen ? `● Last access: ${timeAgo(m.lastSeen)}` : '○ No access recorded yet'}
         </span>
         {m.lastSeen && (
-          <span style={{ ...mono, fontSize: '9px', color: '#444' }}>{formatDate(m.lastSeen)}</span>
+          <span style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.25)' }}>{formatDate(m.lastSeen)}</span>
         )}
       </div>
       {confirmDelete && !deleting && (
-        <p
-          style={{ ...mono, fontSize: '9px', color: 'rgba(248,113,113,0.5)', letterSpacing: '0.1em' }}
-          className="mt-1"
-        >
+        <p style={{ ...mono, fontSize: '9px', color: 'rgba(220,38,38,0.55)', letterSpacing: '0.08em' }} className="mt-1">
           Tap CONFIRM to delete — this cannot be undone
         </p>
       )}
@@ -218,23 +197,21 @@ function MemberRow({ m, onDelete }) {
   )
 }
 
+// ─── Promo codes ──────────────────────────────────────────────────────────────
+
 function PromoSection({ password }) {
   const [promos, setPromos]     = useState(null)
   const [loading, setLoading]   = useState(false)
   const [creating, setCreating] = useState(false)
   const [copied, setCopied]     = useState(null)
-  const [form, setForm] = useState({ promoterName: '', code: '', percentOff: '15', maxRedemptions: '50' })
+  const [form, setForm]         = useState({ promoterName: '', code: '', percentOff: '15', maxRedemptions: '50' })
   const [formError, setFormError] = useState('')
   const [success, setSuccess]   = useState(null)
 
   const loadPromos = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/list-promos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
+      const res  = await fetch('/api/list-promos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
       const data = await res.json()
       if (res.ok) setPromos(data.promos)
     } catch {}
@@ -242,20 +219,11 @@ function PromoSection({ password }) {
   }
 
   const handleCreate = async (e) => {
-    e.preventDefault()
-    setFormError('')
-    setSuccess(null)
-    if (!form.promoterName.trim() || !form.code.trim()) {
-      setFormError('Promoter name and code are required.')
-      return
-    }
+    e.preventDefault(); setFormError(''); setSuccess(null)
+    if (!form.promoterName.trim() || !form.code.trim()) { setFormError('Promoter name and code are required.'); return }
     setCreating(true)
     try {
-      const res = await fetch('/api/create-promo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, ...form }),
-      })
+      const res  = await fetch('/api/create-promo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, ...form }) })
       const data = await res.json()
       if (!res.ok) { setFormError(data.error || 'Failed to create code.'); setCreating(false); return }
       setSuccess(data)
@@ -276,110 +244,95 @@ function PromoSection({ password }) {
     setTimeout(() => setCopied(null), 2000)
   }
 
+  const inputCls = "w-full h-10 bg-transparent outline-none text-[12px] tracking-[0.06em] px-0 border-b transition-colors duration-300 placeholder:text-black/20 border-black/10 focus:border-black/35"
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.35 }}
-      className="mt-8"
+      className="mt-10 pt-8"
+      style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+      <div className="flex items-center justify-between mb-6">
+        <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.32em' }} className="uppercase">
           Promo Codes — Promoters
         </p>
         <button
-          onClick={loadPromos}
-          disabled={loading}
-          style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
-          className="px-2 py-1 border border-white/[0.1] text-white/30 hover:border-white/30 hover:text-white/60 transition-all duration-200 cursor-pointer disabled:opacity-30"
+          onClick={loadPromos} disabled={loading}
+          style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.40)' }}
+          className="px-3 py-1 border border-black/[0.12] hover:border-black/30 hover:text-black/70 transition-all duration-200 cursor-pointer disabled:opacity-30"
         >
-          {loading ? '...' : promos ? '↻ REFRESH' : 'LOAD'}
+          {loading ? '...' : promos ? '↻ Refresh' : 'Load Codes'}
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Create form */}
-        <div className="border border-white/[0.07] p-5">
-          <p style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.2em' }} className="uppercase mb-5">
+        <div className="p-6" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+          <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.3em' }} className="uppercase mb-6">
             Generate New Code
           </p>
-          <form onSubmit={handleCreate} className="flex flex-col gap-4">
+          <form onSubmit={handleCreate} className="flex flex-col gap-5">
             <div>
-              <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+              <label style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.28em' }} className="uppercase block mb-2">
                 Promoter Name
               </label>
-              <input
-                type="text"
-                placeholder="e.g. John Smith"
-                value={form.promoterName}
+              <input type="text" placeholder="e.g. John Smith" value={form.promoterName}
                 onChange={e => suggestCode(e.target.value)}
-                style={{ ...mono }}
-                className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] tracking-[0.06em] px-3 outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
-              />
+                style={{ ...mono, color: '#111111', caretColor: '#111111' }}
+                className={inputCls} />
             </div>
             <div>
-              <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
-                Code
+              <label style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.28em' }} className="uppercase block mb-2">
+                Promo Code
               </label>
-              <input
-                type="text"
-                placeholder="e.g. JOHN15"
-                value={form.code}
+              <input type="text" placeholder="e.g. JOHN15" value={form.code}
                 onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase() }))}
-                style={{ ...mono }}
-                className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] tracking-[0.12em] px-3 outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
-              />
+                style={{ ...mono, color: '#111111', caretColor: '#111111', letterSpacing: '0.14em' }}
+                className={inputCls} />
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-5">
               <div className="flex-1">
-                <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                <label style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.28em' }} className="uppercase block mb-2">
                   Discount %
                 </label>
-                <input
-                  type="number" min="1" max="100"
-                  value={form.percentOff}
+                <input type="number" min="1" max="100" value={form.percentOff}
                   onChange={e => setForm(f => ({ ...f, percentOff: e.target.value }))}
-                  style={{ ...mono }}
-                  className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] px-3 outline-none focus:border-white/30 transition-colors"
-                />
+                  style={{ ...mono, color: '#111111', caretColor: '#111111' }}
+                  className={inputCls} />
               </div>
               <div className="flex-1">
-                <label style={{ ...mono, fontSize: '9px', color: '#555', letterSpacing: '0.2em' }} className="uppercase block mb-2">
+                <label style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.28em' }} className="uppercase block mb-2">
                   Max Uses
                 </label>
-                <input
-                  type="number" min="1"
-                  value={form.maxRedemptions}
+                <input type="number" min="1" value={form.maxRedemptions}
                   onChange={e => setForm(f => ({ ...f, maxRedemptions: e.target.value }))}
-                  style={{ ...mono }}
-                  className="w-full h-10 bg-transparent border border-white/[0.12] text-white text-[12px] px-3 outline-none focus:border-white/30 transition-colors"
-                />
+                  style={{ ...mono, color: '#111111', caretColor: '#111111' }}
+                  className={inputCls} />
               </div>
             </div>
 
             {formError && (
-              <p style={{ ...mono, fontSize: '10px', color: 'rgba(248,113,113,0.8)', letterSpacing: '0.05em' }}>{formError}</p>
+              <p style={{ ...mono, fontSize: '10px', color: 'rgba(220,38,38,0.70)', letterSpacing: '0.04em' }}>{formError}</p>
             )}
             {success && (
-              <div className="border border-green-500/30 px-3 py-2 flex items-center justify-between gap-3">
-                <p style={{ ...mono, fontSize: '11px', color: '#22c55e', letterSpacing: '0.12em' }}>
+              <div className="flex items-center justify-between gap-3 px-3 py-2" style={{ border: '1px solid rgba(22,163,74,0.30)', background: 'rgba(22,163,74,0.04)' }}>
+                <p style={{ ...mono, fontSize: '11px', color: '#16a34a', letterSpacing: '0.1em' }}>
                   ✓ {success.code} — {success.percentOff}% off — {success.maxRedemptions} uses
                 </p>
                 <button type="button" onClick={() => copyCode(success.code)}
-                  style={{ ...mono, fontSize: '9px', color: '#22c55e', letterSpacing: '0.1em' }}
-                  className="hover:opacity-70 cursor-pointer">
+                  style={{ ...mono, fontSize: '9px', color: '#16a34a', letterSpacing: '0.1em' }}
+                  className="hover:opacity-60 cursor-pointer">
                   {copied === success.code ? 'COPIED' : 'COPY'}
                 </button>
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={creating}
-              style={{ ...mono, fontSize: '10px', letterSpacing: '0.2em' }}
-              className="h-10 border border-white/[0.15] text-white/50 uppercase hover:border-white/40 hover:text-white/90 transition-all duration-300 disabled:opacity-30 cursor-pointer"
-            >
+            <button type="submit" disabled={creating}
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.3em' }}
+              className="h-11 bg-[#111111] text-[#F5F3EE] uppercase hover:bg-[#2a2a2a] transition-colors duration-300 disabled:opacity-30 cursor-pointer">
               {creating ? '...' : '[ Generate Code ]'}
             </button>
           </form>
@@ -388,43 +341,42 @@ function PromoSection({ password }) {
         {/* Code list */}
         <div>
           {!promos ? (
-            <div className="border border-white/[0.07] p-5 flex items-center justify-center min-h-[200px]">
-              <p style={{ ...mono, fontSize: '11px', color: '#444', letterSpacing: '0.1em' }}>
-                Click LOAD to view codes
+            <div className="flex items-center justify-center min-h-[200px]" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.18em' }}>
+                Click Load Codes to view
               </p>
             </div>
           ) : promos.length === 0 ? (
-            <div className="border border-white/[0.07] p-5 flex items-center justify-center min-h-[200px]">
-              <p style={{ ...mono, fontSize: '11px', color: '#444', letterSpacing: '0.1em' }}>
+            <div className="flex items-center justify-center min-h-[200px]" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.18em' }}>
                 No codes yet
               </p>
             </div>
           ) : (
-            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05] max-h-[480px] overflow-y-auto scrollbar-none">
+            <div className="flex flex-col max-h-[480px] overflow-y-auto scrollbar-none" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
               {promos.map(p => (
-                <div key={p.id} className="px-4 py-3 flex flex-col gap-1">
+                <div key={p.id} className="px-4 py-3 flex flex-col gap-1" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                   <div className="flex items-center justify-between gap-2">
-                    <span style={{ ...mono, fontSize: '13px', color: p.active ? '#ffffff' : '#444', letterSpacing: '0.1em' }}>
+                    <span style={{ ...mono, fontSize: '13px', color: p.active ? '#111111' : 'rgba(0,0,0,0.28)', letterSpacing: '0.1em' }}>
                       {p.code}
                     </span>
-                    <button
-                      onClick={() => copyCode(p.code)}
-                      style={{ ...mono, fontSize: '9px', letterSpacing: '0.12em', color: copied === p.code ? '#22c55e' : 'rgba(255,255,255,0.25)' }}
-                      className="hover:opacity-70 cursor-pointer transition-colors"
-                    >
+                    <button onClick={() => copyCode(p.code)}
+                      style={{ ...mono, fontSize: '9px', letterSpacing: '0.12em', color: copied === p.code ? '#16a34a' : 'rgba(0,0,0,0.30)' }}
+                      className="hover:opacity-60 cursor-pointer transition-colors">
                       {copied === p.code ? 'COPIED' : 'COPY'}
                     </button>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <span style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.05em' }}>
-                      {p.promoter} &nbsp;·&nbsp; {p.percentOff}% off
+                    <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.04em' }}>
+                      {p.promoter} · {p.percentOff}% off
                     </span>
-                    <span style={{ ...mono, fontSize: '10px', color: p.timesRedeemed > 0 ? '#22c55e' : '#555', letterSpacing: '0.05em' }}>
+                    <span style={{ ...mono, fontSize: '10px', letterSpacing: '0.04em',
+                      color: p.timesRedeemed > 0 ? '#16a34a' : 'rgba(0,0,0,0.32)' }}>
                       {p.timesRedeemed} / {p.maxRedemptions ?? '∞'} used
                     </span>
                   </div>
                   {!p.active && (
-                    <span style={{ ...mono, fontSize: '9px', color: 'rgba(248,113,113,0.6)', letterSpacing: '0.1em' }}>EXPIRED / INACTIVE</span>
+                    <span style={{ ...mono, fontSize: '9px', color: 'rgba(220,38,38,0.55)', letterSpacing: '0.08em' }}>EXPIRED / INACTIVE</span>
                   )}
                 </div>
               ))}
@@ -436,33 +388,28 @@ function PromoSection({ password }) {
   )
 }
 
+// ─── Dashboard ────────────────────────────────────────────────────────────────
+
 function Dashboard({ data, password }) {
-  const { financials } = data
-  const f = financials ?? FINANCIALS
-  const [members, setMembers] = useState(data.members)
+  const f = data.financials ?? FINANCIALS
+  const [members, setMembers]   = useState(data.members)
   const [refreshing, setRefreshing] = useState(false)
   const count = members.length
 
-  const handleDeleteMember = (email) => {
-    setMembers(prev => prev.filter(m => m.email !== email))
-  }
+  const handleDeleteMember = (email) => setMembers(prev => prev.filter(m => m.email !== email))
 
   const handleRefresh = async () => {
     setRefreshing(true)
     try {
-      const res = await fetch('/api/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
+      const res  = await fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
       const fresh = await res.json()
       if (res.ok) setMembers(fresh.members)
     } catch {}
     setRefreshing(false)
   }
 
-  const revenue = count * f.retailPrice
-  const netProfit = revenue - f.initialInvestment
+  const revenue    = count * f.retailPrice
+  const netProfit  = revenue - f.initialInvestment
   const breakEvenPct = Math.min((count / f.breakEvenUnits) * 100, 100)
 
   const finRows = [
@@ -476,78 +423,68 @@ function Dashboard({ data, password }) {
   ]
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#000] text-white flex flex-col">
+    <div className="min-h-[100dvh] w-full bg-[#F5F3EE] flex flex-col">
       <div className="grain" />
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-10 h-10"
-        style={{ background: '#000', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <span style={{ ...mono, fontSize: '10px', color: '#888', letterSpacing: '0.15em' }}>
+      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-10 h-10 bg-[#F5F3EE]"
+        style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+        <span style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.3em' }}>
           TRUE VISION PROJECT
         </span>
-        <span style={{ ...mono, fontSize: '10px', color: '#555', letterSpacing: '0.1em' }}>
+        <span style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }}>
           COMMAND CENTER
         </span>
       </div>
 
       <main className="relative z-10 flex-1 px-4 sm:px-10 pt-16 pb-12 max-w-5xl mx-auto w-full">
 
-        {/* Page title */}
+        {/* Title */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="pt-6 pb-8 border-b border-white/[0.06] mb-8"
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
+          className="pt-6 pb-8 mb-8" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
         >
-          <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.3em' }} className="mb-2 uppercase">
+          <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.4em' }} className="mb-2 uppercase">
             Dashboard
           </p>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px, 6vw, 48px)', color: '#fff', lineHeight: 1.1 }}>
+          <p style={{ ...serif, fontSize: 'clamp(28px, 6vw, 46px)', color: '#111111', lineHeight: 1.1 }}>
             {String(count).padStart(3, '0')} Members
           </p>
         </motion.div>
 
         {/* Stat cards */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8"
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
+          className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6"
         >
-          <StatCard label="Total Members" value={count} />
+          <StatCard label="Total Members"   value={count} />
           <StatCard label="Current Revenue" value={fmt(revenue)} />
-          <StatCard
-            label="Net Position"
-            value={fmt(netProfit)}
-            highlight={netProfit >= 0 ? 'green' : 'red'}
-          />
+          <StatCard label="Net Position"    value={fmt(netProfit)} highlight={netProfit >= 0 ? 'green' : 'red'} />
         </motion.div>
 
         {/* Break-even bar */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="mb-8 p-5 border border-white/[0.07]"
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}
+          className="mb-8 p-5" style={{ border: '1px solid rgba(0,0,0,0.08)' }}
         >
           <div className="flex items-center justify-between mb-3">
-            <p style={{ ...mono, fontSize: '11px', color: '#888', letterSpacing: '0.15em' }} className="uppercase">
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.22em' }} className="uppercase">
               Break-Even Progress
             </p>
-            <p style={{ ...mono, fontSize: '13px', color: count >= f.breakEvenUnits ? '#22c55e' : '#ffffff' }}>
+            <p style={{ ...mono, fontSize: '12px', color: count >= f.breakEvenUnits ? '#16a34a' : '#111111' }}>
               {count} / {f.breakEvenUnits} units
             </p>
           </div>
-          <div className="w-full h-[3px] bg-white/[0.07] rounded-full overflow-hidden">
+          <div className="w-full h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.07)' }}>
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: breakEvenPct / 100 }}
               transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="h-full origin-left rounded-full"
-              style={{ background: count >= f.breakEvenUnits ? '#22c55e' : '#ffffff' }}
+              style={{ background: count >= f.breakEvenUnits ? '#16a34a' : '#111111' }}
             />
           </div>
-          <p style={{ ...mono, fontSize: '10px', color: count >= f.breakEvenUnits ? '#22c55e' : '#555', letterSpacing: '0.1em' }}
+          <p style={{ ...mono, fontSize: '9px', color: count >= f.breakEvenUnits ? '#16a34a' : 'rgba(0,0,0,0.38)', letterSpacing: '0.12em' }}
             className="mt-2">
             {count >= f.breakEvenUnits ? '✓ Break-even achieved' : `${f.breakEvenUnits - count} more units to break even`}
           </p>
@@ -556,22 +493,19 @@ function Dashboard({ data, password }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Financials */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="mb-4 uppercase">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.32em' }} className="mb-4 uppercase">
               Financial Model
             </p>
-            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05]">
+            <div className="flex flex-col" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
               {finRows.map(({ label, value, highlight }) => (
-                <div key={label} className="flex items-center justify-between px-4 py-3 gap-4">
-                  <span style={{ ...mono, fontSize: '11px', color: '#666', letterSpacing: '0.05em' }}>
+                <div key={label} className="flex items-center justify-between px-4 py-3 gap-4"
+                  style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                  <span style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.50)', letterSpacing: '0.04em' }}>
                     {label}
                   </span>
-                  <span style={{ ...mono, fontSize: '13px', letterSpacing: '0.05em',
-                    color: highlight === 'green' ? '#22c55e' : highlight === 'red' ? 'rgba(248,113,113,0.8)' : '#ffffff' }}>
+                  <span style={{ ...mono, fontSize: '12px', letterSpacing: '0.04em',
+                    color: highlight === 'green' ? '#16a34a' : highlight === 'red' ? '#dc2626' : '#111111' }}>
                     {value}
                   </span>
                 </div>
@@ -580,27 +514,20 @@ function Dashboard({ data, password }) {
           </motion.div>
 
           {/* Member list */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
             <div className="flex items-center justify-between mb-4">
-              <p style={{ ...mono, fontSize: '11px', color: '#555', letterSpacing: '0.25em' }} className="uppercase">
+              <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.32em' }} className="uppercase">
                 Member Registry — {count} total
               </p>
-              <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em' }}
-                className="px-2 py-1 border border-white/[0.1] text-white/30 hover:border-white/30 hover:text-white/60 transition-all duration-200 cursor-pointer disabled:opacity-30"
-              >
-                {refreshing ? '...' : '↻ REFRESH'}
+              <button onClick={handleRefresh} disabled={refreshing}
+                style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.38)' }}
+                className="px-2 py-1 border border-black/[0.10] hover:border-black/30 hover:text-black/70 transition-all duration-200 cursor-pointer disabled:opacity-30">
+                {refreshing ? '...' : '↻ Refresh'}
               </button>
             </div>
-            <div className="flex flex-col border border-white/[0.07] divide-y divide-white/[0.05] max-h-[480px] overflow-y-auto scrollbar-none">
+            <div className="flex flex-col max-h-[480px] overflow-y-auto scrollbar-none" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
               {members.length === 0 ? (
-                <p style={{ ...mono, fontSize: '13px', color: '#444' }} className="px-4 py-6 text-center">
+                <p style={{ ...mono, fontSize: '12px', color: 'rgba(0,0,0,0.28)' }} className="px-4 py-6 text-center">
                   No members yet.
                 </p>
               ) : (
@@ -618,8 +545,8 @@ function Dashboard({ data, password }) {
 
       </main>
 
-      <footer className="relative z-10 px-4 sm:px-10 py-4 border-t border-white/[0.06]">
-        <p style={{ ...mono, fontSize: '10px', color: '#444', letterSpacing: '0.15em' }}>
+      <footer className="relative z-10 px-4 sm:px-10 py-4" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+        <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.2em' }}>
           TVP // COMMAND CENTER // {new Date().getFullYear()}
         </p>
       </footer>
@@ -627,8 +554,10 @@ function Dashboard({ data, password }) {
   )
 }
 
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
 export default function AdminPage() {
-  const [data, setData] = useState(null)
+  const [data, setData]         = useState(null)
   const [password, setPassword] = useState('')
 
   return (
