@@ -236,6 +236,54 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── Drop 002 Teaser ──────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: '#111111', borderTop: '1px solid rgba(255,255,255,0.04)' }}
+        aria-label="Drop 002 — Coming Soon"
+      >
+        <div className="grain" aria-hidden="true" style={{ opacity: 0.5 }} />
+        <div className="relative max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-28 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10">
+
+          <div className="flex flex-col gap-6">
+            <motion.p
+              {...inview()}
+              style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.5em' }}
+              className="uppercase"
+            >
+              Drop 002 — Classified
+            </motion.p>
+            <motion.h2
+              {...inview(0.08)}
+              style={{ ...serif, fontSize: 'clamp(32px, 6vw, 56px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.08 }}
+            >
+              Something<br />Is Coming.
+            </motion.h2>
+            <motion.p
+              {...inview(0.14)}
+              style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.20em', maxWidth: '300px', lineHeight: 1.85 }}
+              className="uppercase"
+            >
+              The next chapter. Archive members get first access.
+            </motion.p>
+          </div>
+
+          <motion.div {...inview(0.2)} className="flex flex-col items-start gap-4">
+            <Link
+              to="/drop-002"
+              style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: '#F5F3EE', border: '1px solid rgba(255,255,255,0.14)', padding: '14px 28px' }}
+              className="uppercase hover:bg-white/[0.05] transition-all duration-300"
+            >
+              [ Get Early Access ]
+            </Link>
+            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.22em' }}>
+              Free. No commitment.
+            </p>
+          </motion.div>
+
+        </div>
+      </section>
+
       {/* ─── Quote ────────────────────────────────────────────────────── */}
       <section
         className="flex flex-col items-center text-center px-6 sm:px-16 py-16 sm:py-24"
@@ -266,6 +314,38 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* ─── Archive ──────────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-24 flex flex-col sm:flex-row items-start justify-between gap-10"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+        aria-label="The Archive"
+      >
+        <motion.div {...inview()} className="flex flex-col gap-5 max-w-sm">
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.48em' }} className="uppercase">
+            The Archive
+          </p>
+          <h2 style={{ ...serif, fontSize: 'clamp(24px, 4vw, 36px)', color: '#111111', fontWeight: 500, lineHeight: 1.2 }}>
+            Join the founding community.
+          </h2>
+          <p style={{ ...inter, fontSize: '13px', color: 'rgba(0,0,0,0.50)', lineHeight: 1.85 }}>
+            Archive members are not customers. They are the foundation — people who believed before anyone else. First access to every drop. First to know. First to own.
+          </p>
+        </motion.div>
+
+        <motion.div {...inview(0.1)} className="flex flex-col gap-4 sm:mt-14">
+          <Link
+            to="/archive"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: '#F5F3EE', background: '#111111', padding: '14px 28px' }}
+            className="uppercase hover:bg-[#2a2a2a] transition-all duration-300"
+          >
+            [ Enter the Archive ]
+          </Link>
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.18em' }}>
+            Free to join. Always.
+          </p>
+        </motion.div>
+      </section>
+
       {/* ─── Marquee ──────────────────────────────────────────────────── */}
       <div
         className="w-full overflow-hidden py-[10px]"
@@ -276,7 +356,7 @@ export default function Home() {
           {[0, 1].map((i) => (
             <span key={i}
               style={{ ...mono, fontSize: '8px', color: '#111111', letterSpacing: '0.22em', whiteSpace: 'nowrap', paddingRight: '4rem' }}>
-              [ DROP 001 — NOW AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
+              [ DROP 001 — AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP — €32 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ DROP 002 — COMING SOON ] &nbsp;&nbsp;·&nbsp;&nbsp; [ ARCHIVE — JOIN NOW ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
             </span>
           ))}
         </div>
@@ -296,6 +376,11 @@ export default function Home() {
             className="uppercase hover:opacity-60 transition-opacity duration-300">
             [ Archive ]
           </Link>
+          <Link to="/drop-002"
+            style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.28)' }}
+            className="uppercase hover:opacity-60 transition-opacity duration-300">
+            [ Drop 002 ]
+          </Link>
           <a href="https://www.instagram.com/truevisionproject/" target="_blank" rel="noopener noreferrer"
             aria-label="Instagram" style={{ color: 'rgba(0,0,0,0.28)' }}
             className="hover:opacity-60 transition-opacity duration-300">
@@ -303,6 +388,13 @@ export default function Home() {
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
               <circle cx="12" cy="12" r="4" />
               <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@tvpofficial" target="_blank" rel="noopener noreferrer"
+            aria-label="TikTok" style={{ color: 'rgba(0,0,0,0.28)' }}
+            className="hover:opacity-60 transition-opacity duration-300">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
             </svg>
           </a>
         </div>

@@ -28,9 +28,10 @@ export default function Navbar({ onCartOpen }) {
         <span style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <span className="hidden sm:block" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
-          [ DROP 001 — LIVE ]
-        </span>
+        <Link to="/drop-002" className="hover:opacity-60 transition-opacity duration-300"
+          style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
+          [ DROP 002 — COMING SOON ]
+        </Link>
         <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.18em' }}>
           [ STATUS:&nbsp;<span style={{ color: '#888' }}>AVAILABLE</span>&nbsp;]
           <span className="status-dot" />
