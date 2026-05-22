@@ -5,8 +5,6 @@ const mono  = { fontFamily: "'Space Mono', monospace" }
 const serif = { fontFamily: "'Cormorant Garamond', serif" }
 const inter = { fontFamily: "'Inter', sans-serif" }
 
-// ─── Animation helpers ────────────────────────────────────────────────────────
-
 const reveal = (delay = 0) => ({
   initial:     { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
@@ -35,7 +33,6 @@ const wipeDown = (delay = 0) => ({
   transition:  { duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] },
 })
 
-// Slides a text line up from below its container (parent needs overflow:hidden)
 function LineReveal({ children, style, delay = 0 }) {
   return (
     <span style={{ display: 'block', overflow: 'hidden' }}>
@@ -52,45 +49,49 @@ function LineReveal({ children, style, delay = 0 }) {
   )
 }
 
-// Image slot — swap src prop when you have photos
-function Photo({ label, aspect = 'aspect-[3/4]', dark = false, src }) {
-  const bg         = dark ? '#1c1c1c' : '#D8D4CD'
-  const borderCol  = dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)'
-  const textCol    = dark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.20)'
+const corners = (color = 'rgba(0,0,0,0.10)') => (
+  ['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r',
+   'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'].map((c, i) => (
+    <span key={i} aria-hidden="true" className={`absolute w-6 h-6 z-10 ${c}`}
+      style={{ borderColor: color }} />
+  ))
+)
 
+function Photo({ src, label, aspect = 'aspect-[3/4]', dark = false }) {
   return (
-    <motion.div {...wipeDown()} className={`relative overflow-hidden w-full ${aspect}`} style={{ background: bg }}>
-      {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
-        'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, i) => (
-        <span key={i} aria-hidden="true" className={`absolute w-6 h-6 z-10 ${c}`}
-          style={{ borderColor: borderCol }} />
-      ))}
+    <motion.div {...wipeDown()} className={`relative overflow-hidden w-full ${aspect}`}
+      style={{ background: dark ? '#1a1a1a' : '#D8D4CD' }}>
+      {corners(dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.10)')}
       {src ? (
-        <img src={src} alt={label}
+        <img src={src} alt={label ?? ''}
           className="absolute inset-0 w-full h-full object-cover"
           style={{ filter: 'saturate(0.20) brightness(0.92)' }}
           draggable="false" />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-          <p style={{ ...mono, fontSize: '7px', color: textCol, letterSpacing: '0.38em', lineHeight: 1.9 }}
-            className="uppercase">{label}</p>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span aria-hidden="true" style={{
+            display: 'block', width: '1px', height: '32px',
+            background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+            position: 'absolute',
+          }} />
+          <span aria-hidden="true" style={{
+            display: 'block', height: '1px', width: '32px',
+            background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+            position: 'absolute',
+          }} />
         </div>
       )}
     </motion.div>
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function OurStory() {
   return (
-    <div className="bg-[#F5F3EE]">
+    <div style={{ background: '#F5F3EE' }}>
       <div className="grain" aria-hidden="true" />
 
-      {/* ══════════════════════════════════════════════════════════════
-          01  OPENING  — full screen, light
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 text-center">
+      {/* ── 01  OPENING ──────────────────────────────────────────────── */}
+      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 text-center pt-[78px]">
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.05 }}
@@ -100,7 +101,7 @@ export default function OurStory() {
           True Vision Project &nbsp;·&nbsp; Est. 2026
         </motion.p>
 
-        <div style={{ maxWidth: '720px' }}>
+        <div style={{ maxWidth: '740px' }}>
           <span style={{ display: 'block', overflow: 'hidden' }}>
             <motion.h1
               initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }}
@@ -140,10 +141,8 @@ export default function OurStory() {
         </motion.div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          02  OPENING QUOTE  — dark
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-[#111111] px-6 sm:px-14 py-20 sm:py-28 flex flex-col items-center text-center">
+      {/* ── 02  OPENING QUOTE  — dark ───────────────────────────────── */}
+      <section style={{ background: '#111111' }} className="px-6 sm:px-14 py-20 sm:py-28 flex flex-col items-center text-center">
         <motion.p {...fadeIn()}
           style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.48em' }}
           className="uppercase mb-10"
@@ -151,12 +150,12 @@ export default function OurStory() {
           The beginning
         </motion.p>
 
-        <div style={{ maxWidth: '660px' }}>
+        <div style={{ maxWidth: '640px' }}>
           {[
-            { t: '"We didn\'t start because we had money,',          col: '#ffffff',                   d: 0.04 },
-            { t: 'connections, or a blueprint.',                     col: '#ffffff',                   d: 0.10 },
-            { t: 'We started because we had nothing —',             col: 'rgba(255,255,255,0.38)',    d: 0.17 },
-            { t: 'and decided that was enough to begin."',          col: '#ffffff',                   d: 0.24 },
+            { t: '"We didn\'t start because we had money,',   col: '#ffffff',                 d: 0.04 },
+            { t: 'connections, or a blueprint.',              col: '#ffffff',                 d: 0.10 },
+            { t: 'We started because we had nothing —',      col: 'rgba(255,255,255,0.38)', d: 0.17 },
+            { t: 'and decided that was enough to begin."',   col: '#ffffff',                 d: 0.24 },
           ].map(({ t, col, d }) => (
             <LineReveal key={t} delay={d}
               style={{ ...serif, fontSize: 'clamp(22px, 4.5vw, 38px)', color: col, fontWeight: 400, lineHeight: 1.38, fontStyle: 'italic' }}>
@@ -174,9 +173,7 @@ export default function OurStory() {
         </motion.p>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          03  CHAPTER 01 · ORIGINS  — light, two-col
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ── 03  CHAPTER 01 · ORIGINS  — light ──────────────────────── */}
       <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
         <motion.p {...fadeIn()}
           style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.55em' }}
@@ -185,11 +182,9 @@ export default function OurStory() {
           01 / 03 &nbsp;·&nbsp; Where It Started
         </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-14 items-start">
-
-          {/* Photo slot A — replace src="/your-image.jpg" when ready */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
           <div>
-            <Photo label={'Founder photo\nReplace: add src="/your-image.jpg"'} aspect="aspect-[3/4]" />
+            <Photo aspect="aspect-[3/4]" />
             <motion.p {...fadeIn(0.1)}
               style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.28em' }}
               className="uppercase mt-3">
@@ -197,19 +192,18 @@ export default function OurStory() {
             </motion.p>
           </div>
 
-          {/* Text */}
           <div className="flex flex-col gap-6 sm:pt-10">
             <div>
               <LineReveal style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }}>
                 Two ordinary kids.
               </LineReveal>
               <LineReveal delay={0.08}
-                style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: 'rgba(0,0,0,0.30)', fontWeight: 500, lineHeight: 1.1, fontStyle: 'italic' }}>
+                style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: 'rgba(0,0,0,0.28)', fontWeight: 500, lineHeight: 1.1, fontStyle: 'italic' }}>
                 Extraordinary purpose.
               </LineReveal>
             </div>
 
-            <motion.div {...lineGrow(0.1)} className="origin-left h-px w-8"
+            <motion.div {...lineGrow(0.10)} className="origin-left h-px w-8"
               style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
 
             <motion.p {...reveal(0.14)}
@@ -224,16 +218,14 @@ export default function OurStory() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          04  PULL QUOTE  — light, centered
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ── 04  PULL QUOTE  — light, centered ──────────────────────── */}
       <section className="px-6 sm:px-14 py-16 sm:py-24 flex flex-col items-center text-center"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
         <div style={{ maxWidth: '560px' }}>
           {[
-            { t: 'That background does one of two things.',  col: '#111111',           d: 0,    w: 600 },
-            { t: 'It makes you accept less.',               col: 'rgba(0,0,0,0.35)',  d: 0.09, w: 400, i: true },
-            { t: 'Or it makes you refuse to.',              col: 'rgba(0,0,0,0.35)',  d: 0.17, w: 400, i: true },
+            { t: 'That background does one of two things.', col: '#111111',           d: 0,    w: 600 },
+            { t: 'It makes you accept less.',               col: 'rgba(0,0,0,0.35)', d: 0.09, w: 400, i: true },
+            { t: 'Or it makes you refuse to.',              col: 'rgba(0,0,0,0.35)', d: 0.17, w: 400, i: true },
             { t: 'We refused.',                             col: '#111111',           d: 0.26, w: 700 },
           ].map(({ t, col, d, w, i }) => (
             <LineReveal key={t} delay={d}
@@ -244,24 +236,21 @@ export default function OurStory() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          05  FULL-BLEED IMAGE  — dark, wide
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#111111]">
-        {/* Photo slot B — replace contents with <img src="/both-founders.jpg" .../> */}
+      {/* ── 05  FULL-BLEED BAND  — dark ─────────────────────────────── */}
+      <div style={{ background: '#111111' }}>
         <motion.div {...wipeDown()}
-          className="relative w-full overflow-hidden bg-[#1a1a1a] flex items-center justify-center"
-          style={{ aspectRatio: '21/9', minHeight: '220px' }}
+          className="relative w-full overflow-hidden flex items-center justify-center"
+          style={{ background: '#1a1a1a', aspectRatio: '21/9', minHeight: '200px' }}
         >
-          {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
-            'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c, i) => (
-            <span key={i} aria-hidden="true" className={`absolute w-7 h-7 z-10 ${c}`}
-              style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
-          ))}
-          <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.15)', letterSpacing: '0.42em' }}
-            className="uppercase z-10 text-center px-6">
-            [ Both founders — add src="/both-founders.jpg" to this section ]
-          </p>
+          {corners('rgba(255,255,255,0.06)')}
+          <span aria-hidden="true" style={{
+            display: 'block', width: '1px', height: '40px',
+            background: 'rgba(255,255,255,0.06)', position: 'absolute',
+          }} />
+          <span aria-hidden="true" style={{
+            display: 'block', height: '1px', width: '40px',
+            background: 'rgba(255,255,255,0.06)', position: 'absolute',
+          }} />
         </motion.div>
 
         <motion.div {...fadeIn(0.2)} className="px-6 sm:px-10 py-4 flex justify-between items-center">
@@ -274,9 +263,7 @@ export default function OurStory() {
         </motion.div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          06  CHAPTER 02 · THE MISSION  — light, reversed
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ── 06  CHAPTER 02 · THE MISSION  — light, reversed ─────────── */}
       <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
         <motion.p {...fadeIn()}
           style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.55em' }}
@@ -285,9 +272,7 @@ export default function OurStory() {
           02 / 03 &nbsp;·&nbsp; Why We Built This
         </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-14 items-start">
-
-          {/* Text — left on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
           <div className="flex flex-col gap-6 sm:pt-10 order-2 sm:order-1">
             <div>
               <LineReveal style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }}>
@@ -299,7 +284,7 @@ export default function OurStory() {
               </LineReveal>
             </div>
 
-            <motion.div {...lineGrow(0.1)} className="origin-left h-px w-8"
+            <motion.div {...lineGrow(0.10)} className="origin-left h-px w-8"
               style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
 
             <motion.p {...reveal(0.14)}
@@ -312,9 +297,8 @@ export default function OurStory() {
             </motion.p>
           </div>
 
-          {/* Photo slot C */}
           <div className="order-1 sm:order-2">
-            <Photo label={'Second founder photo\nReplace: add src="/your-image-2.jpg"'} aspect="aspect-[3/4]" />
+            <Photo aspect="aspect-[3/4]" />
             <motion.p {...fadeIn(0.1)}
               style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.28em' }}
               className="uppercase mt-3 text-right">
@@ -324,10 +308,8 @@ export default function OurStory() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          07  CHAPTER 03 · WHO THIS IS FOR  — dark
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-[#111111] px-6 sm:px-14 py-20 sm:py-28">
+      {/* ── 07  CHAPTER 03 · WHO THIS IS FOR  — dark ────────────────── */}
+      <section style={{ background: '#111111' }} className="px-6 sm:px-14 py-20 sm:py-28">
         <div className="max-w-4xl mx-auto">
           <motion.p {...fadeIn()}
             style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.55em' }}
@@ -346,7 +328,7 @@ export default function OurStory() {
                 who work in silence.
               </LineReveal>
               <LineReveal delay={0.16}
-                style={{ ...serif, fontSize: 'clamp(26px, 4vw, 42px)', color: 'rgba(255,255,255,0.32)', fontWeight: 400, lineHeight: 1.25, fontStyle: 'italic' }}>
+                style={{ ...serif, fontSize: 'clamp(26px, 4vw, 42px)', color: 'rgba(255,255,255,0.30)', fontWeight: 400, lineHeight: 1.25, fontStyle: 'italic' }}>
                 Who build without applause.
               </LineReveal>
             </div>
@@ -361,7 +343,7 @@ export default function OurStory() {
                 True Vision exists for everyone who looked at that hand and decided to play differently.
               </motion.p>
               <motion.p {...reveal(0.26)}
-                style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.95, fontWeight: 400 }}>
+                style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.95, fontWeight: 400 }}>
                 If you understand that — you understand True Vision.
               </motion.p>
             </div>
@@ -369,9 +351,7 @@ export default function OurStory() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          08  CLOSING STATEMENT  — light, full-screen feel
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ── 08  CLOSING ─────────────────────────────────────────────── */}
       <section className="relative flex flex-col items-center justify-center text-center px-6 py-28 sm:py-36 min-h-[65vh]">
 
         <motion.div {...lineGrow()} className="origin-center h-px w-10 mb-14"
@@ -382,8 +362,8 @@ export default function OurStory() {
             style={{ ...serif, fontSize: 'clamp(38px, 9vw, 82px)', color: '#111111', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.015em' }}>
             Built from nothing.
           </LineReveal>
-          <LineReveal delay={0.1}
-            style={{ ...serif, fontSize: 'clamp(38px, 9vw, 82px)', color: 'rgba(0,0,0,0.25)', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.015em', fontStyle: 'italic' }}>
+          <LineReveal delay={0.10}
+            style={{ ...serif, fontSize: 'clamp(38px, 9vw, 82px)', color: 'rgba(0,0,0,0.22)', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.015em', fontStyle: 'italic' }}>
             Worn by those who understand.
           </LineReveal>
         </div>
@@ -394,8 +374,8 @@ export default function OurStory() {
         <motion.div {...reveal(0.28)} className="flex flex-col sm:flex-row items-center gap-5">
           <Link
             to="/"
-            className="inline-block px-10 py-[14px] bg-[#111111] text-[#F5F3EE] hover:bg-[#2a2a2a] transition-colors duration-300"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.42em' }}
+            className="inline-block px-10 py-[14px] hover:bg-[#2a2a2a] transition-colors duration-300"
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.42em', background: '#111111', color: '#F5F3EE' }}
           >
             Shop Drop 001
           </Link>
