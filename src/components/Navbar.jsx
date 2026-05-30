@@ -28,9 +28,9 @@ export default function Navbar({ onCartOpen }) {
         <span style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
           [ TRUE VISION PROJECT ]
         </span>
-        <Link to="/drop-002" className="hover:opacity-60 transition-opacity duration-300"
+        <Link to="/" className="hover:opacity-60 transition-opacity duration-300"
           style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.22em' }}>
-          [ DROP 002 — COMING SOON ]
+          [ DROP 001 — AVAILABLE NOW ]
         </Link>
         <span className="flex items-center gap-2" style={{ ...mono, fontSize: '7px', color: '#aaaaaa', letterSpacing: '0.18em' }}>
           [ STATUS:&nbsp;<span style={{ color: '#888' }}>AVAILABLE</span>&nbsp;]
@@ -114,7 +114,15 @@ export default function Navbar({ onCartOpen }) {
               )}
             </button>
 
-            {/* Archive link on mobile */}
+            {/* Mobile links */}
+            <Link
+              to="/"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(0,0,0,0.28)' }}
+              className="uppercase hover:opacity-70 transition-opacity duration-500 sm:hidden"
+              aria-label="Shop"
+            >
+              [ Shop ]
+            </Link>
             <Link
               to="/archive"
               style={{ ...mono, fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(0,0,0,0.28)' }}
