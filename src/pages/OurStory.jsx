@@ -5,32 +5,20 @@ const mono  = { fontFamily: "'Space Mono', monospace" }
 const serif = { fontFamily: "'Cormorant Garamond', serif" }
 const inter = { fontFamily: "'Inter', sans-serif" }
 
-const reveal = (delay = 0) => ({
-  initial:     { opacity: 0, y: 16 },
+const ease = [0.16, 1, 0.3, 1]
+
+const reveal = (delay = 0, y = 22) => ({
+  initial:     { opacity: 0, y },
   whileInView: { opacity: 1, y: 0 },
   viewport:    { once: true, margin: '-40px' },
-  transition:  { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] },
-})
-
-const fadeIn = (delay = 0) => ({
-  initial:     { opacity: 0 },
-  whileInView: { opacity: 1 },
-  viewport:    { once: true, margin: '-40px' },
-  transition:  { duration: 0.7, delay },
+  transition:  { duration: 0.75, delay, ease },
 })
 
 const lineGrow = (delay = 0) => ({
   initial:     { scaleX: 0 },
   whileInView: { scaleX: 1 },
   viewport:    { once: true },
-  transition:  { duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] },
-})
-
-const wipeDown = (delay = 0) => ({
-  initial:     { clipPath: 'inset(0 0 100% 0)' },
-  whileInView: { clipPath: 'inset(0 0 0% 0)' },
-  viewport:    { once: true, margin: '-60px' },
-  transition:  { duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] },
+  transition:  { duration: 0.85, delay, ease },
 })
 
 function LineReveal({ children, style, delay = 0 }) {
@@ -38,10 +26,10 @@ function LineReveal({ children, style, delay = 0 }) {
     <span style={{ display: 'block', overflow: 'hidden' }}>
       <motion.span
         style={{ display: 'block', ...style }}
-        initial={{ y: '108%', opacity: 0 }}
+        initial={{ y: '110%', opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true, margin: '-30px' }}
-        transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.7, delay, ease }}
       >
         {children}
       </motion.span>
@@ -49,36 +37,37 @@ function LineReveal({ children, style, delay = 0 }) {
   )
 }
 
-const corners = (color = 'rgba(0,0,0,0.10)') => (
-  ['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r',
-   'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'].map((c, i) => (
-    <span key={i} aria-hidden="true" className={`absolute w-6 h-6 z-10 ${c}`}
-      style={{ borderColor: color }} />
-  ))
-)
-
-function Photo({ src, label, aspect = 'aspect-[3/4]', dark = false }) {
+function PhotoSlot({ label, aspect = 'aspect-[3/4]', dark = false, src }) {
+  const bg = dark ? '#1a1a1a' : '#D8D4CD'
+  const borderColor = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.10)'
   return (
-    <motion.div {...wipeDown()} className={`relative overflow-hidden w-full ${aspect}`}
-      style={{ background: dark ? '#1a1a1a' : '#D8D4CD' }}>
-      {corners(dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.10)')}
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.85, ease }}
+      className={`relative overflow-hidden w-full ${aspect}`}
+      style={{ background: bg }}
+    >
+      {/* Corner marks */}
+      <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor }} />
+      <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r z-10" style={{ borderColor }} />
+      <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l z-10" style={{ borderColor }} />
+      <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor }} />
+
       {src ? (
-        <img src={src} alt={label ?? ''}
+        <img
+          src={src}
+          alt={label ?? ''}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'saturate(0.20) brightness(0.92)' }}
-          draggable="false" />
+          style={{ filter: 'saturate(0.18) brightness(0.92)' }}
+          draggable="false"
+        />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span aria-hidden="true" style={{
-            display: 'block', width: '1px', height: '32px',
-            background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-            position: 'absolute',
-          }} />
-          <span aria-hidden="true" style={{
-            display: 'block', height: '1px', width: '32px',
-            background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-            position: 'absolute',
-          }} />
+        <div className="absolute inset-0 flex items-end p-4">
+          <p style={{ ...mono, fontSize: '7px', color: dark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)', letterSpacing: '0.28em' }} className="uppercase">
+            {label}
+          </p>
         </div>
       )}
     </motion.div>
@@ -87,315 +76,230 @@ function Photo({ src, label, aspect = 'aspect-[3/4]', dark = false }) {
 
 export default function OurStory() {
   return (
-    <div style={{ background: '#F5F3EE' }}>
+    <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
-      {/* ── 01  OPENING ──────────────────────────────────────────────── */}
-      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 text-center pt-[78px]">
+      {/* ─── 01 / Opening ─────────────────────────────────────────────── */}
+      <section className="pt-[78px] min-h-[100dvh] flex flex-col justify-center px-6 sm:px-12 max-w-3xl mx-auto">
 
         <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.05 }}
-          style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.5em' }}
-          className="uppercase mb-9"
-        >
-          True Vision Project &nbsp;·&nbsp; Est. 2026
-        </motion.p>
-
-        <div style={{ maxWidth: '740px' }}>
-          <span style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.h1
-              initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.75, delay: 0.10, ease: [0.16, 1, 0.3, 1] }}
-              style={{ ...serif, fontSize: 'clamp(54px, 12vw, 110px)', color: '#111111', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.02em' }}
-            >
-              Two towns.
-            </motion.h1>
-          </span>
-          <span style={{ display: 'block', overflow: 'hidden' }}>
-            <motion.h1
-              initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.75, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-              style={{ ...serif, fontSize: 'clamp(54px, 12vw, 110px)', color: '#111111', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.02em', fontStyle: 'italic' }}
-            >
-              One road.
-            </motion.h1>
-          </span>
-        </div>
-
-        <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.36 }}
-          style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.42em' }}
-          className="uppercase mt-9"
-        >
-          Wexford, Ireland &nbsp;×&nbsp; Bergamo, Italy
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.55 }}
-          className="absolute bottom-8 flex flex-col items-center" aria-hidden="true"
-        >
-          <motion.div
-            animate={{ y: [0, 7, 0] }} transition={{ duration: 1.9, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '1px', height: '34px', background: 'rgba(0,0,0,0.14)' }}
-          />
-        </motion.div>
-      </section>
-
-      {/* ── 02  OPENING QUOTE  — dark ───────────────────────────────── */}
-      <section style={{ background: '#111111' }} className="px-6 sm:px-14 py-20 sm:py-28 flex flex-col items-center text-center">
-        <motion.p {...fadeIn()}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.48em' }}
+          {...reveal(0.05, 0)}
+          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.5em' }}
           className="uppercase mb-10"
         >
-          The beginning
+          Our Story
         </motion.p>
 
-        <div style={{ maxWidth: '640px' }}>
-          {[
-            { t: '"We didn\'t start because we had money,',   col: '#ffffff',                 d: 0.04 },
-            { t: 'connections, or a blueprint.',              col: '#ffffff',                 d: 0.10 },
-            { t: 'We started because we had nothing —',      col: 'rgba(255,255,255,0.38)', d: 0.17 },
-            { t: 'and decided that was enough to begin."',   col: '#ffffff',                 d: 0.24 },
-          ].map(({ t, col, d }) => (
-            <LineReveal key={t} delay={d}
-              style={{ ...serif, fontSize: 'clamp(22px, 4.5vw, 38px)', color: col, fontWeight: 400, lineHeight: 1.38, fontStyle: 'italic' }}>
-              {t}
-            </LineReveal>
-          ))}
+        <div className="mb-10">
+          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: '#111111', fontWeight: 500, lineHeight: 1.04 }} delay={0.08}>
+            Two people.
+          </LineReveal>
+          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: '#111111', fontWeight: 500, lineHeight: 1.04 }} delay={0.18}>
+            One idea.
+          </LineReveal>
+          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: 'rgba(0,0,0,0.25)', fontWeight: 500, lineHeight: 1.04, fontStyle: 'italic' }} delay={0.28}>
+            No money.
+          </LineReveal>
         </div>
 
-        <motion.div {...lineGrow(0.38)} className="origin-left h-px mt-12 mb-5 w-10"
-          style={{ background: 'rgba(255,255,255,0.10)' }} aria-hidden="true" />
-        <motion.p {...fadeIn(0.42)}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.38em' }}
-          className="uppercase">
-          — True Vision Project, 2026
+        <motion.div {...lineGrow(0.45)} className="h-px w-16 origin-left mb-10" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+
+        <motion.p
+          {...reveal(0.5)}
+          style={{ ...inter, fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(0,0,0,0.55)', lineHeight: 1.85, maxWidth: '520px' }}
+        >
+          We didn't start with a brand strategy. We started with a conversation. Two friends, different cities, same hunger. Something had to be built.
         </motion.p>
       </section>
 
-      {/* ── 03  CHAPTER 01 · ORIGINS  — light ──────────────────────── */}
-      <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
-        <motion.p {...fadeIn()}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.55em' }}
-          className="uppercase mb-14"
-        >
-          01 / 03 &nbsp;·&nbsp; Where It Started
-        </motion.p>
+      {/* ─── 02 / Wexford ─────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-center">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
           <div>
-            <Photo aspect="aspect-[3/4]" />
-            <motion.p {...fadeIn(0.1)}
-              style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.28em' }}
-              className="uppercase mt-3">
-              Wexford, Ireland
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
+              Wexford / Ireland
             </motion.p>
+            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(30px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }} className="mb-6">
+              Richard.<br />Built from the ground up.
+            </motion.h2>
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
+              From Wexford, Ireland. Working family. No connections, no backing, no safety net. The only thing available was the decision to start. So he started.
+            </motion.p>
+            <motion.div {...reveal(0.20)} className="mt-8">
+              <motion.div {...lineGrow(0.2)} className="h-px w-10 origin-left" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+            </motion.div>
           </div>
 
-          <div className="flex flex-col gap-6 sm:pt-10">
-            <div>
-              <LineReveal style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }}>
-                Two ordinary kids.
-              </LineReveal>
-              <LineReveal delay={0.08}
-                style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: 'rgba(0,0,0,0.28)', fontWeight: 500, lineHeight: 1.1, fontStyle: 'italic' }}>
-                Extraordinary purpose.
-              </LineReveal>
-            </div>
+          <PhotoSlot label="Richard — Wexford" aspect="aspect-[3/4]" />
+        </div>
+      </section>
 
-            <motion.div {...lineGrow(0.10)} className="origin-left h-px w-8"
-              style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+      {/* ─── 03 / Bergamo ─────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-center">
 
-            <motion.p {...reveal(0.14)}
-              style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.95, fontWeight: 300 }}>
-              One grew up in a small town in Italy. One in a small town in Ireland. Different languages, different skies — but underneath it all, the same story.
+          <PhotoSlot label="The Partner — Bergamo" aspect="aspect-[3/4]" />
+
+          <div>
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
+              Bergamo / Italy
             </motion.p>
-            <motion.p {...reveal(0.20)}
-              style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.95, fontWeight: 300 }}>
-              Families who worked hard, asked for little, and gave everything. The kind of upbringing that teaches you the value of something before you ever have it.
+            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(30px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }} className="mb-6">
+              The partner.<br />A different city, the same idea.
+            </motion.h2>
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
+              From Bergamo, Italy. Same background, different country. When they found each other, the conversation was immediate. Neither of them was waiting for permission.
             </motion.p>
+            <motion.div {...reveal(0.20)} className="mt-8">
+              <motion.div {...lineGrow(0.2)} className="h-px w-10 origin-left" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── 04  PULL QUOTE  — light, centered ──────────────────────── */}
-      <section className="px-6 sm:px-14 py-16 sm:py-24 flex flex-col items-center text-center"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-        <div style={{ maxWidth: '560px' }}>
-          {[
-            { t: 'That background does one of two things.', col: '#111111',           d: 0,    w: 600 },
-            { t: 'It makes you accept less.',               col: 'rgba(0,0,0,0.35)', d: 0.09, w: 400, i: true },
-            { t: 'Or it makes you refuse to.',              col: 'rgba(0,0,0,0.35)', d: 0.17, w: 400, i: true },
-            { t: 'We refused.',                             col: '#111111',           d: 0.26, w: 700 },
-          ].map(({ t, col, d, w, i }) => (
-            <LineReveal key={t} delay={d}
-              style={{ ...serif, fontSize: 'clamp(20px, 4vw, 34px)', color: col, fontWeight: w, lineHeight: 1.45, fontStyle: i ? 'italic' : 'normal', marginBottom: '2px' }}>
-              {t}
-            </LineReveal>
-          ))}
-        </div>
-      </section>
+      {/* ─── 04 / The Beginning ───────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: '#111111' }}
+      >
+        <div className="relative max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28">
 
-      {/* ── 05  FULL-BLEED BAND  — dark ─────────────────────────────── */}
-      <div style={{ background: '#111111' }}>
-        <motion.div {...wipeDown()}
-          className="relative w-full overflow-hidden flex items-center justify-center"
-          style={{ background: '#1a1a1a', aspectRatio: '21/9', minHeight: '200px' }}
-        >
-          {corners('rgba(255,255,255,0.06)')}
-          <span aria-hidden="true" style={{
-            display: 'block', width: '1px', height: '40px',
-            background: 'rgba(255,255,255,0.06)', position: 'absolute',
-          }} />
-          <span aria-hidden="true" style={{
-            display: 'block', height: '1px', width: '40px',
-            background: 'rgba(255,255,255,0.06)', position: 'absolute',
-          }} />
-        </motion.div>
-
-        <motion.div {...fadeIn(0.2)} className="px-6 sm:px-10 py-4 flex justify-between items-center">
-          <span style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.16)', letterSpacing: '0.32em' }} className="uppercase">
-            Drop 001 — 2026
-          </span>
-          <span style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.16)', letterSpacing: '0.32em' }} className="uppercase">
-            Wexford &nbsp;×&nbsp; Bergamo
-          </span>
-        </motion.div>
-      </div>
-
-      {/* ── 06  CHAPTER 02 · THE MISSION  — light, reversed ─────────── */}
-      <section className="max-w-5xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
-        <motion.p {...fadeIn()}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.55em' }}
-          className="uppercase mb-14 text-right"
-        >
-          02 / 03 &nbsp;·&nbsp; Why We Built This
-        </motion.p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
-          <div className="flex flex-col gap-6 sm:pt-10 order-2 sm:order-1">
-            <div>
-              <LineReveal style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }}>
-                We built it for
-              </LineReveal>
-              <LineReveal delay={0.08}
-                style={{ ...serif, fontSize: 'clamp(28px, 4vw, 44px)', color: 'rgba(0,0,0,0.28)', fontWeight: 500, lineHeight: 1.1, fontStyle: 'italic' }}>
-                our families.
-              </LineReveal>
-            </div>
-
-            <motion.div {...lineGrow(0.10)} className="origin-left h-px w-8"
-              style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
-
-            <motion.p {...reveal(0.14)}
-              style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.95, fontWeight: 300 }}>
-              No investors. No backing. No industry connections. Just two young men from small towns with a vision clear enough to build on and a story real enough to stand behind.
-            </motion.p>
-            <motion.p {...reveal(0.20)}
-              style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.95, fontWeight: 300 }}>
-              To prove that where you start does not decide where you finish. That ordinary beginnings can produce extraordinary things.
-            </motion.p>
-          </div>
-
-          <div className="order-1 sm:order-2">
-            <Photo aspect="aspect-[3/4]" />
-            <motion.p {...fadeIn(0.1)}
-              style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.28em' }}
-              className="uppercase mt-3 text-right">
-              Bergamo, Italy
-            </motion.p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 07  CHAPTER 03 · WHO THIS IS FOR  — dark ────────────────── */}
-      <section style={{ background: '#111111' }} className="px-6 sm:px-14 py-20 sm:py-28">
-        <div className="max-w-4xl mx-auto">
-          <motion.p {...fadeIn()}
-            style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.55em' }}
-            className="uppercase mb-14"
-          >
-            03 / 03 &nbsp;·&nbsp; Who This Is For
+          <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.45em' }} className="uppercase mb-8">
+            [ How It Started ]
           </motion.p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
-            <div>
-              <LineReveal style={{ ...serif, fontSize: 'clamp(26px, 4vw, 42px)', color: '#ffffff', fontWeight: 400, lineHeight: 1.25 }}>
-                This is for the ones
-              </LineReveal>
-              <LineReveal delay={0.08}
-                style={{ ...serif, fontSize: 'clamp(26px, 4vw, 42px)', color: '#ffffff', fontWeight: 400, lineHeight: 1.25 }}>
-                who work in silence.
-              </LineReveal>
-              <LineReveal delay={0.16}
-                style={{ ...serif, fontSize: 'clamp(26px, 4vw, 42px)', color: 'rgba(255,255,255,0.30)', fontWeight: 400, lineHeight: 1.25, fontStyle: 'italic' }}>
-                Who build without applause.
-              </LineReveal>
-            </div>
+          <motion.blockquote
+            {...reveal(0.08, 0)}
+            style={{ ...serif, fontSize: 'clamp(22px, 4vw, 34px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.55, fontStyle: 'italic' }}
+            className="mb-10"
+          >
+            "No investor. No brand consultant. No budget. Just two people who decided that the idea was more important than the risk."
+          </motion.blockquote>
 
-            <div className="flex flex-col gap-5">
-              <motion.p {...reveal(0.10)}
-                style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.46)', lineHeight: 1.95, fontWeight: 300 }}>
-                Most people are not born into opportunity. Most come from ordinary places, ordinary families, ordinary beginnings — and are told, by circumstance if not by words, to be realistic.
-              </motion.p>
-              <motion.p {...reveal(0.18)}
-                style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.46)', lineHeight: 1.95, fontWeight: 300 }}>
-                True Vision exists for everyone who looked at that hand and decided to play differently.
-              </motion.p>
-              <motion.p {...reveal(0.26)}
-                style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.95, fontWeight: 400 }}>
-                If you understand that — you understand True Vision.
-              </motion.p>
+          <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '480px' }}>
+            The first drop was 24 units. A cap. Made from 300gsm washed chino twill. Nothing special on paper. But it sold out in 24 hours — to people who understood what they were buying into.
+          </motion.p>
+
+          <motion.div {...reveal(0.22)} className="mt-10">
+            <motion.div {...lineGrow(0.22)} className="h-px w-10 origin-left" style={{ background: 'rgba(255,255,255,0.14)' }} aria-hidden="true" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── 05 / Drop 001 ────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
+
+          <div>
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
+              Drop 001 — The Foundation Cap
+            </motion.p>
+            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 42px)', color: '#111111', fontWeight: 500, lineHeight: 1.12 }} className="mb-6">
+              The first thing<br />we ever made.
+            </motion.h2>
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }} className="mb-5">
+              24 units. Two colours. One size. Sold out in 24 hours. No paid ads. No influencers. Just the product and the people who believed in it.
+            </motion.p>
+            <motion.p {...reveal(0.20)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
+              That was the proof. Drop 002 is next.
+            </motion.p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <PhotoSlot label="Foundation Cap — Drop 001" aspect="aspect-[4/5]" />
+            <div className="grid grid-cols-2 gap-3">
+              <PhotoSlot label="Black" aspect="aspect-square" />
+              <PhotoSlot label="White" aspect="aspect-square" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 08  CLOSING ─────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center justify-center text-center px-6 py-28 sm:py-36 min-h-[65vh]">
+      {/* ─── 06 / What This Is ────────────────────────────────────────── */}
+      <section
+        className="max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28 text-center flex flex-col items-center"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <motion.div {...lineGrow()} className="h-px w-10 origin-center mb-12" style={{ background: 'rgba(0,0,0,0.09)' }} aria-hidden="true" />
 
-        <motion.div {...lineGrow()} className="origin-center h-px w-10 mb-14"
-          style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+        <motion.p {...reveal(0.05, 0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.45em' }} className="uppercase mb-8">
+          What This Is
+        </motion.p>
 
-        <div style={{ maxWidth: '740px' }}>
-          <LineReveal
-            style={{ ...serif, fontSize: 'clamp(38px, 9vw, 82px)', color: '#111111', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.015em' }}>
-            Built from nothing.
-          </LineReveal>
-          <LineReveal delay={0.10}
-            style={{ ...serif, fontSize: 'clamp(38px, 9vw, 82px)', color: 'rgba(0,0,0,0.22)', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.015em', fontStyle: 'italic' }}>
-            Worn by those who understand.
-          </LineReveal>
-        </div>
+        <motion.h2 {...reveal(0.10)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.2 }} className="mb-8">
+          This is not a brand.<br />It's a document.
+        </motion.h2>
 
-        <motion.div {...lineGrow(0.22)} className="origin-center h-px w-10 mt-12 mb-10"
-          style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+        <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9, maxWidth: '480px' }} className="mb-5">
+          Every drop is a chapter. Every piece tells you where we are and where we're going. The Archive is the record of everyone who believed before this was anything.
+        </motion.p>
 
-        <motion.div {...reveal(0.28)} className="flex flex-col sm:flex-row items-center gap-5">
-          <Link
-            to="/"
-            className="inline-block px-10 py-[14px] hover:bg-[#2a2a2a] transition-colors duration-300"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.42em', background: '#111111', color: '#F5F3EE' }}
-          >
-            Shop Drop 001
-          </Link>
-          <Link
-            to="/archive"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)', borderBottom: '1px solid rgba(0,0,0,0.12)' }}
-            className="uppercase pb-px hover:opacity-50 transition-opacity duration-300"
-          >
-            Join the Archive →
-          </Link>
-        </motion.div>
-
-        <motion.p {...fadeIn(0.42)}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.16)', letterSpacing: '0.38em' }}
-          className="uppercase mt-14"
-        >
-          True Vision. Est. 2026. This is only the beginning.
+        <motion.p {...reveal(0.22)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9, maxWidth: '480px' }}>
+          If you're reading this, you found us early. That means something.
         </motion.p>
       </section>
 
+      {/* ─── 07 / CTA ─────────────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: '#111111' }}
+      >
+        <div className="relative max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10">
+
+          <div>
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.45em' }} className="uppercase mb-5">
+              [ Join The Foundation ]
+            </motion.p>
+            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(26px, 4.5vw, 40px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.2 }}>
+              "Built from nothing.<br />Worn by those<br />who understand."
+            </motion.h2>
+          </div>
+
+          <motion.div {...reveal(0.14)} className="flex flex-col gap-3 shrink-0">
+            <Link
+              to="/archive"
+              style={{ ...mono, fontSize: '9px', letterSpacing: '0.38em', background: '#F5F3EE', color: '#111111' }}
+              className="flex items-center justify-center px-7 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300 whitespace-nowrap"
+            >
+              [ Enter the Archive ]
+            </Link>
+            <Link
+              to="/"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: 'rgba(255,255,255,0.30)', border: '1px solid rgba(255,255,255,0.12)' }}
+              className="flex items-center justify-center px-7 py-4 uppercase hover:bg-white/[0.05] transition-all duration-300 whitespace-nowrap"
+            >
+              [ View Drop 001 ]
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Footer ───────────────────────────────────────────────────── */}
+      <footer
+        className="px-6 sm:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
+      >
+        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.22em' }}>
+          © 2026 TRUE VISION PROJECT
+        </p>
+        <Link
+          to="/"
+          style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }}
+          className="uppercase hover:opacity-60 transition-opacity duration-300"
+        >
+          ← Back to Store
+        </Link>
+      </footer>
     </div>
   )
 }

@@ -339,7 +339,6 @@ export default function Home() {
         style={{ background: '#111111' }}
         aria-label="The Mission"
       >
-        <div className="grain" aria-hidden="true" style={{ opacity: 0.6 }} />
         <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
           <SectionTag n="03" label="Recording" dark />
 
@@ -347,7 +346,7 @@ export default function Home() {
 
             {/* Terminal */}
             <div>
-              <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.16)', letterSpacing: '0.48em' }} className="uppercase mb-8">
+              <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.48em' }} className="uppercase mb-8">
                 [ RECORDING: ACTIVE ]
               </motion.p>
               <div className="flex flex-col gap-3">
@@ -355,7 +354,7 @@ export default function Home() {
                   <motion.p
                     key={line}
                     {...slideX(0.06 + i * 0.1)}
-                    style={{ ...mono, fontSize: 'clamp(11px, 2.2vw, 14px)', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.16em' }}
+                    style={{ ...mono, fontSize: 'clamp(11px, 2.2vw, 14px)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.16em' }}
                   >
                     {line}
                   </motion.p>
@@ -398,7 +397,6 @@ export default function Home() {
         style={{ background: '#0a0a0a' }}
         aria-label="Drop 002 — Join the Archive"
       >
-        <div className="grain" aria-hidden="true" style={{ opacity: 0.55 }} />
 
         {/* Ambient watermark */}
         <motion.p
@@ -428,10 +426,10 @@ export default function Home() {
 
           {/* Date + note */}
           <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-12 sm:mb-14">
-            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.32em' }} className="uppercase">
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">
               [ August 2026 ]
             </p>
-            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.40)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
               Archive members get access before anyone else.
             </p>
           </motion.div>
