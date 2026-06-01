@@ -18,27 +18,55 @@ const CAP_COLORS = [
 const ease = [0.16, 1, 0.3, 1]
 const fast = (delay = 0) => ({ duration: 0.55, delay, ease })
 
-const inview = (delay = 0, y = 22) => ({
+const reveal = (delay = 0, y = 30) => ({
   initial: { opacity: 0, y },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.7, delay, ease },
+  viewport: { once: true, margin: '-40px' },
+  transition: { duration: 0.75, delay, ease },
+})
+
+const slideX = (delay = 0, x = -18) => ({
+  initial: { opacity: 0, x },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: { once: true, margin: '-40px' },
+  transition: { duration: 0.6, delay, ease },
 })
 
 const lineGrow = (delay = 0) => ({
   initial: { scaleX: 0 },
   whileInView: { scaleX: 1 },
   viewport: { once: true },
-  transition: { duration: 0.75, delay, ease },
+  transition: { duration: 0.8, delay, ease },
 })
 
-const CornerMarks = ({ color = 'rgba(0,0,0,0.10)' }) => (
-  <>
-    <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: color }} />
-    <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r z-10" style={{ borderColor: color }} />
-    <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l z-10" style={{ borderColor: color }} />
-    <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: color }} />
-  </>
+const CornerMarks = ({ dark = false }) => {
+  const c = dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)'
+  return (
+    <>
+      <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: c }} />
+      <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r z-10" style={{ borderColor: c }} />
+      <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l z-10" style={{ borderColor: c }} />
+      <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: c }} />
+    </>
+  )
+}
+
+const SectionTag = ({ n, label, dark = false }) => (
+  <div className="flex items-center gap-4 mb-10 sm:mb-14">
+    <motion.div
+      {...lineGrow()}
+      className="h-px w-10 origin-left shrink-0"
+      style={{ background: dark ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.10)' }}
+      aria-hidden="true"
+    />
+    <motion.p
+      {...reveal(0.05, 0)}
+      style={{ ...mono, fontSize: '7px', color: dark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.28)', letterSpacing: '0.42em' }}
+      className="uppercase"
+    >
+      {n} / {label}
+    </motion.p>
+  </div>
 )
 
 const TERMINAL_LINES = [
@@ -82,74 +110,81 @@ export default function Home() {
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 sm:px-10 text-center pt-[78px]">
-
+      {/* ═══════════════════════════════════════════════════════════════
+          01 — HERO
+      ═══════════════════════════════════════════════════════════════ */}
+      <section
+        className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 sm:px-12 text-center pt-[78px]"
+        aria-label="True Vision Project"
+      >
+        {/* Number */}
         <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.05)}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.52em' }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.08)}
+          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.18)', letterSpacing: '0.5em' }}
           className="uppercase mb-8"
+          aria-hidden="true"
         >
-          True Vision Project &nbsp;·&nbsp; Drop 001 — Available Now
+          01 &nbsp;/&nbsp; True Vision Project
         </motion.p>
 
+        {/* Headline — word by word */}
         <h1
           aria-label="We Are Not Building A Brand."
-          style={{ ...serif, fontSize: 'clamp(44px, 9vw, 82px)', color: '#111111', fontWeight: 500, lineHeight: 1.06, letterSpacing: '-0.01em' }}
-          className="mb-4"
+          style={{ ...serif, fontSize: 'clamp(48px, 11vw, 88px)', color: '#111111', fontWeight: 500, lineHeight: 1.04, letterSpacing: '-0.01em' }}
+          className="mb-5"
         >
-          {['We', 'Are', 'Not'].map((word, i) => (
+          {['We', 'Are', 'Not'].map((w, i) => (
             <motion.span
-              key={word}
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.10 + i * 0.08, ease }}
-              className="inline-block" style={{ marginRight: '0.28em' }}
-              aria-hidden="true"
-            >{word}</motion.span>
+              key={w} aria-hidden="true"
+              initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.14 + i * 0.09, ease }}
+              className="inline-block" style={{ marginRight: '0.26em' }}
+            >{w}</motion.span>
           ))}
           <br aria-hidden="true" />
-          {['Building', 'A', 'Brand.'].map((word, i) => (
+          {['Building', 'A', 'Brand.'].map((w, i) => (
             <motion.span
-              key={word}
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.34 + i * 0.08, ease }}
-              className="inline-block" style={{ marginRight: i < 2 ? '0.28em' : 0 }}
-              aria-hidden="true"
-            >{word}</motion.span>
+              key={w} aria-hidden="true"
+              initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.38 + i * 0.09, ease }}
+              className="inline-block" style={{ marginRight: i < 2 ? '0.26em' : 0 }}
+            >{w}</motion.span>
           ))}
         </h1>
 
+        {/* Subline */}
         <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.62)}
-          style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.42)', letterSpacing: '0.32em' }}
-          className="uppercase mb-14"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.64)}
+          style={{ ...mono, fontSize: 'clamp(8px, 1.8vw, 10px)', color: 'rgba(0,0,0,0.38)', letterSpacing: '0.32em' }}
+          className="uppercase mb-12"
         >
           We Are Documenting A Mission.
         </motion.p>
 
+        {/* Divider */}
         <motion.div
-          initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={fast(0.68)}
-          className="origin-center h-px w-12 mb-12"
+          initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={fast(0.70)}
+          className="origin-center h-px w-10 mb-10"
           style={{ background: 'rgba(0,0,0,0.10)' }}
           aria-hidden="true"
         />
 
         {/* Dual CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={fast(0.74)}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={fast(0.76)}
+          className="flex flex-col sm:flex-row gap-3 w-full max-w-[340px] sm:max-w-none sm:w-auto"
         >
           <button
             onClick={scrollToProduct}
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.38em', background: '#111111', color: '#F5F3EE', padding: '14px 32px' }}
-            className="uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.40em', background: '#111111', color: '#F5F3EE' }}
+            className="w-full sm:w-auto px-8 py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300 cursor-pointer"
           >
             [ View Drop 001 ]
           </button>
           <Link
             to="/archive"
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.38)', border: '1px solid rgba(0,0,0,0.13)', padding: '14px 32px' }}
-            className="uppercase hover:border-black/30 hover:text-black/60 transition-all duration-300"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: 'rgba(0,0,0,0.40)', border: '1px solid rgba(0,0,0,0.14)' }}
+            className="w-full sm:w-auto flex items-center justify-center px-8 py-5 uppercase hover:border-black/32 hover:text-black/62 transition-all duration-300"
           >
             [ Join the Archive ]
           </Link>
@@ -157,351 +192,363 @@ export default function Home() {
 
         {/* Location */}
         <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.95 }}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.20)', letterSpacing: '0.4em' }}
-          className="uppercase absolute bottom-14 hidden sm:block"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 1.1 }}
+          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.16)', letterSpacing: '0.38em' }}
+          className="uppercase absolute bottom-16 hidden sm:block"
           aria-hidden="true"
         >
-          [ Wexford / Ireland &nbsp;×&nbsp; Bergamo / Italy ]
+          Wexford&nbsp;/&nbsp;Ireland &nbsp;×&nbsp; Bergamo&nbsp;/&nbsp;Italy
         </motion.p>
 
-        {/* Scroll indicator */}
+        {/* Scroll cue */}
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.05 }}
-          className="absolute bottom-7 flex flex-col items-center"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 1.2 }}
+          className="absolute bottom-7 flex flex-col items-center gap-[6px]"
           aria-hidden="true"
         >
+          <motion.span
+            style={{ ...mono, fontSize: '6px', color: 'rgba(0,0,0,0.18)', letterSpacing: '0.38em' }}
+            animate={{ opacity: [0.3, 0.9, 0.3] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            SCROLL
+          </motion.span>
           <motion.div
-            animate={{ y: [0, 6, 0] }}
+            animate={{ y: [0, 7, 0] }}
             transition={{ duration: 1.9, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ width: '1px', height: '28px', background: 'rgba(0,0,0,0.12)' }}
+            style={{ width: '1px', height: '26px', background: 'rgba(0,0,0,0.12)' }}
           />
         </motion.div>
       </section>
 
-      {/* ─── Product ──────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          02 — PRODUCT
+      ═══════════════════════════════════════════════════════════════ */}
       <section
         ref={productRef}
-        className="max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-28 scroll-mt-[78px]"
+        className="relative min-h-[100dvh] flex items-center scroll-mt-[78px]"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-        aria-label="Foundation Cap"
+        aria-label="Foundation Cap — Drop 001"
       >
-        <motion.div {...lineGrow()} className="origin-left h-px w-16 mb-10" style={{ background: 'rgba(0,0,0,0.09)' }} aria-hidden="true" />
+        <div className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-14 sm:py-22">
+          <SectionTag n="02" label="Drop 001 — Available Now" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-[1.1fr_1fr] gap-10 sm:gap-14 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-[1.15fr_1fr] gap-8 sm:gap-14 items-start">
 
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.8, ease }}
-            className="relative overflow-hidden bg-[#DEDAD4] w-full aspect-[4/5]"
-          >
-            <CornerMarks />
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={activeColor}
-                src={CAP_COLORS[activeColor].imgSrc}
-                alt={`Foundation Cap — ${CAP_COLORS[activeColor].name}`}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.5, ease }}
-                className="absolute inset-0 w-full h-full object-cover select-none"
-                style={{ filter: 'saturate(0.18) brightness(0.94)' }}
-                draggable="false"
-              />
-            </AnimatePresence>
-          </motion.div>
+            {/* Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.88, ease }}
+              className="relative overflow-hidden bg-[#DEDAD4] w-full aspect-[3/4] sm:aspect-[4/5]"
+            >
+              <CornerMarks />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={activeColor}
+                  src={CAP_COLORS[activeColor].imgSrc}
+                  alt={`Foundation Cap — ${CAP_COLORS[activeColor].name}`}
+                  initial={{ opacity: 0, scale: 1.06 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.97 }}
+                  transition={{ duration: 0.55, ease }}
+                  className="absolute inset-0 w-full h-full object-cover select-none"
+                  style={{ filter: 'saturate(0.18) brightness(0.93)' }}
+                  draggable="false"
+                />
+              </AnimatePresence>
+            </motion.div>
 
-          {/* Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.65, delay: 0.1, ease }}
-            className="flex flex-col gap-0"
-          >
-            <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.48em' }} className="uppercase mb-5">
-              Drop 001
-            </p>
+            {/* Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.72, delay: 0.1, ease }}
+              className="flex flex-col"
+            >
+              <h2
+                style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.08 }}
+                className="mb-6"
+              >
+                The Foundation Cap
+              </h2>
 
-            <h2 style={{ ...serif, fontSize: 'clamp(28px, 5vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }} className="mb-8">
-              The Foundation Cap
-            </h2>
-
-            <div className="flex flex-col mb-8" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-              {[
-                ['Material', '300gsm Washed Chino Twill'],
-                ['Fit',      'One Size'],
-                ['Origin',   'Wexford / Bergamo'],
-                ['Edition',  '024 Units — Drop 001'],
-              ].map(([k, v]) => (
-                <div key={k} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-                  <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.22em' }} className="uppercase">{k}</span>
-                  <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.60)', letterSpacing: '0.10em' }} className="uppercase">{v}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex items-baseline gap-3 mb-7">
-              <span style={{ ...inter, fontSize: '32px', color: '#111111', fontWeight: 300, letterSpacing: '-0.01em' }}>€{CAP.price}</span>
-              <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }}>+ €6 SHIPPING</span>
-            </div>
-
-            <div className="mb-7">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.38em' }} className="mb-3 uppercase">
-                Colour — {CAP_COLORS[activeColor].name}
-              </p>
-              <div className="flex gap-3">
-                {CAP_COLORS.map((c, i) => (
-                  <button
-                    key={c.name}
-                    onClick={() => setActiveColor(i)}
-                    aria-label={c.name}
-                    aria-pressed={activeColor === i}
-                    className={`w-7 h-7 rounded-full border-2 transition-all duration-300 cursor-pointer ${
-                      activeColor === i ? 'border-black/45 scale-110' : 'border-black/[0.12] hover:border-black/28'
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                  />
+              <div className="flex flex-col mb-6" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+                {[
+                  ['Material', '300gsm Washed Chino Twill'],
+                  ['Fit',      'One Size'],
+                  ['Origin',   'Wexford / Bergamo'],
+                  ['Edition',  '024 Units — Drop 001'],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+                    <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }} className="uppercase">{k}</span>
+                    <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.58)', letterSpacing: '0.10em' }} className="uppercase">{v}</span>
+                  </div>
                 ))}
               </div>
-            </div>
 
-            <button
-              onClick={handleAddToCart}
-              aria-label="Add Foundation Cap to cart"
-              className={`w-full py-4 text-[9px] tracking-[0.42em] uppercase transition-all duration-400 cursor-pointer ${
-                addedFeedback
-                  ? 'bg-black/5 border border-black/10'
-                  : 'bg-[#111111] text-[#F5F3EE] hover:bg-[#2a2a2a] active:scale-[0.98]'
-              }`}
-              style={addedFeedback ? { ...mono, color: 'rgba(0,0,0,0.40)' } : mono}
-            >
-              {addedFeedback ? '[ Added ]' : '[ Add to Cart ]'}
-            </button>
-          </motion.div>
+              <div className="flex items-baseline gap-3 mb-6">
+                <span style={{ ...inter, fontSize: '36px', color: '#111111', fontWeight: 300, letterSpacing: '-0.02em' }}>€{CAP.price}</span>
+                <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.26)', letterSpacing: '0.22em' }}>+ €6 SHIPPING</span>
+              </div>
+
+              <div className="mb-6">
+                <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.38em' }} className="mb-3 uppercase">
+                  Colour — {CAP_COLORS[activeColor].name}
+                </p>
+                <div className="flex gap-3">
+                  {CAP_COLORS.map((c, i) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setActiveColor(i)}
+                      aria-label={c.name}
+                      aria-pressed={activeColor === i}
+                      className={`w-8 h-8 rounded-full border-2 transition-all duration-300 cursor-pointer ${
+                        activeColor === i ? 'border-black/45 scale-110' : 'border-black/[0.12] hover:border-black/28'
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleAddToCart}
+                aria-label="Add Foundation Cap to cart"
+                className={`w-full py-5 text-[9px] tracking-[0.42em] uppercase transition-all duration-400 cursor-pointer ${
+                  addedFeedback
+                    ? 'bg-black/5 border border-black/10'
+                    : 'bg-[#111111] text-[#F5F3EE] hover:bg-[#2a2a2a] active:scale-[0.98]'
+                }`}
+                style={addedFeedback ? { ...mono, color: 'rgba(0,0,0,0.38)' } : mono}
+              >
+                {addedFeedback ? '[ Added to Cart ]' : '[ Add to Cart — €32 ]'}
+              </button>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* ─── Documentary ──────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          03 — DOCUMENTARY
+      ═══════════════════════════════════════════════════════════════ */}
       <section
-        className="relative overflow-hidden"
+        className="relative min-h-[100dvh] flex items-center overflow-hidden"
         style={{ background: '#111111' }}
         aria-label="The Mission"
       >
-        <div className="grain" aria-hidden="true" style={{ opacity: 0.55 }} />
-        <div className="relative max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 sm:gap-20 items-end">
+        <div className="grain" aria-hidden="true" style={{ opacity: 0.6 }} />
+        <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
+          <SectionTag n="03" label="Recording" dark />
 
-            {/* Terminal readout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-20 items-end">
+
+            {/* Terminal */}
             <div>
-              <motion.p
-                {...inview()}
-                style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.48em' }}
-                className="uppercase mb-8"
-              >
+              <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.16)', letterSpacing: '0.48em' }} className="uppercase mb-8">
                 [ RECORDING: ACTIVE ]
               </motion.p>
-              <div className="flex flex-col gap-[10px]">
+              <div className="flex flex-col gap-3">
                 {TERMINAL_LINES.map((line, i) => (
                   <motion.p
                     key={line}
-                    initial={{ opacity: 0, x: -14 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.45, delay: 0.08 + i * 0.1, ease }}
-                    style={{ ...mono, fontSize: '11px', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.18em' }}
+                    {...slideX(0.06 + i * 0.1)}
+                    style={{ ...mono, fontSize: 'clamp(11px, 2.2vw, 14px)', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.16em' }}
                   >
                     {line}
                   </motion.p>
                 ))}
                 <motion.span
                   animate={{ opacity: [1, 0, 1] }}
-                  transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
-                  style={{ ...mono, fontSize: '11px', color: 'rgba(255,255,255,0.28)' }}
+                  transition={{ duration: 0.85, repeat: Infinity, ease: 'linear' }}
+                  style={{ ...mono, fontSize: 'clamp(11px, 2.2vw, 14px)', color: 'rgba(255,255,255,0.28)' }}
                   aria-hidden="true"
-                >
-                  █
-                </motion.span>
+                >█</motion.span>
               </div>
             </div>
 
             {/* Statement */}
-            <motion.div {...inview(0.18)} className="flex flex-col gap-6">
-              <h2 style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 52px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.1 }}>
+            <motion.div {...reveal(0.22)} className="flex flex-col gap-6">
+              <h2 style={{ ...serif, fontSize: 'clamp(34px, 6.5vw, 58px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.06 }}>
                 We film<br />everything.
               </h2>
-              <p style={{ ...inter, fontSize: '13px', color: 'rgba(255,255,255,0.32)', lineHeight: 1.88 }}>
+              <p style={{ ...inter, fontSize: 'clamp(13px, 1.8vw, 15px)', color: 'rgba(255,255,255,0.30)', lineHeight: 1.9 }}>
                 The market. The build. The failures. The first sale. Every drop documented from nothing.
               </p>
               <a
                 href="https://www.tiktok.com/@tvpofficial"
                 target="_blank" rel="noopener noreferrer"
-                style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.28em' }}
-                className="uppercase hover:text-white/40 transition-colors duration-300"
+                style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.28em' }}
+                className="uppercase hover:text-white/38 transition-colors duration-300 w-fit"
               >
-                Follow @tvpofficial →
+                @tvpofficial &nbsp;→
               </a>
             </motion.div>
-
           </div>
         </div>
       </section>
 
-      {/* ─── Drop 002 Teaser ──────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          04 — SOMETHING IS COMING / JOIN CTA
+      ═══════════════════════════════════════════════════════════════ */}
       <section
-        className="relative overflow-hidden"
-        style={{ background: '#0c0c0c', borderTop: '1px solid rgba(255,255,255,0.03)' }}
-        aria-label="Drop 002 — Coming Soon"
+        className="relative min-h-[100dvh] flex items-center overflow-hidden"
+        style={{ background: '#0a0a0a' }}
+        aria-label="Drop 002 — Join the Archive"
       >
-        <div className="grain" aria-hidden="true" style={{ opacity: 0.5 }} />
-        <div className="relative max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-28 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10">
+        <div className="grain" aria-hidden="true" style={{ opacity: 0.55 }} />
 
-          <div className="flex flex-col gap-6">
-            <motion.p
-              {...inview()}
-              style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.5em' }}
-              className="uppercase"
-            >
-              Drop 002 — Classified
-            </motion.p>
-            <motion.h2
-              {...inview(0.08)}
-              style={{ ...serif, fontSize: 'clamp(32px, 6vw, 58px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.08 }}
-            >
-              Something<br />Is Coming.
-            </motion.h2>
-            <motion.p
-              {...inview(0.14)}
-              style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.24)', letterSpacing: '0.20em', maxWidth: '300px', lineHeight: 1.85 }}
-              className="uppercase"
-            >
-              The next chapter. Archive members get first access.
-            </motion.p>
-          </div>
+        {/* Ambient watermark */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.035 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.8 }}
+          style={{ ...serif, fontSize: 'clamp(100px, 28vw, 260px)', color: '#ffffff', fontWeight: 500, lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}
+          className="absolute -bottom-6 -right-6 sm:-bottom-10 sm:-right-10 select-none"
+          aria-hidden="true"
+        >002</motion.p>
 
-          <motion.div {...inview(0.22)} className="flex flex-col items-start gap-4">
+        <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
+          <SectionTag n="04" label="Drop 002 — Classified" dark />
+
+          {/* Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.9, delay: 0.04, ease }}
+            style={{ ...serif, fontSize: 'clamp(50px, 13vw, 100px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.01 }}
+            className="mb-8 sm:mb-10"
+          >
+            Something<br />Is Coming.
+          </motion.h2>
+
+          {/* Date + note */}
+          <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-12 sm:mb-14">
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.32em' }} className="uppercase">
+              [ August 2026 ]
+            </p>
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
+              Archive members get access before anyone else.
+            </p>
+          </motion.div>
+
+          {/* CTA block */}
+          <motion.div
+            {...reveal(0.26)}
+            className="flex flex-col gap-3 w-full max-w-[360px]"
+          >
+            {/* Primary — Archive */}
+            <Link
+              to="/archive"
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
+              className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300"
+            >
+              [ Secure Your Access ]
+            </Link>
+
+            {/* Secondary — waitlist */}
             <Link
               to="/drop-002"
-              style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: '#F5F3EE', border: '1px solid rgba(255,255,255,0.12)', padding: '14px 28px' }}
-              className="uppercase hover:bg-white/[0.05] transition-all duration-300"
+              style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: 'rgba(255,255,255,0.24)', border: '1px solid rgba(255,255,255,0.10)' }}
+              className="w-full flex items-center justify-center py-[17px] uppercase hover:bg-white/[0.04] transition-all duration-300"
             >
-              [ Get Early Access ]
+              [ Join the Waitlist ]
             </Link>
-            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.16)', letterSpacing: '0.22em' }}>
-              Free. No commitment.
+
+            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.14)', letterSpacing: '0.20em' }} className="text-center pt-1">
+              Free. No spam. No commitment.
             </p>
           </motion.div>
 
         </div>
       </section>
 
-      {/* ─── Quote ────────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          QUOTE
+      ═══════════════════════════════════════════════════════════════ */}
       <section
         className="flex flex-col items-center text-center px-6 sm:px-16 py-20 sm:py-28"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
         aria-label="Manifesto"
       >
-        <motion.div {...lineGrow()} className="origin-center h-px w-12 mb-12" style={{ background: 'rgba(0,0,0,0.09)' }} aria-hidden="true" />
+        <motion.div
+          {...lineGrow()}
+          className="h-px w-10 mb-12 origin-center"
+          style={{ background: 'rgba(0,0,0,0.09)' }}
+          aria-hidden="true"
+        />
 
         <motion.p
-          {...inview(0, 0)}
+          {...reveal(0.04, 0)}
           style={{
             ...serif,
-            fontSize: 'clamp(22px, 4.5vw, 38px)',
+            fontSize: 'clamp(24px, 5vw, 40px)',
             color: '#111111',
             fontStyle: 'italic',
             fontWeight: 400,
-            lineHeight: 1.5,
-            maxWidth: '540px',
+            lineHeight: 1.46,
+            maxWidth: '560px',
           }}
         >
           "Built from nothing.<br />Worn by those who understand."
         </motion.p>
 
-        <motion.div {...inview(0.12)} className="mt-10">
-          <Link to="/our-story"
-            style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.32)', borderBottom: '1px solid rgba(0,0,0,0.10)' }}
-            className="uppercase pb-px hover:opacity-50 transition-opacity duration-300">
+        <motion.div {...reveal(0.14)} className="mt-10">
+          <Link
+            to="/our-story"
+            style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.28)', borderBottom: '1px solid rgba(0,0,0,0.09)' }}
+            className="uppercase pb-px hover:opacity-50 transition-opacity duration-300"
+          >
             Our Story →
           </Link>
         </motion.div>
       </section>
 
-      {/* ─── Archive ──────────────────────────────────────────────────── */}
-      <section
-        className="max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-24 flex flex-col sm:flex-row items-start justify-between gap-10"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-        aria-label="The Archive"
-      >
-        <motion.div {...inview()} className="flex flex-col gap-5 max-w-sm">
-          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.48em' }} className="uppercase">
-            The Archive
-          </p>
-          <h2 style={{ ...serif, fontSize: 'clamp(24px, 4vw, 38px)', color: '#111111', fontWeight: 500, lineHeight: 1.15 }}>
-            Not a customer list.<br />A founding community.
-          </h2>
-          <p style={{ ...inter, fontSize: '13px', color: 'rgba(0,0,0,0.48)', lineHeight: 1.88 }}>
-            Archive members are the people who believed before anyone else. First access to every drop. First to know. Free to join. No spam — ever.
-          </p>
-        </motion.div>
-
-        <motion.div {...inview(0.1)} className="flex flex-col gap-4 sm:mt-14">
-          <Link
-            to="/archive"
-            style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: '#F5F3EE', background: '#111111', padding: '14px 28px' }}
-            className="uppercase hover:bg-[#2a2a2a] transition-all duration-300"
-          >
-            [ Enter the Archive ]
-          </Link>
-          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.18em' }}>
-            Free to join. Always.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* ─── Marquee ──────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          MARQUEE
+      ═══════════════════════════════════════════════════════════════ */}
       <div
         className="w-full overflow-hidden py-[10px]"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
         aria-hidden="true"
       >
-        <div className="marquee-track" style={{ opacity: 0.24 }}>
+        <div className="marquee-track" style={{ opacity: 0.22 }}>
           {[0, 1].map((i) => (
             <span key={i}
               style={{ ...mono, fontSize: '8px', color: '#111111', letterSpacing: '0.22em', whiteSpace: 'nowrap', paddingRight: '4rem' }}>
-              [ DROP 001 — AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP — €32 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ DROP 002 — COMING SOON ] &nbsp;&nbsp;·&nbsp;&nbsp; [ ARCHIVE — JOIN NOW ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
+              [ DROP 001 — AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP — €32 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ DROP 002 — COMING AUGUST 2026 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ ARCHIVE — JOIN FREE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
             </span>
           ))}
         </div>
       </div>
 
-      {/* ─── Footer ───────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          FOOTER
+      ═══════════════════════════════════════════════════════════════ */}
       <footer
         className="px-6 sm:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4"
         style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
       >
-        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.22em' }}>
+        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.22em' }}>
           © 2026 TRUE VISION PROJECT
         </p>
         <div className="flex items-center gap-7">
           <Link to="/archive"
-            style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.25)' }}
+            style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }}
             className="uppercase hover:opacity-60 transition-opacity duration-300">
             [ Archive ]
           </Link>
           <Link to="/drop-002"
-            style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.25)' }}
+            style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }}
             className="uppercase hover:opacity-60 transition-opacity duration-300">
             [ Drop 002 ]
           </Link>
           <a href="https://www.instagram.com/truevisionproject/" target="_blank" rel="noopener noreferrer"
-            aria-label="Instagram" style={{ color: 'rgba(0,0,0,0.25)' }}
+            aria-label="Instagram" style={{ color: 'rgba(0,0,0,0.22)' }}
             className="hover:opacity-60 transition-opacity duration-300">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -510,7 +557,7 @@ export default function Home() {
             </svg>
           </a>
           <a href="https://www.tiktok.com/@tvpofficial" target="_blank" rel="noopener noreferrer"
-            aria-label="TikTok" style={{ color: 'rgba(0,0,0,0.25)' }}
+            aria-label="TikTok" style={{ color: 'rgba(0,0,0,0.22)' }}
             className="hover:opacity-60 transition-opacity duration-300">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
