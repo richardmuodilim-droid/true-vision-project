@@ -261,7 +261,7 @@ export default function OurStory() {
               <Photo src="/richard-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
               <Photo src="/billy-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
             </div>
-            <Photo src="/caps-drop001.jpg" alt="Foundation Cap — Drop 001" aspect="aspect-[4/3]" />
+            <Photo src="/cap-detail.jpg" alt="Foundation Cap — Black &amp; White" aspect="aspect-[4/3]" />
           </div>
 
           <div className="sm:pt-8">
