@@ -179,7 +179,7 @@ export default function OurStory() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.1fr] gap-12 sm:gap-16 items-center">
 
-          <Photo src="/founders.jpg" alt="Richard and partner — Irish Rail" aspect="aspect-[3/4]" />
+          <Photo src="/founders.jpg" alt="The two founders — Irish Rail" aspect="aspect-[3/4]" />
 
           <div>
             <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
@@ -230,7 +230,7 @@ export default function OurStory() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
 
           <div className="flex flex-col gap-4">
-            <Photo src="/richard-cap.jpg" alt="Richard wearing the Foundation Cap" aspect="aspect-[3/4]" />
+            <Photo src="/richard-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
             <Photo src="/caps-drop001.jpg" alt="Foundation Cap — Drop 001" aspect="aspect-[4/3]" />
           </div>
 
