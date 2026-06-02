@@ -7,18 +7,19 @@ const inter = { fontFamily: "'Inter', sans-serif" }
 
 const ease = [0.16, 1, 0.3, 1]
 
-const reveal = (delay = 0, y = 22) => ({
+const reveal = (delay = 0, y = 24) => ({
   initial:     { opacity: 0, y },
   whileInView: { opacity: 1, y: 0 },
   viewport:    { once: true, margin: '-40px' },
-  transition:  { duration: 0.75, delay, ease },
+  transition:  { duration: 0.78, delay, ease },
 })
 
-const lineGrow = (delay = 0) => ({
+const lineGrow = (delay = 0, origin = 'left') => ({
   initial:     { scaleX: 0 },
   whileInView: { scaleX: 1 },
   viewport:    { once: true },
   transition:  { duration: 0.85, delay, ease },
+  style:       { transformOrigin: origin === 'center' ? 'center' : 'left' },
 })
 
 function LineReveal({ children, style, delay = 0 }) {
@@ -29,7 +30,7 @@ function LineReveal({ children, style, delay = 0 }) {
         initial={{ y: '110%', opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true, margin: '-30px' }}
-        transition={{ duration: 0.7, delay, ease }}
+        transition={{ duration: 0.72, delay, ease }}
       >
         {children}
       </motion.span>
@@ -37,38 +38,30 @@ function LineReveal({ children, style, delay = 0 }) {
   )
 }
 
-function PhotoSlot({ label, aspect = 'aspect-[3/4]', dark = false, src }) {
+function Photo({ src, alt, aspect = 'aspect-[3/4]', dark = false }) {
   const bg = dark ? '#1a1a1a' : '#D8D4CD'
-  const borderColor = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.10)'
+  const bc = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.09)'
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.85, ease }}
+      transition={{ duration: 0.88, ease }}
       className={`relative overflow-hidden w-full ${aspect}`}
       style={{ background: bg }}
     >
-      {/* Corner marks */}
-      <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor }} />
-      <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r z-10" style={{ borderColor }} />
-      <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l z-10" style={{ borderColor }} />
-      <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor }} />
-
-      {src ? (
+      <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: bc }} />
+      <span aria-hidden="true" className="absolute top-0 right-0 w-5 h-5 border-t border-r z-10" style={{ borderColor: bc }} />
+      <span aria-hidden="true" className="absolute bottom-0 left-0 w-5 h-5 border-b border-l z-10" style={{ borderColor: bc }} />
+      <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: bc }} />
+      {src && (
         <img
           src={src}
-          alt={label ?? ''}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'saturate(0.18) brightness(0.92)' }}
+          alt={alt ?? ''}
+          className="absolute inset-0 w-full h-full object-cover select-none"
+          style={{ filter: 'saturate(0.18) brightness(0.90)' }}
           draggable="false"
         />
-      ) : (
-        <div className="absolute inset-0 flex items-end p-4">
-          <p style={{ ...mono, fontSize: '7px', color: dark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)', letterSpacing: '0.28em' }} className="uppercase">
-            {label}
-          </p>
-        </div>
       )}
     </motion.div>
   )
@@ -79,209 +72,264 @@ export default function OurStory() {
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
-      {/* ─── 01 / Opening ─────────────────────────────────────────────── */}
-      <section className="pt-[78px] min-h-[100dvh] flex flex-col justify-center px-6 sm:px-12 max-w-3xl mx-auto">
+      {/* ─── OPENING ──────────────────────────────────────────────────── */}
+      <section className="pt-[78px] min-h-[100dvh] flex flex-col justify-center px-6 sm:px-14 max-w-3xl mx-auto">
 
         <motion.p
           {...reveal(0.05, 0)}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.5em' }}
-          className="uppercase mb-10"
+          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.52em' }}
+          className="uppercase mb-12"
         >
-          Our Story
+          True Vision Project — Origin
         </motion.p>
 
         <div className="mb-10">
-          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: '#111111', fontWeight: 500, lineHeight: 1.04 }} delay={0.08}>
-            Two people.
+          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.06}>
+            Two small towns.
           </LineReveal>
-          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: '#111111', fontWeight: 500, lineHeight: 1.04 }} delay={0.18}>
-            One idea.
+          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.16}>
+            Two countries.
           </LineReveal>
-          <LineReveal style={{ ...serif, fontSize: 'clamp(42px, 9vw, 78px)', color: 'rgba(0,0,0,0.25)', fontWeight: 500, lineHeight: 1.04, fontStyle: 'italic' }} delay={0.28}>
-            No money.
+          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: 'rgba(0,0,0,0.22)', fontWeight: 500, lineHeight: 1.03, fontStyle: 'italic' }} delay={0.26}>
+            One road.
           </LineReveal>
         </div>
 
-        <motion.div {...lineGrow(0.45)} className="h-px w-16 origin-left mb-10" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+        <motion.div {...lineGrow(0.42)} className="h-px w-14 mb-10" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
 
         <motion.p
-          {...reveal(0.5)}
-          style={{ ...inter, fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(0,0,0,0.55)', lineHeight: 1.85, maxWidth: '520px' }}
+          {...reveal(0.48)}
+          style={{ ...inter, fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88, maxWidth: '540px' }}
         >
-          We didn't start with a brand strategy. We started with a conversation. Two friends, different cities, same hunger. Something had to be built.
+          Different languages, different skies, different corners of the world — but underneath it all, the same story.
         </motion.p>
       </section>
 
-      {/* ─── 02 / Wexford ─────────────────────────────────────────────── */}
+      {/* ─── WHERE IT STARTED ─────────────────────────────────────────── */}
       <section
-        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-center">
-
-          <div>
-            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
-              Wexford / Ireland
-            </motion.p>
-            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(30px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }} className="mb-6">
-              Richard.<br />Built from the ground up.
-            </motion.h2>
-            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
-              From Wexford, Ireland. Working family. No connections, no backing, no safety net. The only thing available was the decision to start. So he started.
-            </motion.p>
-            <motion.div {...reveal(0.20)} className="mt-8">
-              <motion.div {...lineGrow(0.2)} className="h-px w-10 origin-left" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
-            </motion.div>
-          </div>
-
-          <PhotoSlot label="Richard — Wexford" aspect="aspect-[3/4]" />
-        </div>
-      </section>
-
-      {/* ─── 03 / Bergamo ─────────────────────────────────────────────── */}
-      <section
-        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-center">
-
-          <PhotoSlot label="The Partner — Bergamo" aspect="aspect-[3/4]" />
-
-          <div>
-            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
-              Bergamo / Italy
-            </motion.p>
-            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(30px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.1 }} className="mb-6">
-              The partner.<br />A different city, the same idea.
-            </motion.h2>
-            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
-              From Bergamo, Italy. Same background, different country. When they found each other, the conversation was immediate. Neither of them was waiting for permission.
-            </motion.p>
-            <motion.div {...reveal(0.20)} className="mt-8">
-              <motion.div {...lineGrow(0.2)} className="h-px w-10 origin-left" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 04 / The Beginning ───────────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden"
-        style={{ background: '#111111' }}
-      >
-        <div className="relative max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28">
-
-          <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.45em' }} className="uppercase mb-8">
-            [ How It Started ]
-          </motion.p>
-
-          <motion.blockquote
-            {...reveal(0.08, 0)}
-            style={{ ...serif, fontSize: 'clamp(22px, 4vw, 34px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.55, fontStyle: 'italic' }}
-            className="mb-10"
-          >
-            "No investor. No brand consultant. No budget. Just two people who decided that the idea was more important than the risk."
-          </motion.blockquote>
-
-          <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '480px' }}>
-            The first drop was 24 units. A cap. Made from 300gsm washed chino twill. Nothing special on paper. But it sold out in 24 hours — to people who understood what they were buying into.
-          </motion.p>
-
-          <motion.div {...reveal(0.22)} className="mt-10">
-            <motion.div {...lineGrow(0.22)} className="h-px w-10 origin-left" style={{ background: 'rgba(255,255,255,0.14)' }} aria-hidden="true" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ─── 05 / Drop 001 ────────────────────────────────────────────── */}
-      <section
-        className="max-w-4xl mx-auto px-6 sm:px-12 py-20 sm:py-28"
+        className="max-w-4xl mx-auto px-6 sm:px-14 py-20 sm:py-28"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
 
           <div>
-            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.45em' }} className="uppercase mb-6">
-              Drop 001 — The Foundation Cap
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
+              [ Where It Started ]
             </motion.p>
-            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 42px)', color: '#111111', fontWeight: 500, lineHeight: 1.12 }} className="mb-6">
-              The first thing<br />we ever made.
+            <motion.h2 {...reveal(0.06)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.12 }} className="mb-7">
+              Ordinary families.<br />Extraordinary decision.
             </motion.h2>
-            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }} className="mb-5">
-              24 units. Two colours. One size. Sold out in 24 hours. No paid ads. No influencers. Just the product and the people who believed in it.
+            <motion.p {...reveal(0.10)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }} className="mb-5">
+              Both came from ordinary households. Families that didn't have much, but never made you feel it. People who worked hard, asked for little, and gave everything they had.
             </motion.p>
-            <motion.p {...reveal(0.20)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}>
-              That was the proof. Drop 002 is next.
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }}>
+              The kind of upbringing that teaches you the value of something before you ever have it. No silver spoons. No shortcuts. No connections.
             </motion.p>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <PhotoSlot label="Foundation Cap — Drop 001" aspect="aspect-[4/5]" />
-            <div className="grid grid-cols-2 gap-3">
-              <PhotoSlot label="Black" aspect="aspect-square" />
-              <PhotoSlot label="White" aspect="aspect-square" />
-            </div>
+          <div className="flex flex-col gap-4 sm:pt-14">
+            <Photo src="/wexford.jpg" alt="Wexford, Ireland" aspect="aspect-[16/10]" />
+            <Photo src="/bergamo.jpg" alt="Bergamo, Italy" aspect="aspect-[16/10]" />
           </div>
         </div>
       </section>
 
-      {/* ─── 06 / What This Is ────────────────────────────────────────── */}
-      <section
-        className="max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28 text-center flex flex-col items-center"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-      >
-        <motion.div {...lineGrow()} className="h-px w-10 origin-center mb-12" style={{ background: 'rgba(0,0,0,0.09)' }} aria-hidden="true" />
-
-        <motion.p {...reveal(0.05, 0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.45em' }} className="uppercase mb-8">
-          What This Is
-        </motion.p>
-
-        <motion.h2 {...reveal(0.10)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.2 }} className="mb-8">
-          This is not a brand.<br />It's a document.
-        </motion.h2>
-
-        <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9, maxWidth: '480px' }} className="mb-5">
-          Every drop is a chapter. Every piece tells you where we are and where we're going. The Archive is the record of everyone who believed before this was anything.
-        </motion.p>
-
-        <motion.p {...reveal(0.22)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9, maxWidth: '480px' }}>
-          If you're reading this, you found us early. That means something.
-        </motion.p>
-      </section>
-
-      {/* ─── 07 / CTA ─────────────────────────────────────────────────── */}
+      {/* ─── THE TURNING POINT ────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
         style={{ background: '#111111' }}
       >
-        <div className="relative max-w-3xl mx-auto px-6 sm:px-12 py-20 sm:py-28 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10">
+        <div className="relative max-w-3xl mx-auto px-6 sm:px-14 py-20 sm:py-28">
+
+          <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.48em' }} className="uppercase mb-10">
+            [ The Turning Point ]
+          </motion.p>
+
+          <motion.p
+            {...reveal(0.06, 0)}
+            style={{ ...serif, fontSize: 'clamp(13px, 1.8vw, 15px)', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.22em', lineHeight: 1 }}
+            className="uppercase mb-6"
+          >
+            That kind of background does one of two things to you.
+          </motion.p>
+
+          <motion.h2
+            {...reveal(0.10)}
+            style={{ ...serif, fontSize: 'clamp(34px, 7vw, 64px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.06 }}
+            className="mb-10"
+          >
+            It makes you accept less.<br />
+            <span style={{ color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>Or it makes you refuse to.</span>
+          </motion.h2>
+
+          <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '500px' }} className="mb-5">
+            We refused. Not out of anger. Not out of bitterness. Out of love — for the people who gave everything so we could have a chance.
+          </motion.p>
+
+          <motion.p {...reveal(0.20)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '500px' }}>
+            We looked at where we came from and made a decision. This is not where the story ends. This is where it begins.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ─── THE FOUNDERS ─────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-14 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.1fr] gap-12 sm:gap-16 items-center">
+
+          <Photo src="/founders.jpg" alt="Richard and partner — Irish Rail" aspect="aspect-[3/4]" />
 
           <div>
-            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.45em' }} className="uppercase mb-5">
-              [ Join The Foundation ]
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
+              [ How We Found Each Other ]
             </motion.p>
-            <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(26px, 4.5vw, 40px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.2 }}>
-              "Built from nothing.<br />Worn by those<br />who understand."
+            <motion.h2 {...reveal(0.06)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.12 }} className="mb-7">
+              Not just a friendship.<br />A foundation.
             </motion.h2>
+            <motion.p {...reveal(0.10)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }} className="mb-5">
+              Two people from two different corners of the world ended up on the same road. Same mindset. Same fire. Same reason to keep going.
+            </motion.p>
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }}>
+              Years of knowing each other, building trust, and realising that what we had between us — the shared hunger, the shared values, the shared refusal to accept less — was something worth building on.
+            </motion.p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── WHY WE BUILT THIS ────────────────────────────────────────── */}
+      <section
+        className="max-w-3xl mx-auto px-6 sm:px-14 py-20 sm:py-28 text-center flex flex-col items-center"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <motion.div {...lineGrow(0, 'center')} className="h-px w-10 mb-12" style={{ background: 'rgba(0,0,0,0.09)', transformOrigin: 'center' }} aria-hidden="true" />
+
+        <motion.p {...reveal(0.04, 0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
+          [ Why We Built True Vision ]
+        </motion.p>
+
+        <motion.h2 {...reveal(0.08)} style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 50px)', color: '#111111', fontWeight: 500, lineHeight: 1.15 }} className="mb-8 max-w-xl">
+          We started because we had nothing — and decided that was enough to begin.
+        </motion.h2>
+
+        <motion.p {...reveal(0.12)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.50)', lineHeight: 1.9, maxWidth: '520px' }} className="mb-5">
+          No investors. No backing. No industry connections. Just two young men from small towns with a vision clear enough to build on and a story real enough to stand behind.
+        </motion.p>
+
+        <motion.p {...reveal(0.16)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.50)', lineHeight: 1.9, maxWidth: '520px' }}>
+          We built it for our families. To prove that where you start does not decide where you finish. That ordinary beginnings can produce extraordinary things.
+        </motion.p>
+      </section>
+
+      {/* ─── THE PRODUCT ──────────────────────────────────────────────── */}
+      <section
+        className="max-w-4xl mx-auto px-6 sm:px-14 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
+
+          <div className="flex flex-col gap-4">
+            <Photo src="/richard-cap.jpg" alt="Richard wearing the Foundation Cap" aspect="aspect-[3/4]" />
+            <Photo src="/caps-drop001.jpg" alt="Foundation Cap — Drop 001" aspect="aspect-[4/3]" />
           </div>
 
-          <motion.div {...reveal(0.14)} className="flex flex-col gap-3 shrink-0">
-            <Link
-              to="/archive"
-              style={{ ...mono, fontSize: '9px', letterSpacing: '0.38em', background: '#F5F3EE', color: '#111111' }}
-              className="flex items-center justify-center px-7 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300 whitespace-nowrap"
-            >
-              [ Enter the Archive ]
-            </Link>
-            <Link
-              to="/"
-              style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: 'rgba(255,255,255,0.30)', border: '1px solid rgba(255,255,255,0.12)' }}
-              className="flex items-center justify-center px-7 py-4 uppercase hover:bg-white/[0.05] transition-all duration-300 whitespace-nowrap"
-            >
-              [ View Drop 001 ]
-            </Link>
-          </motion.div>
+          <div className="sm:pt-8">
+            <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
+              [ Drop 001 — The Foundation ]
+            </motion.p>
+            <motion.h2 {...reveal(0.06)} style={{ ...serif, fontSize: 'clamp(28px, 5vw, 44px)', color: '#111111', fontWeight: 500, lineHeight: 1.12 }} className="mb-7">
+              The first physical proof<br />that it is possible.
+            </motion.h2>
+            <motion.p {...reveal(0.10)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }} className="mb-5">
+              One product. Made with purpose. Limited by design. The first stone laid in something we intend to build for a long time.
+            </motion.p>
+            <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(0,0,0,0.52)', lineHeight: 1.9 }} className="mb-8">
+              24 units. Sold in 24 hours. No paid ads. Just the product and the people who understood what they were buying into.
+            </motion.p>
+            <motion.div {...reveal(0.18)}>
+              <Link
+                to="/"
+                style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
+                className="inline-flex items-center px-7 py-[18px] uppercase hover:bg-[#2a2a2a] transition-all duration-300"
+              >
+                [ View Drop 001 ]
+              </Link>
+            </motion.div>
+          </div>
         </div>
+      </section>
+
+      {/* ─── WHO THIS IS FOR ──────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: '#111111' }}
+      >
+        <div className="relative max-w-3xl mx-auto px-6 sm:px-14 py-20 sm:py-28">
+
+          <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.48em' }} className="uppercase mb-10">
+            [ Who This Is For ]
+          </motion.p>
+
+          <motion.h2 {...reveal(0.06)} style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 52px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.12 }} className="mb-8">
+            We believe our story<br />is your story too.
+          </motion.h2>
+
+          <motion.p {...reveal(0.10)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '520px' }} className="mb-5">
+            Most people are not born into opportunity. Most people come from ordinary places, ordinary families, ordinary beginnings. Most people are told — by circumstance if not by words — to be realistic.
+          </motion.p>
+
+          <motion.p {...reveal(0.14)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '520px' }} className="mb-5">
+            True Vision exists for everyone who looked at that hand and decided to play differently.
+          </motion.p>
+
+          <motion.p {...reveal(0.18)} style={{ ...inter, fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.9, maxWidth: '520px' }}>
+            This is for the ones who work in silence. Who build without applause. Who carry their family's name like a responsibility. If you understand that — you understand True Vision.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ─── THE STATEMENT ────────────────────────────────────────────── */}
+      <section
+        className="flex flex-col items-center text-center px-6 sm:px-16 py-20 sm:py-28"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+      >
+        <motion.div
+          initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
+          transition={{ duration: 0.85, ease }}
+          className="h-px w-10 mb-14"
+          style={{ background: 'rgba(0,0,0,0.09)', transformOrigin: 'center' }}
+          aria-hidden="true"
+        />
+
+        <motion.p
+          {...reveal(0.04, 0)}
+          style={{ ...serif, fontSize: 'clamp(26px, 5.5vw, 46px)', color: '#111111', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.46, maxWidth: '560px' }}
+          className="mb-10"
+        >
+          "Built from nothing.<br />Worn by those who understand."
+        </motion.p>
+
+        <motion.p {...reveal(0.12, 0)} style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.38em' }} className="uppercase mb-12">
+          True Vision Project — Est. 2026
+        </motion.p>
+
+        <motion.div {...reveal(0.18)} className="flex flex-col sm:flex-row gap-3">
+          <Link
+            to="/archive"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.38em', background: '#111111', color: '#F5F3EE' }}
+            className="flex items-center justify-center px-8 py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
+          >
+            [ Enter the Archive ]
+          </Link>
+          <Link
+            to="/"
+            style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: 'rgba(0,0,0,0.38)', border: '1px solid rgba(0,0,0,0.13)' }}
+            className="flex items-center justify-center px-8 py-5 uppercase hover:border-black/30 hover:text-black/60 transition-all duration-300"
+          >
+            [ View Drop 001 ]
+          </Link>
+        </motion.div>
       </section>
 
       {/* ─── Footer ───────────────────────────────────────────────────── */}
