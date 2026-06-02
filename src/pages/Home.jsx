@@ -111,14 +111,12 @@ export default function Home() {
       >
         {/* Video background */}
         <video
-          autoPlay muted loop playsInline preload="metadata"
-          poster="/founders.jpg"
+          autoPlay muted loop playsInline preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ filter: 'saturate(0.12) brightness(0.50)' }}
           aria-hidden="true"
         >
-          <source src="/video-3.mov" type="video/mp4" />
-          <source src="/video-3.mov" type="video/quicktime" />
+          <source src="/hero.mp4" type="video/mp4" />
         </video>
 
         {/* Dark overlay */}
@@ -368,7 +366,7 @@ export default function Home() {
                 autoPlay muted loop playsInline preload="metadata"
                 className="absolute inset-0 w-full h-full object-cover"
               >
-                <source src="/video-1.mp4" type="video/mp4" />
+                <source src="/unbox-1.mp4" type="video/mp4" />
               </video>
             </motion.div>
 
@@ -448,7 +446,7 @@ export default function Home() {
               autoPlay muted loop playsInline preload="metadata"
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/video-2.mp4" type="video/mp4" />
+              <source src="/unbox-2.mp4" type="video/mp4" />
             </video>
           </motion.div>
 
