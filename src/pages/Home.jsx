@@ -204,96 +204,96 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          02 — DROP 001 PRODUCT
+          02 — DROP 001 ARCHIVE (sold out)
       ═══════════════════════════════════════════════════════════════ */}
       <section
         ref={productRef}
-        className="relative min-h-[100dvh] flex items-center scroll-mt-[78px]"
+        className="relative scroll-mt-[78px]"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
         aria-label="Foundation Cap — Drop 001"
       >
-        <div className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-14">
-          <SectionTag n="02" label="Drop 001 — Available Now" />
+        <div className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
+          <SectionTag n="02" label="Drop 001 — Closed" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-[1.15fr_1fr] gap-8 sm:gap-14 items-start">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.88, ease }}
-              className="relative overflow-hidden bg-[#DEDAD4] w-full aspect-[3/4] sm:aspect-[4/5]"
-            >
-              <CornerMarks />
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={activeColor}
-                  src={CAP_COLORS[activeColor].imgSrc}
-                  alt={`Foundation Cap — ${CAP_COLORS[activeColor].name}`}
-                  initial={{ opacity: 0, scale: 1.06 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.55, ease }}
-                  className="absolute inset-0 w-full h-full object-cover select-none"
-                  style={{ filter: 'saturate(0.18) brightness(0.93)' }}
-                  draggable="false"
-                />
-              </AnimatePresence>
-            </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
 
+            {/* Both caps side by side */}
+            <div className="grid grid-cols-2 gap-3">
+              {CAP_COLORS.map(c => (
+                <motion.div
+                  key={c.name}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.75, ease }}
+                  className="relative overflow-hidden bg-[#DEDAD4] w-full aspect-[3/4]"
+                >
+                  <CornerMarks />
+                  <img
+                    src={c.imgSrc}
+                    alt={`Foundation Cap — ${c.name}`}
+                    className="absolute inset-0 w-full h-full object-cover select-none"
+                    style={{ filter: 'saturate(0.18) brightness(0.88)', objectPosition: 'top' }}
+                    draggable="false"
+                  />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Info */}
             <motion.div
-              initial={{ opacity: 0, y: 26 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.72, delay: 0.1, ease }}
-              className="flex flex-col"
+              className="flex flex-col gap-0"
             >
-              <h2 style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.08 }} className="mb-6">
+              <h2 style={{ ...serif, fontSize: 'clamp(30px, 5.5vw, 46px)', color: '#111111', fontWeight: 500, lineHeight: 1.08 }} className="mb-8">
                 The Foundation Cap
               </h2>
-              <div className="flex flex-col mb-6" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-                {[
-                  ['Material', '300gsm Washed Chino Twill'],
-                  ['Fit',      'One Size'],
-                  ['Origin',   'Wexford / Bergamo'],
-                  ['Edition',  '024 Units — Drop 001'],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-                    <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }} className="uppercase">{k}</span>
-                    <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.58)', letterSpacing: '0.10em' }} className="uppercase">{v}</span>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-8 pb-8" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+                {[['024', 'Units'], ['24h', 'Sold Out'], ['€32', 'Drop 001']].map(([n, l]) => (
+                  <div key={l}>
+                    <p style={{ ...serif, fontSize: 'clamp(24px, 4vw, 36px)', color: '#111111', fontWeight: 500, lineHeight: 1 }} className="mb-1">{n}</p>
+                    <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.28em' }} className="uppercase">{l}</p>
                   </div>
                 ))}
               </div>
-              <div className="flex items-baseline gap-3 mb-6">
-                <span style={{ ...inter, fontSize: '36px', color: '#111111', fontWeight: 300, letterSpacing: '-0.02em' }}>€{CAP.price}</span>
-                <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.26)', letterSpacing: '0.22em' }}>+ €6 SHIPPING</span>
+
+              <div className="flex flex-col mb-8" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+                {[
+                  ['Material', '300gsm Washed Chino Twill'],
+                  ['Origin',   'Wexford / Bergamo'],
+                  ['Edition',  'Drop 001 — No Reorder'],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between py-3" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+                    <span style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }} className="uppercase">{k}</span>
+                    <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.55)', letterSpacing: '0.10em' }} className="uppercase">{v}</span>
+                  </div>
+                ))}
               </div>
-              <div className="mb-6">
-                <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.38em' }} className="mb-3 uppercase">
-                  Colour — {CAP_COLORS[activeColor].name}
+
+              {/* Sold out badge */}
+              <div className="w-full py-4 mb-5 flex items-center justify-center" style={{ border: '1px solid rgba(0,0,0,0.12)' }}>
+                <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.40em' }} className="uppercase">
+                  [ Sold Out ]
                 </p>
-                <div className="flex gap-3">
-                  {CAP_COLORS.map((c, i) => (
-                    <button
-                      key={c.name} onClick={() => setActiveColor(i)}
-                      aria-label={c.name} aria-pressed={activeColor === i}
-                      className={`w-8 h-8 rounded-full border-2 transition-all duration-300 cursor-pointer ${
-                        activeColor === i ? 'border-black/45 scale-110' : 'border-black/[0.12] hover:border-black/28'
-                      }`}
-                      style={{ backgroundColor: c.hex }}
-                    />
-                  ))}
-                </div>
               </div>
-              <button
-                onClick={handleAddToCart}
-                aria-label="Add Foundation Cap to cart"
-                className={`w-full py-5 text-[9px] tracking-[0.42em] uppercase transition-all duration-400 cursor-pointer ${
-                  addedFeedback ? 'bg-black/5 border border-black/10' : 'bg-[#111111] text-[#F5F3EE] hover:bg-[#2a2a2a] active:scale-[0.98]'
-                }`}
-                style={addedFeedback ? { ...mono, color: 'rgba(0,0,0,0.38)' } : mono}
+
+              {/* CTA → Archive */}
+              <Link
+                to="/archive"
+                style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
+                className="w-full flex items-center justify-center py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
               >
-                {addedFeedback ? '[ Added to Cart ]' : '[ Add to Cart — €32 ]'}
-              </button>
+                [ Join Archive — Drop 002 Access ]
+              </Link>
+
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }} className="text-center mt-3">
+                Free. Archive members get early access to every drop.
+              </p>
             </motion.div>
           </div>
         </div>
@@ -329,7 +329,7 @@ export default function Home() {
                 }`} style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
               ))}
               <video autoPlay muted loop playsInline preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover">
+                className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'top' }}>
                 <source src="/unbox-1.mp4" type="video/mp4" />
               </video>
             </motion.div>
@@ -405,7 +405,7 @@ export default function Home() {
                 <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
                 <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
                 <video autoPlay muted loop playsInline preload="metadata"
-                  className="absolute inset-0 w-full h-full object-cover">
+                  className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'top' }}>
                   <source src={src} type="video/mp4" />
                 </video>
               </motion.div>
