@@ -38,7 +38,7 @@ function LineReveal({ children, style, delay = 0 }) {
   )
 }
 
-function Photo({ src, alt, aspect = 'aspect-[3/4]', dark = false }) {
+function Photo({ src, alt, aspect = 'aspect-[3/4]', dark = false, location = null }) {
   const bg = dark ? '#1a1a1a' : '#D8D4CD'
   const bc = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.09)'
   return (
@@ -62,6 +62,13 @@ function Photo({ src, alt, aspect = 'aspect-[3/4]', dark = false }) {
           style={{ filter: 'saturate(0.18) brightness(0.90)' }}
           draggable="false"
         />
+      )}
+      {location && (
+        <div className="absolute bottom-0 left-0 right-0 z-20 px-4 py-3" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.45))' }}>
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.80)', letterSpacing: '0.40em' }} className="uppercase">
+            {location}
+          </p>
+        </div>
       )}
     </motion.div>
   )
@@ -134,8 +141,8 @@ export default function OurStory() {
           </div>
 
           <div className="flex flex-col gap-4 sm:pt-14">
-            <Photo src="/wexford.jpg" alt="Wexford, Ireland" aspect="aspect-[16/10]" />
-            <Photo src="/bergamo.jpg" alt="Bergamo, Italy" aspect="aspect-[16/10]" />
+            <Photo src="/wexford.jpg" alt="Wexford, Ireland" aspect="aspect-[16/10]" location="Wexford / Ireland" />
+            <Photo src="/bergamo.jpg" alt="Bergamo, Italy" aspect="aspect-[16/10]" location="Bergamo / Italy" />
           </div>
         </div>
       </section>
@@ -190,7 +197,7 @@ export default function OurStory() {
             initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.88, ease: [0.16,1,0.3,1] }}
-            className="relative overflow-hidden w-full aspect-[9/16]"
+            className="relative overflow-hidden w-full aspect-video sm:aspect-[9/16]"
             style={{ background: '#1a1a1a' }}
           >
             <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
@@ -337,18 +344,18 @@ export default function OurStory() {
           True Vision Project — Est. 2026
         </motion.p>
 
-        <motion.div {...reveal(0.18)} className="flex flex-col sm:flex-row gap-3">
+        <motion.div {...reveal(0.18)} className="flex flex-col sm:flex-row gap-3 w-full max-w-sm sm:max-w-none">
           <Link
             to="/archive"
             style={{ ...mono, fontSize: '9px', letterSpacing: '0.38em', background: '#111111', color: '#F5F3EE' }}
-            className="flex items-center justify-center px-8 py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
+            className="w-full sm:w-auto flex items-center justify-center px-8 py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
           >
             [ Enter the Archive ]
           </Link>
           <Link
             to="/"
             style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: 'rgba(0,0,0,0.38)', border: '1px solid rgba(0,0,0,0.13)' }}
-            className="flex items-center justify-center px-8 py-5 uppercase hover:border-black/30 hover:text-black/60 transition-all duration-300"
+            className="w-full sm:w-auto flex items-center justify-center px-8 py-5 uppercase hover:border-black/30 hover:text-black/60 transition-all duration-300"
           >
             [ View Drop 001 ]
           </Link>

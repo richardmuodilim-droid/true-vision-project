@@ -317,7 +317,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.85, ease }}
-              className="relative overflow-hidden w-full aspect-[9/16] sm:aspect-[4/5]"
+              className="relative overflow-hidden w-full aspect-video sm:aspect-[4/5]"
               style={{ background: '#1a1a1a' }}
             >
               {['tl','tr','bl','br'].map(pos => (
@@ -368,7 +368,7 @@ export default function Home() {
               '/community-dublin.jpg',
               '/richard-cap.jpg',
               '/billy-cap.jpg',
-              '/customer-2.jpg',
+              '/cap-hooded.jpg',
               '/customer-1.jpg',
               '/customer-3.jpg',
             ].map((src, i) => (
@@ -399,7 +399,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.65, delay: i * 0.1, ease }}
-                className="relative overflow-hidden w-full aspect-[9/16] sm:aspect-video"
+                className="relative overflow-hidden w-full aspect-video"
                 style={{ background: '#1a1a1a' }}
               >
                 <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
