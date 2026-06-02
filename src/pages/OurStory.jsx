@@ -179,7 +179,21 @@ export default function OurStory() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.1fr] gap-12 sm:gap-16 items-center">
 
-          <Photo src="/founders.jpg" alt="The two founders — Irish Rail" aspect="aspect-[3/4]" />
+          {/* Founder walk video */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.88, ease: [0.16,1,0.3,1] }}
+            className="relative overflow-hidden w-full aspect-[9/16]"
+            style={{ background: '#1a1a1a' }}
+          >
+            <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+            <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+            <video autoPlay muted loop playsInline preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover">
+              <source src="/hero.mp4" type="video/mp4" />
+            </video>
+          </motion.div>
 
           <div>
             <motion.p {...reveal()} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
@@ -230,7 +244,10 @@ export default function OurStory() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-start">
 
           <div className="flex flex-col gap-4">
-            <Photo src="/richard-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
+            <div className="grid grid-cols-2 gap-3">
+              <Photo src="/richard-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
+              <Photo src="/billy-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
+            </div>
             <Photo src="/caps-drop001.jpg" alt="Foundation Cap — Drop 001" aspect="aspect-[4/3]" />
           </div>
 

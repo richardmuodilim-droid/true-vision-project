@@ -116,12 +116,12 @@ export default function Navbar({ onCartOpen }) {
 
             {/* Mobile links */}
             <Link
-              to="/"
+              to="/our-story"
               style={{ ...mono, fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(0,0,0,0.28)' }}
               className="uppercase hover:opacity-70 transition-opacity duration-500 sm:hidden"
-              aria-label="Shop"
+              aria-label="Our Story"
             >
-              [ Shop ]
+              [ Story ]
             </Link>
             <Link
               to="/archive"
