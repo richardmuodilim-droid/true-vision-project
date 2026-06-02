@@ -73,36 +73,42 @@ export default function OurStory() {
       <div className="grain" aria-hidden="true" />
 
       {/* ─── OPENING ──────────────────────────────────────────────────── */}
-      <section className="pt-[78px] min-h-[100dvh] flex flex-col justify-center px-6 sm:px-14 max-w-3xl mx-auto">
+      <section className="pt-[78px] min-h-[100dvh] max-w-5xl mx-auto px-6 sm:px-14 flex flex-col sm:grid sm:grid-cols-2 sm:gap-16 justify-center items-center py-14">
 
-        <motion.p
-          {...reveal(0.05, 0)}
-          style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.52em' }}
-          className="uppercase mb-12"
-        >
-          True Vision Project — Origin
-        </motion.p>
+        {/* Text */}
+        <div>
+          <motion.p
+            {...reveal(0.05, 0)}
+            style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.52em' }}
+            className="uppercase mb-12"
+          >
+            True Vision Project — Origin
+          </motion.p>
 
-        <div className="mb-10">
-          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.06}>
-            Two small towns.
-          </LineReveal>
-          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.16}>
-            Two countries.
-          </LineReveal>
-          <LineReveal style={{ ...serif, fontSize: 'clamp(46px, 10vw, 84px)', color: 'rgba(0,0,0,0.22)', fontWeight: 500, lineHeight: 1.03, fontStyle: 'italic' }} delay={0.26}>
-            One road.
-          </LineReveal>
+          <div className="mb-10">
+            <LineReveal style={{ ...serif, fontSize: 'clamp(40px, 8vw, 72px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.06}>
+              Two small towns.
+            </LineReveal>
+            <LineReveal style={{ ...serif, fontSize: 'clamp(40px, 8vw, 72px)', color: '#111111', fontWeight: 500, lineHeight: 1.03 }} delay={0.16}>
+              Two countries.
+            </LineReveal>
+            <LineReveal style={{ ...serif, fontSize: 'clamp(40px, 8vw, 72px)', color: 'rgba(0,0,0,0.22)', fontWeight: 500, lineHeight: 1.03, fontStyle: 'italic' }} delay={0.26}>
+              One road.
+            </LineReveal>
+          </div>
+
+          <motion.div {...lineGrow(0.42)} className="h-px w-14 mb-10" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
+
+          <motion.p
+            {...reveal(0.48)}
+            style={{ ...inter, fontSize: 'clamp(15px, 1.8vw, 17px)', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88 }}
+          >
+            Different languages, different skies, different corners of the world — but underneath it all, the same story.
+          </motion.p>
         </div>
 
-        <motion.div {...lineGrow(0.42)} className="h-px w-14 mb-10" style={{ background: 'rgba(0,0,0,0.10)' }} aria-hidden="true" />
-
-        <motion.p
-          {...reveal(0.48)}
-          style={{ ...inter, fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(0,0,0,0.52)', lineHeight: 1.88, maxWidth: '540px' }}
-        >
-          Different languages, different skies, different corners of the world — but underneath it all, the same story.
-        </motion.p>
+        {/* Founders photo */}
+        <Photo src="/founders.jpg" alt="The two founders" aspect="aspect-[3/4]" />
       </section>
 
       {/* ─── WHERE IT STARTED ─────────────────────────────────────────── */}
