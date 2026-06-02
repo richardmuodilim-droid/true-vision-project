@@ -112,7 +112,7 @@ export default function Home() {
         {/* Video background */}
         <video
           autoPlay muted loop playsInline preload="metadata"
-          poster="/cap-hooded.jpg"
+          poster="/founders.jpg"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ filter: 'saturate(0.12) brightness(0.50)' }}
           aria-hidden="true"
@@ -404,9 +404,11 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 sm:px-10">
           <SectionTag n="04" label="The People" />
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
             {[
               { src: '/community-dublin.jpg', alt: 'Dublin — Drop 001 in the wild' },
+              { src: '/cap-hooded.jpg',       alt: 'Foundation Cap — worn' },
+              { src: '/customer-door.jpg',    alt: 'Foundation Cap — worn' },
               { src: '/customer-2.jpg',       alt: 'Foundation Cap — worn' },
               { src: '/customer-1.jpg',       alt: 'Foundation Cap — worn' },
               { src: '/customer-3.jpg',       alt: 'Foundation Cap — worn' },
