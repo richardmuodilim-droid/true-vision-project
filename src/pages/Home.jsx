@@ -216,7 +216,7 @@ export default function Home() {
                     src={c.imgSrc}
                     alt={`Foundation Cap — ${c.name}`}
                     className="absolute inset-0 w-full h-full object-cover select-none"
-                    style={{ filter: 'saturate(0.18) brightness(0.88)', objectPosition: 'top' }}
+                    style={{ filter: 'saturate(0.18) brightness(0.88)', objectPosition: 'center' }}
                     draggable="false"
                   />
                 </motion.div>
