@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getProduct } from '../data/products'
 
 const CAP  = getProduct('foundation-cap')
-const mono  = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
+import { mono, serif } from '../lib/design'
 
 const LS_KEY = 'TrueVisionMember'
 

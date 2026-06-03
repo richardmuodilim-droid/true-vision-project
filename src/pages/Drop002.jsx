@@ -7,8 +7,7 @@ const LS_KEY = 'TrueVisionMember'
 // ── Configure this date when you're ready to reveal ──────────────────────────
 const REVEAL_DATE = new Date('2026-08-01T12:00:00+01:00')
 
-const mono  = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
+import { mono, serif } from '../lib/design'
 
 function loadMember() {
   try {

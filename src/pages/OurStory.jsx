@@ -1,26 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-
-const mono  = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
-const inter = { fontFamily: "'Inter', sans-serif" }
-
-const ease = [0.16, 1, 0.3, 1]
-
-const reveal = (delay = 0, y = 24) => ({
-  initial:     { opacity: 0, y },
-  whileInView: { opacity: 1, y: 0 },
-  viewport:    { once: true, margin: '-40px' },
-  transition:  { duration: 0.78, delay, ease },
-})
-
-const lineGrow = (delay = 0, origin = 'left') => ({
-  initial:     { scaleX: 0 },
-  whileInView: { scaleX: 1 },
-  viewport:    { once: true },
-  transition:  { duration: 0.85, delay, ease },
-  style:       { transformOrigin: origin === 'center' ? 'center' : 'left' },
-})
+import Footer from '../components/Footer'
+import { mono, serif, inter, ease, reveal, lineGrow } from '../lib/design'
 
 function LineReveal({ children, style, delay = 0 }) {
   return (
@@ -230,7 +211,7 @@ export default function OurStory() {
         className="max-w-3xl mx-auto px-6 sm:px-14 py-20 sm:py-28 text-center flex flex-col items-center"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
       >
-        <motion.div {...lineGrow(0, 'center')} className="h-px w-10 mb-12" style={{ background: 'rgba(0,0,0,0.09)', transformOrigin: 'center' }} aria-hidden="true" />
+        <motion.div {...lineGrow(0)} className="h-px w-10 mb-12 origin-center" style={{ background: 'rgba(0,0,0,0.09)' }} aria-hidden="true" />
 
         <motion.p {...reveal(0.04, 0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.48em' }} className="uppercase mb-8">
           [ Why We Built True Vision ]
@@ -362,22 +343,7 @@ export default function OurStory() {
         </motion.div>
       </section>
 
-      {/* ─── Footer ───────────────────────────────────────────────────── */}
-      <footer
-        className="px-6 sm:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
-      >
-        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.22em' }}>
-          © 2026 TRUE VISION PROJECT
-        </p>
-        <Link
-          to="/"
-          style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }}
-          className="uppercase hover:opacity-60 transition-opacity duration-300"
-        >
-          ← Back to Store
-        </Link>
-      </footer>
+      <Footer />
     </div>
   )
 }

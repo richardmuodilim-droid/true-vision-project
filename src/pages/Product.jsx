@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProduct, products } from '../data/products'
 import ProductCard from '../components/ProductCard'
-
-const mono  = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
+import Footer from '../components/Footer'
+import { mono, serif } from '../lib/design'
 
 export default function Product() {
   const { onCartOpen } = useOutletContext()
@@ -373,21 +372,7 @@ export default function Product() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="px-6 sm:px-12 py-8 mt-20 flex flex-col sm:flex-row items-center justify-between gap-4"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.22em' }}>
-          © 2026 TRUE VISION PROJECT
-        </p>
-        <a href="https://www.instagram.com/truevisionproject/" target="_blank" rel="noopener noreferrer"
-          aria-label="Instagram" style={{ color: 'rgba(0,0,0,0.28)' }} className="hover:opacity-60 transition-opacity duration-400">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
-      </footer>
+      <Footer className="mt-20" />
     </div>
   )
 }

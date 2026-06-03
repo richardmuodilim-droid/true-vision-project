@@ -3,34 +3,17 @@ import { Link, useOutletContext } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProduct } from '../data/products'
+import Footer from '../components/Footer'
+import { mono, serif, inter, ease, reveal, lineGrow } from '../lib/design'
 
 const CAP = getProduct('foundation-cap')
-
-const mono  = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
-const inter = { fontFamily: "'Inter', sans-serif" }
 
 const CAP_COLORS = [
   { name: 'Black', hex: '#0a0a0a', imgSrc: '/cap-black.jpg' },
   { name: 'White', hex: '#f5f2ec', imgSrc: '/cap-white.jpg' },
 ]
 
-const ease = [0.16, 1, 0.3, 1]
 const fast = (delay = 0) => ({ duration: 0.55, delay, ease })
-
-const reveal = (delay = 0, y = 30) => ({
-  initial: { opacity: 0, y },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-40px' },
-  transition: { duration: 0.75, delay, ease },
-})
-
-const lineGrow = (delay = 0) => ({
-  initial: { scaleX: 0 },
-  whileInView: { scaleX: 1 },
-  viewport: { once: true },
-  transition: { duration: 0.8, delay, ease },
-})
 
 const SectionTag = ({ n, label, dark = false }) => (
   <div className="flex items-center gap-4 mb-10 sm:mb-14">
@@ -317,7 +300,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.85, ease }}
-              className="relative overflow-hidden w-full aspect-video sm:aspect-[4/5]"
+              className="relative overflow-hidden w-full aspect-[3/4] sm:aspect-[4/5]"
               style={{ background: '#1a1a1a' }}
             >
               {['tl','tr','bl','br'].map(pos => (
@@ -329,7 +312,7 @@ export default function Home() {
                 }`} style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
               ))}
               <video autoPlay muted loop playsInline preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'top' }}>
+                className="absolute inset-0 w-full h-full object-cover">
                 <source src="/unbox-1.mp4" type="video/mp4" />
               </video>
             </motion.div>
@@ -399,13 +382,13 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.65, delay: i * 0.1, ease }}
-                className="relative overflow-hidden w-full aspect-video"
+                className="relative overflow-hidden w-full aspect-[3/4] sm:aspect-video"
                 style={{ background: '#1a1a1a' }}
               >
                 <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
                 <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
                 <video autoPlay muted loop playsInline preload="metadata"
-                  className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'top' }}>
+                  className="absolute inset-0 w-full h-full object-cover">
                   <source src={src} type="video/mp4" />
                 </video>
               </motion.div>
@@ -501,24 +484,13 @@ export default function Home() {
         <div className="marquee-track" style={{ opacity: 0.22 }}>
           {[0, 1].map(i => (
             <span key={i} style={{ ...mono, fontSize: '8px', color: '#111111', letterSpacing: '0.22em', whiteSpace: 'nowrap', paddingRight: '4rem' }}>
-              [ DROP 001 — AVAILABLE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP — €32 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ DROP 002 — COMING AUGUST 2026 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ ARCHIVE — JOIN FREE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
+              [ DROP 001 — SOLD OUT ] &nbsp;&nbsp;·&nbsp;&nbsp; [ FOUNDATION CAP — 24 UNITS ] &nbsp;&nbsp;·&nbsp;&nbsp; [ DROP 002 — AUGUST 2026 ] &nbsp;&nbsp;·&nbsp;&nbsp; [ ARCHIVE — JOIN FREE ] &nbsp;&nbsp;·&nbsp;&nbsp; [ WEXFORD / IRELAND ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BERGAMO / ITALY ] &nbsp;&nbsp;·&nbsp;&nbsp; [ BUILT FROM NOTHING ] &nbsp;&nbsp;·&nbsp;&nbsp;
             </span>
           ))}
         </div>
       </div>
 
-      {/* FOOTER */}
-      <footer className="px-6 sm:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-        <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.22em' }}>© 2026 TRUE VISION PROJECT</p>
-        <div className="flex items-center gap-7">
-          <Link to="/our-story" style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }} className="uppercase hover:opacity-60 transition-opacity duration-300">[ Our Story ]</Link>
-          <Link to="/archive" style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }} className="uppercase hover:opacity-60 transition-opacity duration-300">[ Archive ]</Link>
-          <Link to="/drop-002" style={{ ...mono, fontSize: '7px', letterSpacing: '0.28em', color: 'rgba(0,0,0,0.22)' }} className="uppercase hover:opacity-60 transition-opacity duration-300">[ Drop 002 ]</Link>
-          <a href="https://www.tiktok.com/@tvpofficial" target="_blank" rel="noopener noreferrer" aria-label="TikTok" style={{ color: 'rgba(0,0,0,0.22)' }} className="hover:opacity-60 transition-opacity duration-300">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
