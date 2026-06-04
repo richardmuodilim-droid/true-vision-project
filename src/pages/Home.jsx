@@ -162,22 +162,18 @@ export default function Home() {
 
           <motion.div
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={fast(0.76)}
-            className="flex flex-col sm:flex-row gap-3 w-full max-w-[340px] sm:max-w-none sm:w-auto"
+            className="flex flex-col gap-3 w-full max-w-[340px]"
           >
-            <button
-              onClick={scrollToProduct}
-              style={{ ...mono, fontSize: '9px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
-              className="w-full sm:w-auto px-8 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300 cursor-pointer"
-            >
-              [ View Drop 001 ]
-            </button>
             <Link
               to="/drop-002"
-              style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: 'rgba(255,255,255,0.70)', border: '1px solid rgba(255,255,255,0.28)' }}
-              className="w-full sm:w-auto flex items-center justify-center px-8 py-5 uppercase hover:bg-white/[0.08] transition-all duration-300"
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
+              className="w-full flex items-center justify-center px-8 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300"
             >
-              [ Join Drop 002 Waitlist ]
+              [ Join the Waitlist ]
             </Link>
+            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.22em' }} className="text-center">
+              Drop 002 — August 2026. Free. No spam.
+            </p>
           </motion.div>
         </div>
 
