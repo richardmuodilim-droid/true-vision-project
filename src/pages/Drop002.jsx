@@ -13,7 +13,8 @@ const COLOURWAYS = [
     accent:  '#7B2FBE',
     bg:      'linear-gradient(160deg, #0e0c14 0%, #1a0d2e 60%, #2d1054 100%)',
     border:  'rgba(123,47,190,0.35)',
-    img:     null, // swap to '/tracksuit-purple.jpg' when ready
+    img:     '/ts-all-front.png',
+    imgPos:  '82% top',
   },
   {
     name:    'Light Blue / Grey',
@@ -21,7 +22,8 @@ const COLOURWAYS = [
     accent:  '#7DD3DA',
     bg:      'linear-gradient(160deg, #141616 0%, #1a2626 60%, #1e3535 100%)',
     border:  'rgba(125,211,218,0.30)',
-    img:     null, // swap to '/tracksuit-blue.jpg' when ready
+    img:     '/ts-blue.jpg',
+    imgPos:  'center top',
   },
   {
     name:    'Pink / Black',
@@ -29,7 +31,8 @@ const COLOURWAYS = [
     accent:  '#EC008C',
     bg:      'linear-gradient(160deg, #0e0b0d 0%, #2a0820 60%, #3d0a2a 100%)',
     border:  'rgba(236,0,140,0.32)',
-    img:     null, // swap to '/tracksuit-pink.jpg' when ready
+    img:     '/ts-all-front.png',
+    imgPos:  '15% top',
   },
 ]
 
@@ -218,11 +221,11 @@ export default function Drop002() {
               <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: c.border }} />
               <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: c.border }} />
 
-              {/* Real image — swap null to path when images are in public/ */}
+              {/* Real image */}
               {c.img && (
                 <img src={c.img} alt={c.name}
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                  style={{ filter: 'saturate(0.85) brightness(0.75)' }} />
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ filter: 'saturate(0.88) brightness(0.70)', objectPosition: c.imgPos }} />
               )}
 
               {/* Colour accent glow */}
@@ -271,7 +274,7 @@ export default function Drop002() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-center">
 
-          {/* Visual — hidden pocket representation */}
+          {/* Hidden pocket photo */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -282,31 +285,12 @@ export default function Drop002() {
           >
             <span aria-hidden="true" className="absolute top-0 left-0 w-5 h-5 border-t border-l z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
             <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
-
-            {/* Pocket diagram */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
-              <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
-              <div className="relative w-full">
-                <div className="w-full h-[2px] rounded" style={{ background: 'rgba(255,255,255,0.15)' }} />
-                <motion.div
-                  animate={{ width: ['0%', '60%', '0%'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
-                  className="absolute top-0 left-0 h-[2px] rounded"
-                  style={{ background: 'rgba(255,255,255,0.55)' }}
-                />
-                <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.32em' }}
-                  className="uppercase mt-3 text-center">
-                  Hidden zip — all colourways
-                </p>
-              </div>
-              <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
-
-              <div className="flex items-center gap-3 mt-2">
-                {COLOURWAYS.map(c => (
-                  <div key={c.code} className="w-3 h-3 rounded-full" style={{ background: c.accent, opacity: 0.7 }} />
-                ))}
-              </div>
-            </div>
+            <img
+              src="/ts-pocket.jpg"
+              alt="Hidden pocket detail"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: 'center 20%', filter: 'brightness(0.80)' }}
+            />
           </motion.div>
 
           <div>
