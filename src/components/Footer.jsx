@@ -25,7 +25,7 @@ export default function Footer({ className = '' }) {
             </p>
             <div className="flex items-center gap-5">
               <a
-                href="https://www.tiktok.com/@tvpofficial"
+                href="https://www.tiktok.com/@truevisionproject"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"

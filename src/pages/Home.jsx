@@ -324,10 +324,10 @@ export default function Home() {
               <p style={{ ...inter, fontSize: 'clamp(13px, 1.8vw, 15px)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.9 }}>
                 The market. The build. The failures. The first sale. Every drop documented from nothing.
               </p>
-              <a href="https://www.tiktok.com/@tvpofficial" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.tiktok.com/@truevisionproject" target="_blank" rel="noopener noreferrer"
                 style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.28em' }}
                 className="uppercase hover:text-white/50 transition-colors duration-300 w-fit">
-                @tvpofficial &nbsp;→
+                @truevisionproject &nbsp;→
               </a>
             </motion.div>
           </div>
