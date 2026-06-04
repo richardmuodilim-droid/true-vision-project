@@ -388,6 +388,73 @@ function PromoSection({ password }) {
   )
 }
 
+// ─── Drop 002 section ─────────────────────────────────────────────────────────
+
+const DROP002_MIN_ORDERS = 30
+
+function Drop002Section({ drop002Count }) {
+  const pct = Math.min((drop002Count / DROP002_MIN_ORDERS) * 100, 100)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.45 }}
+      className="mt-10 pt-8"
+      style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
+    >
+      <div className="flex items-center justify-between mb-6">
+        <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.32em' }} className="uppercase">
+          Drop 002 — Windbreaker
+        </p>
+        <a
+          href="/drop-002"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ ...mono, fontSize: '9px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.35)' }}
+          className="px-3 py-1 border border-black/[0.10] hover:border-black/25 hover:text-black/60 transition-all duration-200"
+        >
+          View Page ↗
+        </a>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+        <StatCard label="Waitlist Signups"    value={drop002Count} />
+        <StatCard label="Pre-Order Minimum"   value={`${DROP002_MIN_ORDERS} units`} />
+        <StatCard
+          label="Production Trigger"
+          value={drop002Count >= DROP002_MIN_ORDERS ? 'READY' : `${DROP002_MIN_ORDERS - drop002Count} to go`}
+          highlight={drop002Count >= DROP002_MIN_ORDERS ? 'green' : undefined}
+        />
+      </div>
+
+      <div className="p-5" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+        <div className="flex items-center justify-between mb-3">
+          <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.40)', letterSpacing: '0.22em' }} className="uppercase">
+            Waitlist Progress
+          </p>
+          <p style={{ ...mono, fontSize: '12px', color: drop002Count >= DROP002_MIN_ORDERS ? '#16a34a' : '#111111' }}>
+            {drop002Count} / {DROP002_MIN_ORDERS} signups
+          </p>
+        </div>
+        <div className="w-full h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.07)' }}>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: pct / 100 }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full origin-left rounded-full"
+            style={{ background: drop002Count >= DROP002_MIN_ORDERS ? '#16a34a' : '#111111' }}
+          />
+        </div>
+        <p style={{ ...mono, fontSize: '9px', color: drop002Count >= DROP002_MIN_ORDERS ? '#16a34a' : 'rgba(0,0,0,0.38)', letterSpacing: '0.12em' }}
+          className="mt-2">
+          {drop002Count >= DROP002_MIN_ORDERS ? '✓ Production threshold reached' : `${DROP002_MIN_ORDERS - drop002Count} more signups to unlock production`}
+        </p>
+      </div>
+    </motion.div>
+  )
+}
+
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
 function Dashboard({ data, password }) {
@@ -542,6 +609,8 @@ function Dashboard({ data, password }) {
         </div>
 
         <PromoSection password={password} />
+
+        <Drop002Section drop002Count={data.drop002Count ?? 0} />
 
       </main>
 

@@ -34,5 +34,8 @@ export default async function handler(req, res) {
     lastSeen: lastSeenMap[m.userId] || null,
   }))
 
-  return res.status(200).json({ count, members: membersWithActivity, financials: FINANCIALS })
+  // Drop 002 waitlist
+  const drop002Count = (await kv.scard('tvp:drop002:waitlist')) ?? 0
+
+  return res.status(200).json({ count, members: membersWithActivity, financials: FINANCIALS, drop002Count })
 }

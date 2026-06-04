@@ -13,6 +13,7 @@ import ArchiveEntry from './components/ArchiveEntry'
 import AdminPage from './components/AdminPage'
 import OrderSuccess from './pages/OrderSuccess'
 import OurStory from './pages/OurStory'
+import Drop002 from './pages/Drop002'
 
 function StoreShell() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -60,6 +61,7 @@ export default function App() {
       <Routes>
         {/* Standalone — no navbar */}
         <Route path="/intro"         element={<Landing />} />
+        <Route path="/drop-002"      element={<Drop002 />} />
         <Route path="/archive"       element={<ArchiveFlow />} />
         <Route path="/archive-admin" element={<AdminPage />} />
 
