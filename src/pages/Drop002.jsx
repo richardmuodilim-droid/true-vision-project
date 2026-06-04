@@ -430,7 +430,7 @@ export default function Drop002() {
             )}
 
             <Link
-              to="/archive"
+              to="/waitlist"
               style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
               className="uppercase pb-px hover:opacity-60 transition-opacity duration-300"
             >
