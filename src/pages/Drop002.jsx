@@ -254,7 +254,7 @@ export default function Drop002() {
               {c.img && (
                 <img src={c.img} alt={c.name}
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ filter: 'saturate(0.88) brightness(0.70)', objectPosition: c.imgPos }} />
+                  style={{ objectPosition: c.imgPos }} />
               )}
 
               {/* Colour accent glow */}
@@ -318,7 +318,7 @@ export default function Drop002() {
               src="/ts-pocket.jpg"
               alt="Hidden pocket detail"
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ objectPosition: 'center 20%', filter: 'brightness(0.80)' }}
+              style={{ objectPosition: 'center 20%' }}
             />
           </motion.div>
 
