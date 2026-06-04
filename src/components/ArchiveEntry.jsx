@@ -6,9 +6,10 @@ const manifest = [
   { key: 'PROJECT ID',  value: '001' },
   { key: 'OBJECT',      value: 'THE FOUNDATION CAP' },
   { key: 'COMPOSITION', value: '300GSM WASHED CHINO TWILL' },
-  { key: 'EDITION',     value: 'DROP 001' },
+  { key: 'EDITION',     value: 'DROP 001 — CLOSED' },
   { key: 'ORIGIN',      value: 'IRELAND / ITALY' },
-  { key: 'STATUS',      value: 'IN PRODUCTION', live: true },
+  { key: 'STATUS',      value: 'SOLD OUT — 24 UNITS / 24 HOURS' },
+  { key: 'NEXT DROP',   value: 'DROP 002 — AUGUST 2026', next: true },
 ]
 
 const processItems = [
@@ -213,7 +214,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
           {/* Manifest rows */}
           <div className="flex flex-col mb-10 sm:mb-14">
-            {manifest.map(({ key, value, live }, i) => (
+            {manifest.map(({ key, value, live, next }, i) => (
               <motion.div
                 key={key}
                 initial={{ opacity: 0, x: -6 }}
@@ -232,6 +233,10 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
                 {/* Value */}
                 {live ? (
                   <span className="leading-snug status-live" style={{ ...mono, fontSize: '11px', letterSpacing: '0.06em' }}>
+                    {value}
+                  </span>
+                ) : next ? (
+                  <span className="leading-snug" style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.72)', letterSpacing: '0.06em', borderBottom: '1px solid rgba(0,0,0,0.10)', paddingBottom: '2px' }}>
                     {value}
                   </span>
                 ) : (
@@ -267,7 +272,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             }}
             className="text-center md:text-left"
           >
-            The Foundation Cap. Built between Ireland and Italy.
+            Drop 001 — sold out in 24 hours. Drop 002 is coming.
           </motion.p>
 
         </motion.div>
@@ -410,7 +415,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               key={i}
               style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.55)', letterSpacing: '0.2em', whiteSpace: 'nowrap', paddingRight: '4rem' }}
             >
-              [ CONNECTION_SECURE ] &nbsp;&nbsp;...&nbsp;&nbsp; [ WEXFORD_ARCHIVE_SYNCED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ BERGAMO_TEXTILE_VERIFIED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ DROP_001_PENDING ] &nbsp;&nbsp;...&nbsp;&nbsp; [ RELENTLESS_EFFORT_REQUIRED ] &nbsp;&nbsp;...&nbsp;&nbsp;
+              [ CONNECTION_SECURE ] &nbsp;&nbsp;...&nbsp;&nbsp; [ WEXFORD_ARCHIVE_SYNCED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ BERGAMO_TEXTILE_VERIFIED ] &nbsp;&nbsp;...&nbsp;&nbsp; [ DROP_001_SOLD_OUT ] &nbsp;&nbsp;...&nbsp;&nbsp; [ DROP_002_INCOMING_AUG_2026 ] &nbsp;&nbsp;...&nbsp;&nbsp; [ MEMBERS_GO_FIRST ] &nbsp;&nbsp;...&nbsp;&nbsp;
             </span>
           ))}
         </div>
@@ -464,13 +469,13 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             [ OUR STORY ]
           </Link>
           <Link
-            to="/"
+            to="/drop-002"
             style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
             className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] flex items-center justify-center transition-all duration-300"
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >
-            [ SHOP DROP 001 ]
+            [ DROP 002 — AUG 2026 ]
           </Link>
           <button
             onClick={onLogout}

@@ -5,7 +5,7 @@ const reduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const FOOTER_TEXT = '[PROJECT: 001] // TVP // EST. 2026'
+const FOOTER_TEXT = '[PROJECT: 002 INCOMING] // TVP // EST. 2026'
 
 function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
   const [displayed, setDisplayed] = useState('')
@@ -341,7 +341,7 @@ export default function Vault({ onSuccess, glitching }) {
                       <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Checking</span>
                     </span>
-                  ) : btnHovered ? '[ Continue ]' : 'Join the Project'}
+                  ) : btnHovered ? '[ Continue ]' : 'Get Drop 002 Access'}
                 </button>
               </motion.form>
 
@@ -416,7 +416,7 @@ export default function Vault({ onSuccess, glitching }) {
                       <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Verifying</span>
                     </span>
-                  ) : btnHovered ? '[ Access Granted ]' : 'Enter the Archive'}
+                  ) : btnHovered ? '[ Access Granted ]' : 'Secure My Spot'}
                 </button>
 
                 <button
@@ -495,7 +495,7 @@ export default function Vault({ onSuccess, glitching }) {
           className="relative z-10 text-center uppercase px-6 pb-4"
           style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#111111', letterSpacing: '0.25em' }}
         >
-          [ {String(memberCount).padStart(2, '0')} MEMBERS HAVE JOINED THE PROJECT ]
+          [ {String(memberCount).padStart(2, '0')} MEMBERS — DROP 002 PRIORITY ACCESS ]
         </motion.p>
       )}
 

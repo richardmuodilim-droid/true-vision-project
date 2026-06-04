@@ -49,6 +49,7 @@ export default async function handler(req, res) {
 
   await kv.hset('tvp:emails', { [normalised]: JSON.stringify(entry) })
   await kv.lpush('tvp:members', JSON.stringify(entry))
+  await kv.sadd('tvp:drop002:waitlist', normalised)
 
   const firstName = normalisedName.split(' ')[0] || 'Member'
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
@@ -60,11 +61,15 @@ export default async function handler(req, res) {
     subject: `You're in — TVP Archive`,
     text: `${capName},
 
-You're in the archive. Member #${String(memberNumber).padStart(3, '0')}.
+You're in. Member #${String(memberNumber).padStart(3, '0')}.
 
 This isn't a brand. It's a statement. Two people, two small towns, one mission.
 
-Drop 001 is live — truevisionproject.com
+Drop 001 sold out in 24 hours. Drop 002 is coming — August 2026.
+
+As an Archive member you go first. 48 hours before anyone else.
+
+truevisionproject.com/drop-002
 
 — Richard
 True Vision Project
