@@ -168,7 +168,7 @@ export default function OurStory() {
             <span aria-hidden="true" className="absolute bottom-0 right-0 w-5 h-5 border-b border-r z-10" style={{ borderColor: 'rgba(255,255,255,0.08)' }} />
             <video autoPlay muted loop playsInline preload="metadata"
               className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'center' }}>
-              <source src="/hero.mp4" type="video/mp4" />
+              <source src="/IMG_1831~3.mp4" type="video/mp4" />
             </video>
           </motion.div>
 
