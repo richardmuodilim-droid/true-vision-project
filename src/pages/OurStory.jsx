@@ -59,7 +59,7 @@ export default function OurStory() {
 
           {/* Photo — first on mobile, right on desktop */}
           <div className="order-first sm:order-last mb-8 sm:mb-0">
-            <Photo src="/founders.jpg" alt="The two founders on the train" aspect="aspect-[3/4]" />
+            <Photo src="/25962.jpg" alt="The two founders on the train" aspect="aspect-[3/4]" />
           </div>
 
           {/* Text */}
@@ -222,8 +222,8 @@ export default function OurStory() {
 
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-2 gap-3">
-              <Photo src="/richard-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
-              <Photo src="/billy-cap.jpg" alt="Foundation Cap — worn" aspect="aspect-[3/4]" />
+              <Photo src="/25963.jpg" alt="The founders wearing TVP caps" aspect="aspect-[3/4]" />
+              <Photo src="/25964.jpg" alt="The two founders on the train" aspect="aspect-[3/4]" />
             </div>
             <Photo src="/cap-detail (2).jpg" alt="Foundation Cap — Black &amp; White" aspect="aspect-[4/3]" />
           </div>
