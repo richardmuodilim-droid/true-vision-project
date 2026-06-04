@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { mono, serif, inter, ease, reveal } from '../lib/design'
@@ -61,11 +61,23 @@ function pad(n) { return String(n).padStart(2, '0') }
 export default function Drop002() {
   const [member,      setMember]      = useState(null)
   const [timeLeft,    setTimeLeft]    = useState(getTimeLeft(REVEAL_DATE))
+  const [step,        setStep]        = useState('email')
   const [email,       setEmail]       = useState('')
+  const [name,        setName]        = useState('')
   const [submitted,   setSubmitted]   = useState(false)
   const [submitting,  setSubmitting]  = useState(false)
   const [subError,    setSubError]    = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
+  const [btnHovered,  setBtnHovered]  = useState(false)
+  const [scanning,    setScanning]    = useState(false)
+  const scanTimeout = useRef(null)
+
+  const handleBtnEnter = () => {
+    setBtnHovered(true); setScanning(false)
+    clearTimeout(scanTimeout.current)
+    scanTimeout.current = setTimeout(() => setScanning(true), 10)
+  }
+  const handleBtnLeave = () => { setBtnHovered(false); setScanning(false) }
 
   useEffect(() => { setMember(loadMember()) }, [])
 
@@ -75,15 +87,24 @@ export default function Drop002() {
     return () => clearInterval(t)
   }, [timeLeft.expired])
 
-  const handleSubmit = async (e) => {
+  const handleEmailSubmit = (e) => {
     e.preventDefault()
-    if (!email.trim()) return
+    const trimmed = email.trim()
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setSubError('Enter a valid email.'); return
+    }
+    setSubError(''); setStep('name')
+  }
+
+  const handleNameSubmit = async (e) => {
+    e.preventDefault()
+    if (!name.trim()) { setSubError('Enter your name.'); return }
     setSubmitting(true); setSubError('')
     try {
       const res  = await fetch('/api/drop002-waitlist', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email: email.trim() }),
+        body:    JSON.stringify({ email: email.trim(), name: name.trim() }),
       })
       const data = await res.json()
       if (res.ok) { setShowConfirm(true) }
@@ -379,64 +400,110 @@ export default function Drop002() {
               You go first. 48 hours before anyone else.
             </p>
           </motion.div>
+
         ) : submitted ? (
-          <motion.div {...reveal(0.04)} className="flex flex-col items-center gap-4">
+          <motion.div {...reveal(0.04)} className="flex flex-col items-center gap-5">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" aria-hidden="true" />
               <span style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.28em' }} className="uppercase">
                 You're on the list
               </span>
             </div>
-            <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.18em' }}>
+            <p style={{ ...serif, fontSize: 'clamp(20px, 4vw, 28px)', color: '#F5F3EE', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.3 }}>
               We'll reach out when it drops.
             </p>
+            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.28em' }} className="uppercase">
+              August 2026 — You'll be first.
+            </p>
           </motion.div>
+
         ) : (
-          <motion.div {...reveal(0.04)} className="flex flex-col items-center gap-6 w-full">
-            <p style={{ ...serif, fontSize: 'clamp(22px, 4vw, 32px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.2 }}>
-              Get notified<br />before it drops.
-            </p>
-            <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.24)', letterSpacing: '0.22em' }} className="uppercase">
-              Archive members get 48h early access.
-            </p>
+          <AnimatePresence mode="wait">
 
-            <form onSubmit={handleSubmit} className="flex w-full gap-0 max-w-[300px]">
-              <input
-                type="email"
-                required
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); setSubError('') }}
-                style={{ ...mono, color: '#F5F3EE', caretColor: '#F5F3EE' }}
-                className="flex-1 h-11 bg-transparent outline-none text-[11px] tracking-[0.06em] px-0
-                  border-b border-white/[0.12] focus:border-white/30
-                  placeholder:text-white/15 transition-colors duration-300"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                style={{ ...mono, fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.35)' }}
-                className="h-11 px-4 border border-white/[0.10] hover:text-white/60 hover:border-white/25
-                  transition-all duration-300 disabled:opacity-30 cursor-pointer"
+            {step === 'email' ? (
+              <motion.div key="email"
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4, ease }}
+                className="flex flex-col items-center gap-5 w-full"
               >
-                {submitting ? '...' : '→'}
-              </button>
-            </form>
+                <div className="flex flex-col items-center gap-2 mb-2">
+                  <p style={{ ...serif, fontSize: 'clamp(22px, 4vw, 32px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.2 }}>
+                    Get notified<br />before it drops.
+                  </p>
+                  <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.24)', letterSpacing: '0.22em' }} className="uppercase">
+                    Free. No spam.
+                  </p>
+                </div>
 
-            {subError && (
-              <p style={{ ...mono, fontSize: '9px', color: 'rgba(220,80,80,0.70)', letterSpacing: '0.08em' }}>
-                {subError}
-              </p>
+                <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 w-full max-w-[320px]">
+                  <input
+                    type="email" autoComplete="email" placeholder="YOUR@EMAIL.COM"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setSubError('') }}
+                    style={{ ...mono, fontSize: '11px', letterSpacing: '0.12em', color: '#F5F3EE', caretColor: '#F5F3EE', background: 'rgba(255,255,255,0.04)', borderColor: subError ? 'rgba(220,80,80,0.5)' : 'rgba(255,255,255,0.14)' }}
+                    className="w-full h-[52px] border outline-none px-5 text-center uppercase placeholder:text-white/18 focus:border-white/35 transition-colors duration-300"
+                  />
+                  {subError && (
+                    <p style={{ ...mono, fontSize: '9px', color: 'rgba(220,80,80,0.70)', letterSpacing: '0.08em' }} className="text-center">{subError}</p>
+                  )}
+                  <button type="submit"
+                    onMouseEnter={handleBtnEnter} onMouseLeave={handleBtnLeave}
+                    className={`btn-vault w-full h-[52px] border text-[11px] tracking-[0.45em] uppercase transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                    style={{ ...mono, borderColor: btnHovered ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.18)', color: btnHovered ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.45)', background: btnHovered ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                  >
+                    <span className="scanline" aria-hidden="true" />
+                    {btnHovered ? '[ Continue ]' : 'Get Access'}
+                  </button>
+                </form>
+              </motion.div>
+
+            ) : (
+              <motion.div key="name"
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4, ease }}
+                className="flex flex-col items-center gap-5 w-full"
+              >
+                <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.28em' }} className="uppercase text-center mb-1">
+                  One more thing — your name
+                </p>
+
+                <form onSubmit={handleNameSubmit} className="flex flex-col gap-3 w-full max-w-[320px]">
+                  <input
+                    type="text" autoComplete="name" placeholder="YOUR FULL NAME" autoFocus
+                    value={name}
+                    onChange={(e) => { setName(e.target.value); setSubError('') }}
+                    style={{ ...mono, fontSize: '11px', letterSpacing: '0.12em', color: '#F5F3EE', caretColor: '#F5F3EE', background: 'rgba(255,255,255,0.04)', borderColor: subError ? 'rgba(220,80,80,0.5)' : 'rgba(255,255,255,0.14)' }}
+                    className="w-full h-[52px] border outline-none px-5 text-center uppercase placeholder:text-white/18 focus:border-white/35 transition-colors duration-300"
+                  />
+                  {subError && (
+                    <p style={{ ...mono, fontSize: '9px', color: 'rgba(220,80,80,0.70)', letterSpacing: '0.08em' }} className="text-center">{subError}</p>
+                  )}
+                  <button type="submit" disabled={submitting}
+                    onMouseEnter={handleBtnEnter} onMouseLeave={handleBtnLeave}
+                    className={`btn-vault w-full h-[52px] border text-[11px] tracking-[0.45em] uppercase disabled:opacity-30 transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                    style={{ ...mono, borderColor: btnHovered ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.18)', color: btnHovered ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.45)', background: btnHovered ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                  >
+                    <span className="scanline" aria-hidden="true" />
+                    {submitting ? (
+                      <span className="inline-flex items-center justify-center gap-3">
+                        <span className="w-3 h-3 border border-white/20 border-t-white/60 rounded-full animate-spin" aria-hidden="true" />
+                        <span>Registering</span>
+                      </span>
+                    ) : btnHovered ? '[ Secure My Spot ]' : 'Join the Waitlist'}
+                  </button>
+                  <button type="button"
+                    onClick={() => { setStep('email'); setSubError('') }}
+                    style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.22em' }}
+                    className="uppercase cursor-pointer hover:opacity-50 transition-opacity duration-300"
+                  >
+                    ← back
+                  </button>
+                </form>
+              </motion.div>
             )}
-
-            <Link
-              to="/waitlist"
-              style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.22)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
-              className="uppercase pb-px hover:opacity-60 transition-opacity duration-300"
-            >
-              Join the Archive for priority access →
-            </Link>
-          </motion.div>
+          </AnimatePresence>
         )}
       </section>
 

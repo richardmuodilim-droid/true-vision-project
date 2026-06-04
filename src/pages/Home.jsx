@@ -173,7 +173,7 @@ export default function Home() {
             className="flex flex-col gap-3 w-full max-w-[340px]"
           >
             <Link
-              to="/waitlist"
+              to="/drop-002"
               style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
               className="w-full flex items-center justify-center px-8 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300"
             >
@@ -291,7 +291,7 @@ export default function Home() {
 
               {/* CTA → Archive */}
               <Link
-                to="/waitlist"
+                to="/drop-002"
                 style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
                 className="w-full flex items-center justify-center py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
               >
@@ -464,7 +464,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
-            <Link to="/waitlist"
+            <Link to="/drop-002"
               style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
               className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
               [ Join the Waitlist ]
