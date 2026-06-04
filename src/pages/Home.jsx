@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProduct } from '../data/products'
 import Footer from '../components/Footer'
+import WaitlistConfirmScreen from '../components/WaitlistConfirmScreen'
 import { mono, serif, inter, ease, reveal, lineGrow } from '../lib/design'
 
 const CAP = getProduct('foundation-cap')
@@ -50,10 +51,11 @@ export default function Home() {
   const { dispatch }   = useCart()
   const [activeColor, setActiveColor]         = useState(0)
   const [addedFeedback, setAddedFeedback]     = useState(false)
-  const [waitlistEmail, setWaitlistEmail]     = useState('')
-  const [waitlistDone, setWaitlistDone]       = useState(false)
-  const [waitlistBusy, setWaitlistBusy]       = useState(false)
-  const [waitlistError, setWaitlistError]     = useState('')
+  const [waitlistEmail,   setWaitlistEmail]   = useState('')
+  const [waitlistDone,    setWaitlistDone]    = useState(false)
+  const [waitlistBusy,    setWaitlistBusy]    = useState(false)
+  const [waitlistError,   setWaitlistError]   = useState('')
+  const [waitlistConfirm, setWaitlistConfirm] = useState(false)
   const productRef = useRef(null)
 
   const handleWaitlist = async (e) => {
@@ -66,7 +68,7 @@ export default function Home() {
         body: JSON.stringify({ email: waitlistEmail.trim() }),
       })
       const data = await res.json()
-      if (res.ok) setWaitlistDone(true)
+      if (res.ok) setWaitlistConfirm(true)
       else setWaitlistError(data.error || 'Something went wrong.')
     } catch { setWaitlistError('Connection error. Try again.') }
     setWaitlistBusy(false)
@@ -95,6 +97,12 @@ export default function Home() {
   }
 
   return (
+    <>
+    <AnimatePresence>
+      {waitlistConfirm && (
+        <WaitlistConfirmScreen onComplete={() => { setWaitlistConfirm(false); setWaitlistDone(true) }} />
+      )}
+    </AnimatePresence>
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
@@ -539,5 +547,6 @@ export default function Home() {
 
       <Footer />
     </div>
+    </>
   )
 }

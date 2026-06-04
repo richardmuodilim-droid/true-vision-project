@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { mono, serif, inter, ease, reveal } from '../lib/design'
+import WaitlistConfirmScreen from '../components/WaitlistConfirmScreen'
 
 const LS_KEY     = 'TrueVisionMember'
 const REVEAL_DATE = new Date('2026-08-01T12:00:00+01:00')
@@ -58,12 +59,13 @@ function getTimeLeft(target) {
 function pad(n) { return String(n).padStart(2, '0') }
 
 export default function Drop002() {
-  const [member,     setMember]     = useState(null)
-  const [timeLeft,   setTimeLeft]   = useState(getTimeLeft(REVEAL_DATE))
-  const [email,      setEmail]      = useState('')
-  const [submitted,  setSubmitted]  = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [subError,   setSubError]   = useState('')
+  const [member,      setMember]      = useState(null)
+  const [timeLeft,    setTimeLeft]    = useState(getTimeLeft(REVEAL_DATE))
+  const [email,       setEmail]       = useState('')
+  const [submitted,   setSubmitted]   = useState(false)
+  const [submitting,  setSubmitting]  = useState(false)
+  const [subError,    setSubError]    = useState('')
+  const [showConfirm, setShowConfirm] = useState(false)
 
   useEffect(() => { setMember(loadMember()) }, [])
 
@@ -84,7 +86,7 @@ export default function Drop002() {
         body:    JSON.stringify({ email: email.trim() }),
       })
       const data = await res.json()
-      if (res.ok) { setSubmitted(true) }
+      if (res.ok) { setShowConfirm(true) }
       else { setSubError(data.error || 'Something went wrong.') }
     } catch { setSubError('Connection error. Try again.') }
     setSubmitting(false)
@@ -93,6 +95,12 @@ export default function Drop002() {
   const firstName = member?.name ? member.name.trim().split(/\s+/)[0] : null
 
   return (
+    <>
+    <AnimatePresence>
+      {showConfirm && (
+        <WaitlistConfirmScreen onComplete={() => { setShowConfirm(false); setSubmitted(true) }} />
+      )}
+    </AnimatePresence>
     <div className="min-h-screen bg-[#0a0909]">
       <div className="grain" aria-hidden="true" style={{ opacity: 0.6 }} />
 
@@ -443,5 +451,6 @@ export default function Drop002() {
         </Link>
       </div>
     </div>
+    </>
   )
 }
