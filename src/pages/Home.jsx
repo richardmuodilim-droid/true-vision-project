@@ -48,9 +48,29 @@ const CornerMarks = ({ dark = false }) => {
 export default function Home() {
   const { onCartOpen } = useOutletContext()
   const { dispatch }   = useCart()
-  const [activeColor, setActiveColor]     = useState(0)
-  const [addedFeedback, setAddedFeedback] = useState(false)
+  const [activeColor, setActiveColor]         = useState(0)
+  const [addedFeedback, setAddedFeedback]     = useState(false)
+  const [waitlistEmail, setWaitlistEmail]     = useState('')
+  const [waitlistDone, setWaitlistDone]       = useState(false)
+  const [waitlistBusy, setWaitlistBusy]       = useState(false)
+  const [waitlistError, setWaitlistError]     = useState('')
   const productRef = useRef(null)
+
+  const handleWaitlist = async (e) => {
+    e.preventDefault()
+    if (!waitlistEmail.trim()) return
+    setWaitlistBusy(true); setWaitlistError('')
+    try {
+      const res  = await fetch('/api/drop002-waitlist', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: waitlistEmail.trim() }),
+      })
+      const data = await res.json()
+      if (res.ok) setWaitlistDone(true)
+      else setWaitlistError(data.error || 'Something went wrong.')
+    } catch { setWaitlistError('Connection error. Try again.') }
+    setWaitlistBusy(false)
+  }
 
   const handleAddToCart = () => {
     dispatch({
@@ -152,11 +172,11 @@ export default function Home() {
               [ View Drop 001 ]
             </button>
             <Link
-              to="/archive"
+              to="/drop-002"
               style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', color: 'rgba(255,255,255,0.70)', border: '1px solid rgba(255,255,255,0.28)' }}
               className="w-full sm:w-auto flex items-center justify-center px-8 py-5 uppercase hover:bg-white/[0.08] transition-all duration-300"
             >
-              [ Join the Archive ]
+              [ Join Drop 002 Waitlist ]
             </Link>
           </motion.div>
         </div>
@@ -267,15 +287,15 @@ export default function Home() {
 
               {/* CTA → Archive */}
               <Link
-                to="/archive"
+                to="/drop-002"
                 style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
                 className="w-full flex items-center justify-center py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
               >
-                [ Join Archive — Drop 002 Access ]
+                [ Join Drop 002 Waitlist ]
               </Link>
 
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }} className="text-center mt-3">
-                Free. Archive members get early access to every drop.
+                Free. Be first when Drop 002 drops.
               </p>
             </motion.div>
           </div>
@@ -432,26 +452,57 @@ export default function Home() {
           >
             Something<br />Is Coming.
           </motion.h2>
-          <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-12 sm:mb-14">
-            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">[ August 2026 ]</p>
-            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.40)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
-              Archive members get access before anyone else.
+          <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-10 sm:mb-12">
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">[ August 2026 — The Tracksuit ]</p>
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
+              3 colourways. Hidden pocket. Limited run.
             </p>
           </motion.div>
+
           <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
-            <Link to="/archive"
-              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
-              className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
-              [ Secure Your Access ]
-            </Link>
-            <Link to="/drop-002"
-              style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.12)' }}
-              className="w-full flex items-center justify-center py-[17px] uppercase hover:bg-white/[0.04] transition-all duration-300">
-              [ Join the Waitlist ]
-            </Link>
-            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }} className="text-center pt-1">
-              Free. No spam. No commitment.
-            </p>
+            {waitlistDone ? (
+              <div className="flex items-center gap-3 py-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0" aria-hidden="true" />
+                <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.26em' }} className="uppercase">
+                  You're on the list — we'll reach out when it drops.
+                </p>
+              </div>
+            ) : (
+              <>
+                <form onSubmit={handleWaitlist} className="flex w-full gap-0">
+                  <input
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    value={waitlistEmail}
+                    onChange={(e) => { setWaitlistEmail(e.target.value); setWaitlistError('') }}
+                    style={{ ...mono, color: '#F5F3EE', caretColor: '#F5F3EE', background: 'rgba(255,255,255,0.04)', fontSize: '11px', letterSpacing: '0.06em' }}
+                    className="flex-1 h-14 outline-none px-4 border border-white/[0.12] focus:border-white/30 placeholder:text-white/20 transition-colors duration-300"
+                  />
+                  <button
+                    type="submit"
+                    disabled={waitlistBusy}
+                    style={{ ...mono, fontSize: '9px', letterSpacing: '0.32em', background: '#F5F3EE', color: '#111111' }}
+                    className="h-14 px-5 uppercase hover:bg-white/90 transition-all duration-300 disabled:opacity-40 cursor-pointer shrink-0"
+                  >
+                    {waitlistBusy ? '...' : 'Join'}
+                  </button>
+                </form>
+                {waitlistError && (
+                  <p style={{ ...mono, fontSize: '8px', color: 'rgba(220,80,80,0.75)', letterSpacing: '0.08em' }}>{waitlistError}</p>
+                )}
+                <div className="flex items-center justify-between pt-1">
+                  <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }}>
+                    Free. No spam.
+                  </p>
+                  <Link to="/drop-002"
+                    style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.12)' }}
+                    className="uppercase pb-px hover:opacity-60 transition-opacity duration-300">
+                    See what's coming →
+                  </Link>
+                </div>
+              </>
+            )}
           </motion.div>
         </div>
       </section>
