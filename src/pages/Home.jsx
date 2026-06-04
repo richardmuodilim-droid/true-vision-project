@@ -1,17 +1,12 @@
-import { useState, useRef } from 'react'
-import { Link, useOutletContext } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useCart } from '../context/CartContext'
-import { getProduct } from '../data/products'
+import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import Footer from '../components/Footer'
-import WaitlistConfirmScreen from '../components/WaitlistConfirmScreen'
 import { mono, serif, inter, ease, reveal, lineGrow } from '../lib/design'
 
-const CAP = getProduct('foundation-cap')
-
 const CAP_COLORS = [
-  { name: 'Black', hex: '#0a0a0a', imgSrc: '/cap-black.jpg' },
-  { name: 'White', hex: '#f5f2ec', imgSrc: '/cap-white.jpg' },
+  { name: 'Black', imgSrc: '/cap-black.jpg' },
+  { name: 'White', imgSrc: '/cap-white.jpg' },
 ]
 
 const fast = (delay = 0) => ({ duration: 0.55, delay, ease })
@@ -47,82 +42,69 @@ const CornerMarks = ({ dark = false }) => {
 }
 
 export default function Home() {
-  const { onCartOpen } = useOutletContext()
-  const { dispatch }   = useCart()
-  const [activeColor, setActiveColor]         = useState(0)
-  const [addedFeedback, setAddedFeedback]     = useState(false)
-  const [waitlistEmail,   setWaitlistEmail]   = useState('')
-  const [waitlistDone,    setWaitlistDone]    = useState(false)
-  const [waitlistBusy,    setWaitlistBusy]    = useState(false)
-  const [waitlistError,   setWaitlistError]   = useState('')
-  const [waitlistConfirm, setWaitlistConfirm] = useState(false)
-  const productRef = useRef(null)
+  const heroRef = useRef(null)
+  const [showFloatingCTA, setShowFloatingCTA] = useState(false)
 
-  const handleWaitlist = async (e) => {
-    e.preventDefault()
-    if (!waitlistEmail.trim()) return
-    setWaitlistBusy(true); setWaitlistError('')
-    try {
-      const res  = await fetch('/api/drop002-waitlist', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: waitlistEmail.trim() }),
-      })
-      const data = await res.json()
-      if (res.ok) setWaitlistConfirm(true)
-      else setWaitlistError(data.error || 'Something went wrong.')
-    } catch { setWaitlistError('Connection error. Try again.') }
-    setWaitlistBusy(false)
-  }
-
-  const handleAddToCart = () => {
-    dispatch({
-      type: 'ADD',
-      item: {
-        id:     'foundation-cap',
-        name:   'Foundation Cap',
-        price:  CAP.price,
-        size:   'One Size',
-        color:  CAP_COLORS[activeColor].name,
-        imgSrc: CAP_COLORS[activeColor].imgSrc,
-        qty:    1,
-      },
-    })
-    setAddedFeedback(true)
-    setTimeout(() => setAddedFeedback(false), 2000)
-    onCartOpen()
-  }
-
-  const scrollToProduct = () => {
-    productRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowFloatingCTA(!entry.isIntersecting),
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <>
-    <AnimatePresence>
-      {waitlistConfirm && (
-        <WaitlistConfirmScreen onComplete={() => { setWaitlistConfirm(false); setWaitlistDone(true) }} />
+      {/* Floating mobile CTA — appears after scrolling past hero */}
+      {showFloatingCTA && (
+        <motion.div
+          initial={{ y: 80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.35, ease }}
+          className="fixed bottom-0 left-0 right-0 z-40 sm:hidden"
+          style={{ background: 'rgba(10,9,9,0.96)', backdropFilter: 'blur(8px)', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          <div className="flex items-center justify-between px-5 py-4 gap-4">
+            <div>
+              <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.60)', letterSpacing: '0.28em' }} className="uppercase">
+                Drop 002 — August 2026
+              </p>
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.16em' }}>
+                The Tracksuit. Free to join.
+              </p>
+            </div>
+            <Link
+              to="/drop-002"
+              style={{ ...mono, fontSize: '9px', letterSpacing: '0.30em', background: '#F5F3EE', color: '#111111' }}
+              className="flex items-center justify-center px-5 py-3 uppercase shrink-0 hover:bg-white/90 transition-colors duration-300"
+            >
+              Join →
+            </Link>
+          </div>
+        </motion.div>
       )}
-    </AnimatePresence>
+
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
       {/* ═══════════════════════════════════════════════════════════════
-          01 — HERO (static image)
+          01 — HERO
       ═══════════════════════════════════════════════════════════════ */}
       <section
+        ref={heroRef}
         className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 sm:px-12 text-center pt-[78px] overflow-hidden"
         aria-label="True Vision Project"
       >
-        {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: 'url(/cap-hooded.jpg)', filter: 'saturate(0.10) brightness(0.42)' }}
           aria-hidden="true"
         />
-        {/* Subtle vignette */}
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.35) 100%)' }} aria-hidden="true" />
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col items-center w-full">
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.08)}
@@ -153,6 +135,14 @@ export default function Home() {
               >{w}</motion.span>
             ))}
           </h1>
+
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.58)}
+            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 9px)', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.28em' }}
+            className="uppercase mb-5"
+          >
+            Drop 001 — 24 units — Sold out in 24 hours — No ads.
+          </motion.p>
 
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.64)}
@@ -211,10 +201,9 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          02 — DROP 001 ARCHIVE (sold out)
+          02 — DROP 001 PROOF (sold out)
       ═══════════════════════════════════════════════════════════════ */}
       <section
-        ref={productRef}
         className="relative scroll-mt-[78px]"
         style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
         aria-label="Foundation Cap — Drop 001"
@@ -224,7 +213,6 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
 
-            {/* Both caps side by side */}
             <div className="grid grid-cols-2 gap-3">
               {CAP_COLORS.map(c => (
                 <motion.div
@@ -247,7 +235,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Info */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -259,7 +246,6 @@ export default function Home() {
                 The Foundation Cap
               </h2>
 
-              {/* Stats */}
               <div className="grid grid-cols-3 gap-4 mb-8 pb-8" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
                 {[['024', 'Units'], ['24h', 'Sold Out'], ['€32', 'Drop 001']].map(([n, l]) => (
                   <div key={l}>
@@ -282,14 +268,12 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Sold out badge */}
               <div className="w-full py-4 mb-5 flex items-center justify-center" style={{ border: '1px solid rgba(0,0,0,0.12)' }}>
                 <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.40em' }} className="uppercase">
                   [ Sold Out ]
                 </p>
               </div>
 
-              {/* CTA → Archive */}
               <Link
                 to="/drop-002"
                 style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
@@ -297,7 +281,6 @@ export default function Home() {
               >
                 [ Join Drop 002 Waitlist ]
               </Link>
-
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }} className="text-center mt-3">
                 Free. Be first when Drop 002 drops.
               </p>
@@ -307,7 +290,61 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          03 — DOCUMENTARY (unboxing video + statement)
+          03 — SOMETHING IS COMING (moved up for conversion)
+      ═══════════════════════════════════════════════════════════════ */}
+      <section
+        className="relative min-h-[100dvh] flex items-center overflow-hidden"
+        style={{ background: '#0a0a0a' }}
+        aria-label="Drop 002"
+      >
+        <motion.p
+          initial={{ opacity: 0 }} whileInView={{ opacity: 0.035 }} viewport={{ once: true }}
+          transition={{ duration: 1.8 }}
+          style={{ ...serif, fontSize: 'clamp(100px, 28vw, 260px)', color: '#ffffff', fontWeight: 500, lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}
+          className="absolute -bottom-6 -right-6 sm:-bottom-10 sm:-right-10 select-none"
+          aria-hidden="true"
+        >002</motion.p>
+
+        <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
+          <SectionTag n="03" label="Drop 002 — Classified" dark />
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.9, delay: 0.04, ease }}
+            style={{ ...serif, fontSize: 'clamp(50px, 13vw, 100px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.01 }}
+            className="mb-8 sm:mb-10"
+          >
+            Something<br />Is Coming.
+          </motion.h2>
+          <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-10 sm:mb-12">
+            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">[ August 2026 — The Tracksuit ]</p>
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
+              3 colourways. Hidden pocket. Limited run.
+            </p>
+          </motion.div>
+
+          <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
+            <Link to="/drop-002"
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
+              className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
+              [ Join the Waitlist ]
+            </Link>
+            <div className="flex items-center justify-between px-1 pt-1">
+              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }}>
+                Free. No spam.
+              </p>
+              <Link to="/drop-002"
+                style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.12)' }}
+                className="uppercase pb-px hover:opacity-60 transition-opacity duration-300">
+                See what's coming →
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          04 — DOCUMENTARY
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative min-h-[100dvh] flex items-center overflow-hidden"
@@ -315,10 +352,9 @@ export default function Home() {
         aria-label="The Mission"
       >
         <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <SectionTag n="03" label="Drop 001 — Documented" dark />
+          <SectionTag n="04" label="Drop 001 — Documented" dark />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-center">
 
-            {/* Unboxing video */}
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -359,7 +395,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          04 — COMMUNITY (people + two more videos)
+          05 — THE PEOPLE
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative py-16 sm:py-24"
@@ -367,9 +403,8 @@ export default function Home() {
         aria-label="The People"
       >
         <div className="max-w-4xl mx-auto px-6 sm:px-10">
-          <SectionTag n="04" label="The People" />
+          <SectionTag n="05" label="The People" />
 
-          {/* Photo grid — 3 col */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
             {[
               '/community-dublin.jpg',
@@ -397,7 +432,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Two videos side by side */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             {['/unbox-2.mp4', '/customer-wearing.mp4'].map((src, i) => (
               <motion.div
@@ -426,60 +460,6 @@ export default function Home() {
           >
             Drop 001 — Received by the foundation
           </motion.p>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          05 — SOMETHING IS COMING
-      ═══════════════════════════════════════════════════════════════ */}
-      <section
-        className="relative min-h-[100dvh] flex items-center overflow-hidden"
-        style={{ background: '#0a0a0a' }}
-        aria-label="Drop 002"
-      >
-        <motion.p
-          initial={{ opacity: 0 }} whileInView={{ opacity: 0.035 }} viewport={{ once: true }}
-          transition={{ duration: 1.8 }}
-          style={{ ...serif, fontSize: 'clamp(100px, 28vw, 260px)', color: '#ffffff', fontWeight: 500, lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}
-          className="absolute -bottom-6 -right-6 sm:-bottom-10 sm:-right-10 select-none"
-          aria-hidden="true"
-        >002</motion.p>
-
-        <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <SectionTag n="05" label="Drop 002 — Classified" dark />
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.9, delay: 0.04, ease }}
-            style={{ ...serif, fontSize: 'clamp(50px, 13vw, 100px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.01 }}
-            className="mb-8 sm:mb-10"
-          >
-            Something<br />Is Coming.
-          </motion.h2>
-          <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-10 sm:mb-12">
-            <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">[ August 2026 — The Tracksuit ]</p>
-            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
-              3 colourways. Hidden pocket. Limited run.
-            </p>
-          </motion.div>
-
-          <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
-            <Link to="/drop-002"
-              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
-              className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
-              [ Join the Waitlist ]
-            </Link>
-            <div className="flex items-center justify-between px-1 pt-1">
-              <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }}>
-                Free. No spam.
-              </p>
-              <Link to="/drop-002"
-                style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.12)' }}
-                className="uppercase pb-px hover:opacity-60 transition-opacity duration-300">
-                See what's coming →
-              </Link>
-            </div>
-          </motion.div>
         </div>
       </section>
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useCart } from '../context/CartContext'
 import { mono, ease } from '../lib/design'
 
 const NAV_LINKS = [
@@ -12,7 +11,6 @@ const NAV_LINKS = [
 ]
 
 export default function Navbar({ onCartOpen }) {
-  const { itemCount } = useCart()
   const [scrolled,  setScrolled]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const location = useLocation()
@@ -106,30 +104,6 @@ export default function Navbar({ onCartOpen }) {
               </Link>
             </nav>
 
-            {/* Cart */}
-            <button
-              onClick={onCartOpen}
-              aria-label={`Open cart — ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
-              className="relative flex items-center justify-center w-8 h-8 transition-opacity duration-500 hover:opacity-60 cursor-pointer"
-              style={{ color: 'rgba(0,0,0,0.50)' }}
-            >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 01-8 0" />
-              </svg>
-              {itemCount > 0 && (
-                <motion.span
-                  key={itemCount}
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-[#111111] rounded-full flex items-center justify-center text-[7px] text-[#F5F3EE] font-medium leading-none"
-                  aria-hidden="true"
-                >
-                  {itemCount > 9 ? '9+' : itemCount}
-                </motion.span>
-              )}
-            </button>
 
             {/* Mobile hamburger */}
             <button

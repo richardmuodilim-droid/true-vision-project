@@ -14,7 +14,7 @@ function saveWaitlistMember(data) {
   try { localStorage.setItem(LS_KEY, JSON.stringify(data)) } catch {}
 }
 
-const LS_KEY     = 'TrueVisionMember'
+const ARCHIVE_KEY = 'TrueVisionMember'
 const REVEAL_DATE = new Date('2026-08-01T12:00:00+01:00')
 
 const COLOURWAYS = [
@@ -49,7 +49,7 @@ const COLOURWAYS = [
 
 function loadMember() {
   try {
-    const raw = localStorage.getItem(LS_KEY)
+    const raw = localStorage.getItem(ARCHIVE_KEY)
     return raw ? JSON.parse(raw) : null
   } catch { return null }
 }

@@ -5,7 +5,7 @@ const reduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const FOOTER_TEXT = '[PROJECT: 002 INCOMING] // TVP // EST. 2026'
+const FOOTER_TEXT = '[PROJECT: 002 INCOMING] // TVP // ARCHIVE MEMBERS GO FIRST'
 
 function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
   const [displayed, setDisplayed] = useState('')
@@ -486,17 +486,21 @@ export default function Vault({ onSuccess, glitching }) {
         </motion.div>
       </div>
 
-      {/* Member count */}
+      {/* Member count + priority messaging */}
       {memberCount !== null && (
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.35 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.4 }}
-          className="relative z-10 text-center uppercase px-6 pb-4"
-          style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: '#111111', letterSpacing: '0.25em' }}
+          className="relative z-10 text-center uppercase px-6 pb-2 flex flex-col items-center gap-2"
         >
-          [ {String(memberCount).padStart(2, '0')} MEMBERS — DROP 002 PRIORITY ACCESS ]
-        </motion.p>
+          <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.25em' }}>
+            [ {String(memberCount).padStart(2, '0')} MEMBERS — DROP 002 PRIORITY ACCESS ]
+          </p>
+          <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }}>
+            Archive members go 48h before the public waitlist opens.
+          </p>
+        </motion.div>
       )}
 
       {/* Sync progress bar */}
