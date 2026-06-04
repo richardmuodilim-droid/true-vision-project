@@ -3,6 +3,16 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { mono, serif, inter, ease, reveal } from '../lib/design'
 import WaitlistConfirmScreen from '../components/WaitlistConfirmScreen'
+import Drop002Entry from '../components/Drop002Entry'
+
+const LS_KEY = 'TVPWaitlist'
+
+function loadWaitlistMember() {
+  try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null } catch { return null }
+}
+function saveWaitlistMember(data) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)) } catch {}
+}
 
 const LS_KEY     = 'TrueVisionMember'
 const REVEAL_DATE = new Date('2026-08-01T12:00:00+01:00')
@@ -59,7 +69,8 @@ function getTimeLeft(target) {
 function pad(n) { return String(n).padStart(2, '0') }
 
 export default function Drop002() {
-  const [member,      setMember]      = useState(null)
+  const [member,       setMember]       = useState(null)
+  const [waitlistMember, setWaitlistMember] = useState(() => loadWaitlistMember())
   const [timeLeft,    setTimeLeft]    = useState(getTimeLeft(REVEAL_DATE))
   const [step,        setStep]        = useState('email')
   const [email,       setEmail]       = useState('')
@@ -107,19 +118,29 @@ export default function Drop002() {
         body:    JSON.stringify({ email: email.trim(), name: name.trim() }),
       })
       const data = await res.json()
-      if (res.ok) { setShowConfirm(true) }
-      else { setSubError(data.error || 'Something went wrong.') }
+      if (res.ok) {
+        saveWaitlistMember({ name: name.trim(), email: email.trim() })
+        setShowConfirm(true)
+      } else { setSubError(data.error || 'Something went wrong.') }
     } catch { setSubError('Connection error. Try again.') }
     setSubmitting(false)
   }
 
   const firstName = member?.name ? member.name.trim().split(/\s+/)[0] : null
 
+  // Returning waitlist member — go straight inside
+  if (waitlistMember && !showConfirm) {
+    return <Drop002Entry name={waitlistMember.name} onExit={() => { localStorage.removeItem(LS_KEY); setWaitlistMember(null) }} />
+  }
+
   return (
     <>
     <AnimatePresence>
       {showConfirm && (
-        <WaitlistConfirmScreen onComplete={() => { setShowConfirm(false); setSubmitted(true) }} />
+        <WaitlistConfirmScreen onComplete={() => {
+          setShowConfirm(false)
+          setWaitlistMember(loadWaitlistMember())
+        }} />
       )}
     </AnimatePresence>
     <div className="min-h-screen bg-[#0a0909]">
