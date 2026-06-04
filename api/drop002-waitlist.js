@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   }
 
   await resend.emails.send({
-    from: 'Richard @ TVP <archive@truevisionproject.com>',
+    from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
     subject: `You're on the list — Drop 002`,
@@ -40,8 +40,7 @@ You'll hear from us before anyone else. When it drops, you'll have the link firs
 
 truevisionproject.com/drop-002
 
-— Richard
-True Vision Project
+— True Vision Project
 
 ---
 You joined the waitlist at truevisionproject.com. Reply DELETE to be removed.`,

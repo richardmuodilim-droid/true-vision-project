@@ -55,7 +55,7 @@ export default async function handler(req, res) {
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
 
   await resend.emails.send({
-    from: 'Richard @ TVP <archive@truevisionproject.com>',
+    from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
     subject: `You're in — TVP Archive`,
@@ -71,8 +71,7 @@ As an Archive member you go first. 48 hours before anyone else.
 
 truevisionproject.com/drop-002
 
-— Richard
-True Vision Project
+— True Vision Project
 
 ---
 You registered at truevisionproject.com. Reply DELETE to be removed.`,
