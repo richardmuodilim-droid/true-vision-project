@@ -1,179 +1,272 @@
-# TRUE VISION PROJECT — CLAUDE INSTRUCTIONS
-> This file is read automatically by Claude Code every session. Never delete it.
+# TRUE VISION PROJECT — MASTER DOCUMENT
+> This file is read automatically every session. It is the single source of truth. Always update it when something changes.
 
 ---
 
 ## THE PROJECT
 
-Irish fashion brand and editorial store. Live at **truevisionproject.com**.
-GitHub: `richardmuodilim-droid/true-vision-project`
-Auto-deploys to Vercel on every push to `main`.
+**Brand:** True Vision Project (TVP)
+**Live site:** truevisionproject.com
+**GitHub:** richardmuodilim-droid/true-vision-project
+**Deploy:** Auto-deploys via Vercel on every push to `main`
+**Local path:** `C:\Users\muodi\Desktop\Antigravity Project\true-vision-project`
 
-Richard (user) is the co-founder and builds everything with Claude. His partner handles social media.
-Move fast. Build clean. Push after every change.
+**Two founders:**
+- Richard — Wexford, Ireland
+- Partner — Bergamo, Italy
+
+**Core statement:** "Built from nothing. Worn by those who understand."
+**Est:** 2026
 
 ---
 
 ## COMMANDS
 
 ```bash
-npm run dev          # local dev server
-npm run build        # production build check
-git add [files] && git commit -m "..." && git push   # deploy to Vercel
+npm run dev          # local dev server (localhost:5173)
+npm run build        # production build check — always run before pushing
+git add [files] && git commit -m "..." && git push   # deploys to Vercel in ~60s
 ```
 
-Always push specific files, never `git add .` blindly — avoid committing .env or secrets.
-Always push after completing a task. Vercel deploys automatically.
+Always push specific files. Never `git add .` blindly — avoid committing .env or secrets.
 
 ---
 
 ## TECH STACK
 
-| Layer | Tech |
-|---|---|
-| Frontend | React 18 + Vite + TailwindCSS + Framer Motion |
-| Routing | React Router v6 — BrowserRouter + Routes |
-| Hosting | Vercel (auto-deploy) |
-| Database | Vercel KV (Redis) |
-| Email | Resend — FROM archive@truevisionproject.com |
-| Payments | Stripe live |
-| DNS | Namecheap — all records verified |
+| Layer      | Tech                                              |
+|------------|---------------------------------------------------|
+| Frontend   | React 18 + Vite + TailwindCSS + Framer Motion    |
+| Routing    | React Router v6 — BrowserRouter + Routes         |
+| Hosting    | Vercel (auto-deploy on push to main)              |
+| Database   | Vercel KV (Redis)                                 |
+| Email      | Resend — FROM archive@truevisionproject.com       |
+| Payments   | Stripe live                                       |
+| DNS        | Namecheap — all records verified                  |
 
 ---
 
-## ROUTING
+## DESIGN SYSTEM — NEVER DEVIATE
 
-| Route | File | Notes |
-|---|---|---|
-| `/` | `src/pages/Landing.jsx` | NO Navbar — standalone cinematic entrance |
-| `/store` | `src/pages/Home.jsx` | StoreShell |
-| `/product/:id` | `src/pages/Product.jsx` | StoreShell |
-| `/category/:slug` | `src/pages/Category.jsx` | StoreShell |
-| `/checkout` | `src/pages/Checkout.jsx` | StoreShell |
-| `/order-success` | `src/pages/OrderSuccess.jsx` | StoreShell |
-| `/archive` | ArchiveFlow in App.jsx | Screen-based state — NOT React Router |
-| `/archive-admin` | `src/components/AdminPage.jsx` | Password protected |
+**Background:** `#F5F3EE` (warm off-white — everywhere)
+**Dark sections:** `#111111`
+**Drop 002 dark:** `#0a0909`
 
-**StoreShell** = Navbar + Cart drawer + Outlet with `{ onCartOpen }` context.
-
----
-
-## API ENDPOINTS
-
-All in `/api/` — Vercel serverless functions.
-
-| File | Method | Does |
-|---|---|---|
-| `submit.js` | POST | Register member, send welcome email (plain text) |
-| `lookup.js` | POST | Check if email already exists |
-| `ping.js` | POST | Log member last-seen timestamp |
-| `count.js` | GET | Return total member count |
-| `admin.js` | POST | Return all members + lastseen (password protected) |
-| `delete.js` | DELETE | Remove a member |
-| `create-checkout-session.js` | POST | Create Stripe checkout session |
-| `send-welcome-all.js` | POST | Bulk resend welcome email |
-
-**Vercel KV keys:** `tvp:emails`, `tvp:members`, `tvp:count`, `tvp:lastseen`
-
-**Env vars (never hardcode):** `RESEND_API_KEY`, `STRIPE_SECRET_KEY`, `ADMIN_PASSWORD`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`
-
----
-
-## DESIGN SYSTEM — NEVER DEVIATE FROM THESE
-
-**Fonts:**
-- `'Space Mono', monospace` — technical labels, metadata, buttons, IDs
-- `'Cormorant Garamond', serif` — narrative headings, quotes, story copy
-
-**Shorthand used in files:**
+**Fonts (imported from src/lib/design.js):**
 ```js
-const mono = { fontFamily: "'Space Mono', monospace" }
-const serif = { fontFamily: "'Cormorant Garamond', serif" }
+import { mono, serif, inter, ease, reveal, lineGrow } from '../lib/design'
+
+mono  = { fontFamily: "'Space Mono', monospace" }    // labels, buttons, UI
+serif = { fontFamily: "'Cormorant Garamond', serif" } // headlines, editorial
+inter = { fontFamily: "'Inter', sans-serif" }         // body text
+ease  = [0.16, 1, 0.3, 1]
 ```
 
-**Colors:** Pure black `#000000` bg. White text with opacity layers (/85 /60 /40 /25 /15).
-**No colour accents.** No gradients except atmospheric radial black/white.
+**Always import from `../lib/design` — never redefine locally.**
 
-**Images:** Cap photos always desaturated — `filter: saturate(0.12) brightness(0.88)`
-
-**Corner marks pattern:**
-```jsx
-<span className="absolute top-0 left-0 w-5 h-5 border-t border-l border-white/25" />
-<span className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-white/25" />
-```
-
-**Animation easing:** Always `[0.16, 1, 0.3, 1]` — never use default ease
-**Grain overlay:** `<div className="grain" aria-hidden="true" />` — always present on full pages
-
-**Currency:** Always `€` — never `$`
+**Colors:** Black `#111111` text. Opacity layers: /80 /60 /50 /38 /28 /18
+**No colour accents.** No gradients except atmospheric.
+**Image treatment:** `filter: saturate(0.18) brightness(0.90)` on all cap/product photos
+**Corner marks:** absolute spans with border-black/12
+**Grain overlay:** `<div className="grain" aria-hidden="true" />` — always on full pages
 
 ---
 
-## ABSOLUTE RULES — NEVER BREAK THESE
+## FULL ROUTING
 
-- Never use `$` dollar signs anywhere — always `€`
-- Never show unit counts ("20 units", "only X left" on landing)
-- Never say "No restock" or "No compromise" anywhere on the site
-- Never add Navbar to the `/` Landing route
-- Never send HTML welcome emails — plain text only (deliverability fix)
-- Never commit `.env` files or secrets
+| Route              | File                        | Notes                                    |
+|--------------------|-----------------------------|------------------------------------------|
+| `/`                | `src/pages/Home.jsx`        | Store + story + Drop 002 CTA             |
+| `/our-story`       | `src/pages/OurStory.jsx`    | 8-section brand story                    |
+| `/drop-002`        | `src/pages/Drop002.jsx`     | Tracksuit teaser + waitlist signup       |
+| `/archive`         | App.jsx > ArchiveFlow       | TVP membership signup flow               |
+| `/product/:id`     | `src/pages/Product.jsx`     | Product detail (cap is sold out)         |
+| `/category/:slug`  | `src/pages/Category.jsx`    | Category filter                          |
+| `/checkout`        | `src/pages/Checkout.jsx`    | 3-step checkout                          |
+| `/order-success`   | `src/pages/OrderSuccess.jsx`| Post-payment confirmation                |
+| `/intro`           | `src/pages/Landing.jsx`     | Cinematic entrance (optional)            |
+| `/archive-admin`   | `src/components/AdminPage.jsx` | Password-protected command centre     |
+
+**StoreShell** = Navbar + Cart drawer + Outlet  
+**ArchiveFlow** = screen-based state (Vault → DecryptionScreen → ArchiveEntry)  
+**No Navbar on:** `/intro`, `/drop-002`, `/archive`, `/archive-admin`
+
+---
+
+## ALL API ENDPOINTS
+
+| File                        | Method | Does                                          |
+|-----------------------------|--------|-----------------------------------------------|
+| `submit.js`                 | POST   | Archive registration + welcome email + auto-adds to Drop 002 waitlist |
+| `lookup.js`                 | POST   | Check if email is an Archive member           |
+| `ping.js`                   | POST   | Log member last-seen timestamp                |
+| `count.js`                  | GET    | Return total Archive member count             |
+| `admin.js`                  | POST   | All members + financials + Drop 002 count     |
+| `delete.js`                 | DELETE | Remove a member                               |
+| `create-checkout-session.js`| POST   | Stripe checkout session                       |
+| `order-confirm.js`          | POST   | Send order confirmation emails                |
+| `create-promo.js`           | POST   | Create Stripe promo code                      |
+| `list-promos.js`            | POST   | List all promo codes                          |
+| `drop002-waitlist.js`       | POST   | Add email to Drop 002 waitlist                |
+| `send-welcome-all.js`       | POST   | Bulk resend welcome emails                    |
+
+**Vercel KV keys:**
+- `tvp:emails` — Archive members (hset by email)
+- `tvp:members` — Archive members (lpush)
+- `tvp:count` — Archive member count
+- `tvp:lastseen` — Last access timestamps
+- `tvp:drop002:waitlist` — Drop 002 waitlist (set — auto-populated when Archive member joins)
+
+**Env vars (never hardcode):**
+`RESEND_API_KEY`, `STRIPE_SECRET_KEY`, `ADMIN_PASSWORD`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`
+
+---
+
+## CURRENT DROP STATUS
+
+### DROP 001 — THE FOUNDATION CAP
+- **Status: SOLD OUT**
+- 24 units. Sold out in 24 hours. No restock.
+- Price: €32 + €6 shipping per hat
+- Colours: Black, White
+- Stock in products.js: `{ 'One Size': 0 }` — shows as sold out on product page
+
+### DROP 002 — THE TRACKSUIT
+- **Status: COMING AUGUST 2026**
+- Price: €70 full set
+- Sizes: S / M / L
+- Colourways: Purple/Black, Light Blue/Grey, Pink/Black
+- Feature: Hidden zip pocket (jacket) + hidden waistband pocket (bottoms)
+- Supplier: Pakistan — 3-4 week lead time
+- Strategy: Pre-order after 40 orders, OR 100-unit stall run across Ireland + England
+- Images in public/: `ts-blue.jpg`, `ts-all-front.png`, `ts-all-back.png`, `ts-pocket.jpg`, `ts-tags.png`
+- Page: `/drop-002` — full teaser + 2-step signup form
+
+---
+
+## MEMBERSHIP / WAITLIST SYSTEM
+
+**Archive = TVP membership. One system. Two entry points.**
+
+| Entry | Route | Stores to |
+|-------|-------|-----------|
+| Archive Vault | `/archive` | `tvp:members` + `tvp:drop002:waitlist` |
+| Drop 002 waitlist | `/drop-002` form | `tvp:drop002:waitlist` only |
+
+Archive members have **48h early access** to every drop.
+Both funnels lead to the same Drop 002 waitlist.
+
+**Welcome email** (sent on Archive signup):
+- Confirms membership number
+- Mentions Drop 001 sold out
+- Confirms Drop 002 priority access
+- Links to `/drop-002`
+
+---
+
+## CONVERSION FUNNEL
+
+**Goal:** Every visitor → email captured → waitlist.
+
+```
+Homepage (/)
+  ↓ Hero CTA: [ Join the Waitlist ] → /drop-002
+  ↓ Drop 001 section CTA: [ Join Drop 002 Waitlist ] → /drop-002
+  ↓ Section 05 CTA: [ Join the Waitlist ] → /drop-002
+
+Drop 002 (/drop-002)
+  ↓ Scroll through teaser (tracksuit, colourways, hidden pocket)
+  ↓ Email → Name → Submit
+  ↓ WaitlistConfirmScreen animation
+  ↓ Confirmed state
+
+Archive (/archive)
+  ↓ Email → Name → Submit
+  ↓ DecryptionScreen animation
+  ↓ ArchiveEntry (sees Drop 002 as next drop, button → /drop-002)
+
+Navbar (always visible on store pages)
+  → Drop 002 button (bordered, prominent)
+  → Our Story / Archive links
+```
+
+---
+
+## WHAT'S BUILT ✅
+
+- Landing / hero page
+- Editorial store homepage
+- Product detail page (cap shows as sold out)
+- Cart drawer
+- Checkout — 3-step
+- Stripe live payments
+- Order success page with email
+- Archive member system (Vault → Decrypt → ArchiveEntry)
+- Drop 002 waitlist page (teaser + 2-step form + animation)
+- WaitlistConfirmScreen (scanning animation)
+- Welcome email (updated for Drop 002)
+- Admin panel (members, financials, promo codes)
+- Promo / discount code system (Stripe-backed)
+- Our Story — 8-section editorial
+- Footer — consistent across all pages
+- Shared design tokens (`src/lib/design.js`)
+- Mobile hamburger nav
+
+## WHAT'S NOT BUILT YET ❌
+
+- Order confirmation email after Stripe payment (api/order-confirm.js exists but needs testing)
+- Stock tracking in admin (decrement on order)
+- Admin order log
+- Drop 002 product page (tracksuit) with Stripe checkout
+- TikTok Shop integration
+- Stall location tracker page
+
+---
+
+## ABSOLUTE RULES — NEVER BREAK
+
+- Always `€` never `$`
+- Never show unit counts on landing/hero
+- Never say "No restock" or "No compromise"
+- Never add Navbar to `/intro`, `/drop-002`, `/archive`, `/archive-admin`
+- Welcome emails = plain text only (deliverability)
+- Always run `npm run build` before pushing
+- Always push after every change
+- Never commit `.env` or secrets
 - Never add features not explicitly requested
-- Never add comments explaining what code does — only add comments for non-obvious WHY
-- Never use: "authentic", "artisan", "craft", "elevated", "bespoke" in copy
-- Always push to GitHub after changes so Vercel deploys
+- No comments in code unless the WHY is non-obvious
+- Never use: "authentic", "artisan", "craft", "elevated", "bespoke"
+- Shipping = `qty × €6` — never a flat rate
 
 ---
 
 ## BRAND VOICE
 
-**Two founders.** One from Wexford, Ireland. One from Bergamo, Italy. Both from working families. No money, no backing, no connections. Built from nothing.
-
-**The Archive** = member area. Members are not customers — they are the foundation. People who believed early.
-
-**Core statement:** "Built from nothing. Worn by those who understand."
-
-**Copy rules:**
-- Specific and honest — real details, real numbers, real places
-- Never generic marketing language
-- Monospace text = technical/archive language
-- Serif text = emotional/human language
-- Both together = the brand
+| Use | Avoid |
+|-----|-------|
+| Specific + honest — real numbers, real places | Generic marketing language |
+| "Built between Ireland and Italy" | "elevated", "curated", "bespoke" |
+| Space Mono = technical/archive language | Over-explanation |
+| Cormorant Garamond = emotional/human | Superlatives |
+| "Built from nothing. Worn by those who understand." | |
 
 ---
 
-## WHAT'S BUILT (STATUS)
+## ADMIN ACCESS
 
-- [x] Landing page — cinematic two-door entrance
-- [x] Editorial store home — Foundation Cap with add-to-cart
-- [x] Product detail page — full color/size/qty/accordion
-- [x] Cart drawer
-- [x] Checkout — 3-step form
-- [x] Stripe live payments
-- [x] Order success page
-- [x] Archive member system — registration, returning member, localStorage
-- [x] Vault — email → lookup → name → confirmation screen → archive
-- [x] Welcome email — plain text, spam-safe
-- [x] Resend domain verified on Namecheap (DKIM + SPF + DMARC)
-- [x] Admin panel — members, last seen, financials
-- [x] Navbar simplified — logo + Archive link + cart only
-- [x] All prices €32, shipping €6
+**URL:** truevisionproject.com/archive-admin
+**Password:** `BUILTFROMNOTHING2026`
 
-## WHAT'S NOT BUILT YET (NEXT UP)
-
-- [ ] Order confirmation email after Stripe payment
-- [ ] Discount / promo code system (for rappers / influencers)
-- [ ] Stock tracking — decrement on order, show in admin
-- [ ] Admin order log — full order history
-- [ ] "Notify me" for Drop 002 — email capture
+Shows: Archive members, last seen, revenue, break-even, promo codes, Drop 002 waitlist count.
 
 ---
 
 ## HOW TO WORK WITH RICHARD
 
 - Read intent, not just literal words — he types fast
-- When he says "go ahead" — build it immediately
-- When he says "do this" — do it, don't plan out loud first
-- Always check if something already exists in the code before building it
+- When he says "go" — build it immediately, don't plan out loud
+- Always check if something already exists before building
 - Report back in 1–2 sentences after completing a task
 - If unclear, do the most obvious thing and state what you did
-- Never ask about optional parameters — make a sensible choice and move on
+- Always update this CLAUDE.md when something significant changes
+- Keep the whole ecosystem in mind — nothing is ever random

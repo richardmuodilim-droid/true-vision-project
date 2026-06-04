@@ -97,6 +97,13 @@ export default function Navbar({ onCartOpen }) {
               >
                 [ Archive ]
               </Link>
+              <Link
+                to="/drop-002"
+                style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: '#111111', border: '1px solid rgba(0,0,0,0.22)', padding: '7px 14px' }}
+                className="uppercase hover:bg-black hover:text-[#F5F3EE] transition-all duration-300"
+              >
+                Drop 002
+              </Link>
             </nav>
 
             {/* Cart */}
