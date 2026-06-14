@@ -201,7 +201,48 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          02 — DROP 001 PROOF (sold out)
+          02 — THE MISSION
+      ═══════════════════════════════════════════════════════════════ */}
+      <section
+        className="relative py-16 sm:py-24"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+        aria-label="The Mission"
+      >
+        <div className="w-full max-w-3xl mx-auto px-6 sm:px-10">
+          <SectionTag n="02" label="The Mission" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.75, ease }}
+            className="flex flex-col gap-6"
+          >
+            <h2
+              style={{ ...serif, fontSize: 'clamp(28px, 5.5vw, 44px)', color: '#111111', fontWeight: 400, lineHeight: 1.12 }}
+            >
+              We're building for people from backgrounds most brands ignore.
+            </h2>
+
+            <div className="flex flex-col gap-5">
+              <p style={{ ...inter, fontSize: 'clamp(14px, 2vw, 16px)', color: 'rgba(0,0,0,0.60)', lineHeight: 1.8 }}>
+                We know what it's like to come from the same place, carry the same struggles, want the same thing: proof that building something real together is possible.
+              </p>
+
+              <p style={{ ...inter, fontSize: 'clamp(14px, 2vw, 16px)', color: 'rgba(0,0,0,0.60)', lineHeight: 1.8 }}>
+                TVP started on a train between two small towns—Wexford and Bergamo. No capital. No hype machine. Just a decision: make something real, sell it to people who actually want it, tell the truth about how it's done.
+              </p>
+
+              <p style={{ ...inter, fontSize: 'clamp(14px, 2vw, 16px)', color: 'rgba(0,0,0,0.60)', lineHeight: 1.8 }}>
+                When you wear TVP, you're not buying a product. You're buying membership in something that says: <span style={{ ...serif, fontStyle: 'italic' }}>representation matters. Unity matters. Building from nothing works.</span>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          03 — DROP 001 PROOF (sold out)
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative scroll-mt-[78px]"
@@ -209,7 +250,7 @@ export default function Home() {
         aria-label="Foundation Cap — Drop 001"
       >
         <div className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <SectionTag n="02" label="Drop 001 — Closed" />
+          <SectionTag n="03" label="Drop 001 — Closed" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-start">
 
@@ -290,7 +331,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          03 — SOMETHING IS COMING (moved up for conversion)
+          04 — SOMETHING IS COMING (moved up for conversion)
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative min-h-[100dvh] flex items-center overflow-hidden"
@@ -306,7 +347,7 @@ export default function Home() {
         >002</motion.p>
 
         <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <SectionTag n="03" label="Drop 002 — Classified" dark />
+          <SectionTag n="04" label="Drop 002 — Classified" dark />
           <motion.h2
             initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -344,7 +385,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          04 — DOCUMENTARY
+          05 — DOCUMENTARY
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative min-h-[100dvh] flex items-center overflow-hidden"
@@ -352,7 +393,7 @@ export default function Home() {
         aria-label="The Mission"
       >
         <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <SectionTag n="04" label="Drop 001 — Documented" dark />
+          <SectionTag n="05" label="Drop 001 — Documented" dark />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 items-center">
 
             <motion.div
@@ -395,7 +436,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          05 — THE PEOPLE
+          06 — THE PEOPLE
       ═══════════════════════════════════════════════════════════════ */}
       <section
         className="relative py-16 sm:py-24"
@@ -403,7 +444,7 @@ export default function Home() {
         aria-label="The People"
       >
         <div className="max-w-4xl mx-auto px-6 sm:px-10">
-          <SectionTag n="05" label="The People" />
+          <SectionTag n="06" label="The People" />
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
             {[

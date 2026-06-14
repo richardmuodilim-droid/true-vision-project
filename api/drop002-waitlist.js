@@ -29,21 +29,25 @@ export default async function handler(req, res) {
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
-    subject: `You're on the list — Drop 002`,
+    subject: `You're in — part of something that matters`,
     text: `${capName},
 
-You're on the list for Drop 002.
+You're in. Not just a waitlist. A movement.
 
-The Tracksuit. Three colourways. Hidden pocket. August 2026.
+Drop 001 was the first proof. 24 units. Sold out in 24 hours. No ads.
 
-You'll hear from us before anyone else. When it drops, you'll have the link first.
+Drop 002 is the next proof that representation works. That building from nothing, together, is real.
+
+When you wear this tracksuit, you're saying: I'm part of this mission.
+
+August 2026 — The Tracksuit launches. You'll go first.
 
 truevisionproject.com/drop-002
 
 — True Vision Project
 
 ---
-You joined the waitlist at truevisionproject.com. Reply DELETE to be removed.`,
+You joined Drop 002 waitlist at truevisionproject.com. Reply DELETE to be removed.`,
   }).catch(() => {})
 
   return res.status(200).json({ ok: true, alreadyRegistered: !!already })
