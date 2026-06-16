@@ -109,6 +109,8 @@ ease  = [0.16, 1, 0.3, 1]
 | `list-promos.js`            | POST   | List all promo codes                          |
 | `drop002-waitlist.js`       | POST   | Add email to Drop 002 waitlist                |
 | `send-welcome-all.js`       | POST   | Bulk resend welcome emails                    |
+| `unsubscribe.js`            | GET/POST | One-click unsubscribe (List-Unsubscribe header target). GET=page, POST=one-click. Adds to suppression, removes from lists |
+| `send-update.js`            | POST   | Admin broadcast to all members — suppression-aware, `{NAME}` personalisation, `test` field for preview send |
 
 **Vercel KV keys:**
 - `tvp:emails` — Archive members (hset by email)
@@ -116,6 +118,13 @@ ease  = [0.16, 1, 0.3, 1]
 - `tvp:count` — Archive member count
 - `tvp:lastseen` — Last access timestamps
 - `tvp:drop002:waitlist` — Drop 002 waitlist (set — auto-populated when Archive member joins)
+- `tvp:unsubscribed` — Suppression set. Checked before every broadcast; cleared on explicit re-signup. NEVER email an address in this set.
+
+**Email rules (deliverability — never break):**
+- Every email MUST include `List-Unsubscribe` + `List-Unsubscribe-Post: List-Unsubscribe=One-Click` headers (Gmail/Yahoo reject bulk mail without them)
+- Unsubscribe link = `https://truevisionproject.com/api/unsubscribe?email=<encoded>`
+- Always check `tvp:unsubscribed` before sending to a list
+- Plain text for confirmations/updates (best deliverability); HTML only for the rich welcome
 
 **Env vars (never hardcode):**
 `RESEND_API_KEY`, `STRIPE_SECRET_KEY`, `ADMIN_PASSWORD`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`
@@ -164,30 +173,35 @@ Both funnels lead to the same Drop 002 waitlist.
 
 ---
 
-## CONVERSION FUNNEL
+## CONVERSION FUNNEL — MOVEMENT FIRST
 
-**Goal:** Every visitor → email captured → waitlist.
+**Core principle:** TVP is a movement, not a shop. The #1 action everywhere is **Join the Movement** (membership), NOT buy a product. Products are what members get access to. The member IS the point; the product is the consequence.
+
+**Goal:** Every visitor → becomes a member → represents → buys/shares as a consequence.
 
 ```
 Homepage (/)
-  ↓ Hero CTA: [ Join the Waitlist ] → /drop-002
-  ↓ Drop 001 section CTA: [ Join Drop 002 Waitlist ] → /drop-002
-  ↓ Section 05 CTA: [ Join the Waitlist ] → /drop-002
+  ↓ Hero CTA: [ Join the Movement ] → /archive   (primary action everywhere)
+  ↓ Section 02: THE MISSION (representation / unity / built from nothing)
+  ↓ Section 03 (Drop 001 proof) CTA: [ Join the Movement ] → /archive
+  ↓ Section 04 (Drop 002 teaser) CTA: [ Join the Movement ] → /archive
+       + secondary text link "See what's coming →" → /drop-002
+  ↓ Floating mobile bar: "Be part of something real" → /archive
 
-Drop 002 (/drop-002)
-  ↓ Scroll through teaser (tracksuit, colourways, hidden pocket)
-  ↓ Email → Name → Submit
-  ↓ WaitlistConfirmScreen animation
-  ↓ Confirmed state
-
-Archive (/archive)
-  ↓ Email → Name → Submit
+Archive (/archive) — THE membership entry (Vault)
+  ↓ Email → Name → Submit  ("Join the Movement" / "Become a Member" / "You're In")
   ↓ DecryptionScreen animation
-  ↓ ArchiveEntry (sees Drop 002 as next drop, button → /drop-002)
+  ↓ ArchiveEntry — the MEMBER INTERIOR (movement, not product):
+       Member Manifest (status, 48h access, what we stand for, origin, proof, next drop)
+       Gallery: founders / community / Wexford / Bergamo
+       "You're not a customer. You're part of this. You go first — always."
 
-Navbar (always visible on store pages)
-  → Drop 002 button (bordered, prominent)
-  → Our Story / Archive links
+Drop 002 (/drop-002) — product teaser, still has its own signup
+  ↓ Mission framing ("The Next Statement") → product → Email → Name → confirm
+
+Navbar (store pages)
+  → Prominent bordered button: "Join the Movement" → /archive
+  → Our Story / Drop 002 as text links (secondary)
 ```
 
 ---
