@@ -316,14 +316,14 @@ export default function Home() {
               </div>
 
               <Link
-                to="/drop-002"
+                to="/archive"
                 style={{ ...mono, fontSize: '9px', letterSpacing: '0.36em', background: '#111111', color: '#F5F3EE' }}
                 className="w-full flex items-center justify-center py-5 uppercase hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300"
               >
-                [ Join Drop 002 Waitlist ]
+                [ Join the Movement ]
               </Link>
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }} className="text-center mt-3">
-                Free. Be first when Drop 002 drops.
+                Free. Members go first on every drop.
               </p>
             </motion.div>
           </div>
@@ -365,14 +365,14 @@ export default function Home() {
           </motion.div>
 
           <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
-            <Link to="/drop-002"
+            <Link to="/archive"
               style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
               className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
-              [ Join the Waitlist ]
+              [ Join the Movement ]
             </Link>
             <div className="flex items-center justify-between px-1 pt-1">
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }}>
-                Free. No spam.
+                Members go first.
               </p>
               <Link to="/drop-002"
                 style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.22em', borderBottom: '1px solid rgba(255,255,255,0.12)' }}

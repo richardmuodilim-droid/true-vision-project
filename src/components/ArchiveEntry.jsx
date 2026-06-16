@@ -2,15 +2,17 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const manifest = [
-  { key: 'PROJECT ID',  value: '001' },
-  { key: 'OBJECT',      value: 'THE FOUNDATION CAP' },
-  { key: 'COMPOSITION', value: '300GSM WASHED CHINO TWILL' },
-  { key: 'EDITION',     value: 'DROP 001 — CLOSED' },
-  { key: 'ORIGIN',      value: 'IRELAND / ITALY' },
-  { key: 'STATUS',      value: 'SOLD OUT — 24 UNITS / 24 HOURS' },
-  { key: 'NEXT DROP',   value: 'DROP 002 — AUGUST 2026', next: true },
-]
+function buildManifest(memberName) {
+  return [
+    { key: 'MEMBER',     value: getFirstName(memberName) },
+    { key: 'STATUS',     value: 'ACTIVE — ONE OF US', live: true },
+    { key: 'ACCESS',     value: '48H BEFORE EVERYONE' },
+    { key: 'STANDS FOR', value: 'REPRESENTATION / UNITY' },
+    { key: 'ORIGIN',     value: 'WEXFORD / BERGAMO' },
+    { key: 'PROOF',      value: 'DROP 001 — SOLD OUT' },
+    { key: 'NEXT DROP',  value: 'DROP 002 — AUGUST 2026', next: true },
+  ]
+}
 
 const processItems = [
   {
@@ -34,8 +36,10 @@ const processItems = [
 ]
 
 const images = [
-  { src: '/cap-black.jpg', label: 'BLACK' },
-  { src: '/cap-white.jpg', label: 'WHITE' },
+  { src: '/founders.jpg',         label: 'THE FOUNDERS' },
+  { src: '/community-dublin.jpg', label: 'THE COMMUNITY' },
+  { src: '/wexford.jpg',          label: 'WEXFORD' },
+  { src: '/bergamo.jpg',          label: 'BERGAMO' },
 ]
 
 const mono = { fontFamily: "'Space Mono', monospace" }
@@ -55,6 +59,7 @@ const LS_KEY = 'TrueVisionMember'
 export default function ArchiveEntry({ onLogout, userId, memberName }) {
   const [activeImg, setActiveImg] = useState(0)
   const [flickering, setFlickering] = useState(false)
+  const manifest = buildManifest(memberName)
 
   const handleDisconnect = () => {
     setFlickering(true)
@@ -113,7 +118,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           style={{ filter: 'invert(1)' }}
           draggable="false" />
         <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.2em' }}>
-          ARCHIVE // ENTRY_001
+          MEMBER // ACTIVE
         </p>
       </motion.header>
 
@@ -125,7 +130,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         className="relative z-10 text-center uppercase px-4 sm:px-0"
         style={{ ...mono, fontSize: 'clamp(10px, 2.2vw, 12px)', letterSpacing: '0.14em', color: '#111111', paddingBottom: '4px' }}
       >
-        WELCOME TO THE ARCHIVE, {getFirstName(memberName)}. ACCESS GRANTED.
+        WELCOME, {getFirstName(memberName)}. YOU'RE ONE OF US NOW.
       </motion.p>
 
       {/* ── Main ── */}
@@ -209,7 +214,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
         >
           {/* Section label */}
           <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="mb-8 uppercase">
-            Product Manifest
+            Member Manifest
           </p>
 
           {/* Manifest rows */}
@@ -272,7 +277,7 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
             }}
             className="text-center md:text-left"
           >
-            Drop 001 — sold out in 24 hours. Drop 002 is coming.
+            You're not a customer. You're part of this. You go first — always.
           </motion.p>
 
         </motion.div>
@@ -479,13 +484,13 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
           </Link>
           <button
             onClick={onLogout}
-            aria-label="Exit Archive"
+            aria-label="Exit"
             style={{ ...mono, fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.45)', borderColor: 'rgba(0,0,0,0.12)' }}
             className="flex-1 sm:flex-none uppercase border px-4 sm:px-6 min-h-[44px] transition-all duration-300 cursor-pointer"
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.28)'; e.currentTarget.style.color = 'rgba(0,0,0,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.45)' }}
           >
-            [ EXIT ARCHIVE ]
+            [ EXIT ]
           </button>
         </div>
       </motion.footer>
