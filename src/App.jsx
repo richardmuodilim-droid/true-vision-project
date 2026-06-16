@@ -15,6 +15,7 @@ import OrderSuccess from './pages/OrderSuccess'
 import OurStory from './pages/OurStory'
 import Drop002 from './pages/Drop002'
 import Posters from './pages/Posters'
+import Tee from './pages/Tee'
 
 function StoreShell() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/our-story"   element={<OurStory />} />
           <Route path="/posters"     element={<Posters />} />
+          <Route path="/tee"         element={<Tee />} />
         </Route>
       </Routes>
     </BrowserRouter>
