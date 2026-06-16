@@ -50,31 +50,42 @@ export default async function handler(req, res) {
   await kv.hset('tvp:emails', { [normalised]: JSON.stringify(entry) })
   await kv.lpush('tvp:members', JSON.stringify(entry))
   await kv.sadd('tvp:drop002:waitlist', normalised)
+  // Explicit signup = re-consent: clear any prior unsubscribe
+  await kv.srem('tvp:unsubscribed', normalised)
 
   const firstName = normalisedName.split(' ')[0] || 'Member'
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
+
+  const unsubUrl = `https://truevisionproject.com/api/unsubscribe?email=${encodeURIComponent(normalised)}`
 
   await resend.emails.send({
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
-    subject: `You're in — TVP Archive`,
+    subject: `You're one of us now`,
+    headers: {
+      'List-Unsubscribe': `<${unsubUrl}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
     text: `${capName},
 
 You're in. Member #${String(memberNumber).padStart(3, '0')}.
 
-This isn't a brand. It's a statement. Two people, two small towns, one mission.
+This isn't a brand. It's a representation of us — people who come from the same place, building something real from nothing.
 
-Drop 001 sold out in 24 hours. Drop 002 is coming — August 2026.
+You're not a customer now. You're part of this. And members go first — 48 hours before anyone else, on every drop.
 
-As an Archive member you go first. 48 hours before anyone else.
+Drop 002 is coming. August 2026.
 
-truevisionproject.com/drop-002
+Stay close. Big things are being built — and you're part of it.
+
+truevisionproject.com
 
 — True Vision Project
+Wexford / Ireland — Bergamo / Italy
 
 ---
-You registered at truevisionproject.com. Reply DELETE to be removed.`,
+You signed up at truevisionproject.com. Unsubscribe anytime: ${unsubUrl}`,
   }).catch(() => {})
 
   return res.status(200).json({ userId, name: normalisedName, memberNumber })

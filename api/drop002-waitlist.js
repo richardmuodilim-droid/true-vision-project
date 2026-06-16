@@ -24,30 +24,39 @@ export default async function handler(req, res) {
   if (!already) {
     await kv.sadd(key, normalised)
   }
+  // Explicit signup = re-consent: clear any prior unsubscribe
+  await kv.srem('tvp:unsubscribed', normalised)
+
+  const unsubUrl = `https://truevisionproject.com/api/unsubscribe?email=${encodeURIComponent(normalised)}`
 
   await resend.emails.send({
     from: 'True Vision Project <archive@truevisionproject.com>',
     to: normalised,
     replyTo: 'archive@truevisionproject.com',
     subject: `You're in — part of something that matters`,
+    headers: {
+      'List-Unsubscribe': `<${unsubUrl}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
     text: `${capName},
 
 You're in. Not just a waitlist. A movement.
 
-Drop 001 was the first proof. 24 units. Sold out in 24 hours. No ads.
+This is a representation of us — people building something real from nothing.
 
-Drop 002 is the next proof that representation works. That building from nothing, together, is real.
+Drop 002 is coming. August 2026. The Tracksuit. And you'll go first.
 
-When you wear this tracksuit, you're saying: I'm part of this mission.
+When you wear it, you're saying: I'm part of this.
 
-August 2026 — The Tracksuit launches. You'll go first.
+Stay close. We'll only reach out when it matters.
 
-truevisionproject.com/drop-002
+truevisionproject.com
 
 — True Vision Project
+Wexford / Ireland — Bergamo / Italy
 
 ---
-You joined Drop 002 waitlist at truevisionproject.com. Reply DELETE to be removed.`,
+You joined at truevisionproject.com. Unsubscribe anytime: ${unsubUrl}`,
   }).catch(() => {})
 
   return res.status(200).json({ ok: true, alreadyRegistered: !!already })
