@@ -5,7 +5,7 @@ const reduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const FOOTER_TEXT = '[PROJECT: 002 INCOMING] // TVP // ARCHIVE MEMBERS GO FIRST'
+const FOOTER_TEXT = '[ A MOVEMENT, NOT A BRAND ] // TVP // MEMBERS GO FIRST'
 
 function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
   const [displayed, setDisplayed] = useState('')
@@ -264,7 +264,7 @@ export default function Vault({ onSuccess, glitching }) {
                   }}
                 >
                   <span className="scanline" aria-hidden="true" />
-                  [ RESUME ARCHIVE ACCESS ]
+                  [ Enter ]
                 </button>
 
                 <button
@@ -341,7 +341,7 @@ export default function Vault({ onSuccess, glitching }) {
                       <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Checking</span>
                     </span>
-                  ) : btnHovered ? '[ Continue ]' : 'Get Drop 002 Access'}
+                  ) : btnHovered ? '[ Continue ]' : 'Join the Movement'}
                 </button>
               </motion.form>
 
@@ -362,7 +362,7 @@ export default function Vault({ onSuccess, glitching }) {
                   className="text-center uppercase"
                   style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.25em' }}
                 >
-                  New member detected — enter your name
+                  One of us now — what's your name?
                 </p>
                 <label htmlFor="vault-name" className="sr-only">Your full name</label>
                 <input
@@ -416,7 +416,7 @@ export default function Vault({ onSuccess, glitching }) {
                       <span className="w-3 h-3 border border-black/20 border-t-black/50 rounded-full animate-spin" aria-hidden="true" />
                       <span>Verifying</span>
                     </span>
-                  ) : btnHovered ? '[ Access Granted ]' : 'Secure My Spot'}
+                  ) : btnHovered ? '[ You\'re In ]' : 'Become a Member'}
                 </button>
 
                 <button
@@ -477,7 +477,7 @@ export default function Vault({ onSuccess, glitching }) {
                   }}
                 >
                   <span className="scanline" aria-hidden="true" />
-                  [ Enter the Archive ]
+                  [ Enter ]
                 </button>
               </motion.div>
 
@@ -495,10 +495,10 @@ export default function Vault({ onSuccess, glitching }) {
           className="relative z-10 text-center uppercase px-6 pb-2 flex flex-col items-center gap-2"
         >
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '8px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.25em' }}>
-            [ {String(memberCount).padStart(2, '0')} MEMBERS — DROP 002 PRIORITY ACCESS ]
+            [ {String(memberCount).padStart(2, '0')} MEMBERS — AND GROWING ]
           </p>
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em' }}>
-            Archive members go 48h before the public waitlist opens.
+            Members go first on every drop. Always.
           </p>
         </motion.div>
       )}

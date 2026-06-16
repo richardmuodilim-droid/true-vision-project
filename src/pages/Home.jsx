@@ -70,14 +70,14 @@ export default function Home() {
           <div className="flex items-center justify-between px-5 py-4 gap-4">
             <div>
               <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.60)', letterSpacing: '0.28em' }} className="uppercase">
-                Drop 002 — August 2026
+                Be part of something real
               </p>
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.16em' }}>
-                The Tracksuit. Free to join.
+                Free. Become a member.
               </p>
             </div>
             <Link
-              to="/drop-002"
+              to="/archive"
               style={{ ...mono, fontSize: '9px', letterSpacing: '0.30em', background: '#F5F3EE', color: '#111111' }}
               className="flex items-center justify-center px-5 py-3 uppercase shrink-0 hover:bg-white/90 transition-colors duration-300"
             >
@@ -141,7 +141,7 @@ export default function Home() {
             style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 9px)', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.28em' }}
             className="uppercase mb-5"
           >
-            Drop 001 — 24 units — Sold out in 24 hours — No ads.
+            A movement. A representation. All of us.
           </motion.p>
 
           <motion.p
@@ -149,7 +149,7 @@ export default function Home() {
             style={{ ...mono, fontSize: 'clamp(8px, 1.8vw, 10px)', color: 'rgba(255,255,255,0.50)', letterSpacing: '0.32em' }}
             className="uppercase mb-12"
           >
-            We Are Documenting A Mission.
+            For people who come from where we come from.
           </motion.p>
 
           <motion.div
@@ -163,14 +163,14 @@ export default function Home() {
             className="flex flex-col gap-3 w-full max-w-[340px]"
           >
             <Link
-              to="/drop-002"
+              to="/archive"
               style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
               className="w-full flex items-center justify-center px-8 py-5 uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300"
             >
-              [ Join the Waitlist ]
+              [ Join the Movement ]
             </Link>
             <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.22em' }} className="text-center">
-              Drop 002 — August 2026. Free. No spam.
+              Free. Become a member. Be part of it.
             </p>
           </motion.div>
         </div>

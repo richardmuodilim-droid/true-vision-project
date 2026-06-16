@@ -4,10 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { mono, ease } from '../lib/design'
 
 const NAV_LINKS = [
-  { to: '/',           label: 'Drop 001' },
   { to: '/our-story',  label: 'Our Story' },
-  { to: '/archive',    label: 'Archive' },
   { to: '/drop-002',   label: 'Drop 002' },
+  { to: '/',           label: 'Drop 001' },
 ]
 
 export default function Navbar({ onCartOpen }) {
@@ -89,18 +88,18 @@ export default function Navbar({ onCartOpen }) {
                 [ Our Story ]
               </Link>
               <Link
-                to="/archive"
+                to="/drop-002"
                 style={{ ...mono, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(0,0,0,0.35)' }}
                 className="uppercase hover:opacity-70 transition-opacity duration-500"
               >
-                [ Archive ]
+                [ Drop 002 ]
               </Link>
               <Link
-                to="/drop-002"
+                to="/archive"
                 style={{ ...mono, fontSize: '8px', letterSpacing: '0.30em', color: '#111111', border: '1px solid rgba(0,0,0,0.22)', padding: '7px 14px' }}
                 className="uppercase hover:bg-black hover:text-[#F5F3EE] transition-all duration-300"
               >
-                Drop 002
+                Join the Movement
               </Link>
             </nav>
 
@@ -178,7 +177,7 @@ export default function Navbar({ onCartOpen }) {
                 style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#111111', color: '#F5F3EE' }}
                 className="w-full flex items-center justify-center py-5 uppercase"
               >
-                [ Join the Archive ]
+                [ Join the Movement ]
               </Link>
             </motion.div>
           </motion.nav>
