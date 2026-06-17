@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Cart from './components/Cart'
@@ -57,6 +57,16 @@ function ArchiveFlow() {
 }
 
 export default function App() {
+  // Capture invite code from ?ref= so the referrer gets credit when this visitor joins
+  useEffect(() => {
+    try {
+      const ref = new URLSearchParams(window.location.search).get('ref')
+      if (ref && /^TVP-\d{3}-[A-Z0-9]{4}$/i.test(ref.trim())) {
+        localStorage.setItem('tvp_ref', ref.trim().toUpperCase())
+      }
+    } catch {}
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>

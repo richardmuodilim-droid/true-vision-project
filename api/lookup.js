@@ -23,5 +23,12 @@ export default async function handler(req, res) {
   if (!existing) return res.status(200).json({ found: false })
 
   const entry = typeof existing === 'string' ? JSON.parse(existing) : existing
-  return res.status(200).json({ found: true, name: entry.name, userId: entry.userId })
+  const referralCount = Number(await kv.get(`tvp:ref:${entry.userId}`)) || 0
+  return res.status(200).json({
+    found: true,
+    name: entry.name,
+    userId: entry.userId,
+    memberNumber: entry.memberNumber ?? null,
+    referralCount,
+  })
 }

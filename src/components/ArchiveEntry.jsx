@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -59,7 +59,39 @@ const LS_KEY = 'TrueVisionMember'
 export default function ArchiveEntry({ onLogout, userId, memberName }) {
   const [activeImg, setActiveImg] = useState(0)
   const [flickering, setFlickering] = useState(false)
+  const [stats, setStats] = useState({ referralCount: 0, memberNumber: null })
+  const [copied, setCopied] = useState(false)
   const manifest = buildManifest(memberName)
+
+  const inviteCode = userId || ''
+  const inviteLink = `https://truevisionproject.com/?ref=${inviteCode}`
+
+  useEffect(() => {
+    let email = ''
+    try { email = JSON.parse(localStorage.getItem(LS_KEY) || '{}').email || '' } catch {}
+    if (!email) return
+    fetch('/api/lookup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
+      .then(r => r.json())
+      .then(d => { if (d.found) setStats({ referralCount: d.referralCount || 0, memberNumber: d.memberNumber }) })
+      .catch(() => {})
+  }, [])
+
+  const handleCopy = () => {
+    try {
+      navigator.clipboard.writeText(inviteLink)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    } catch {}
+  }
+
+  const broughtIn = stats.referralCount
+  const onWall = broughtIn >= 5
+  const rankLabel = stats.memberNumber
+    ? (stats.memberNumber <= 100 ? `FOUNDING #${String(stats.memberNumber).padStart(3, '0')}` : `MEMBER #${String(stats.memberNumber).padStart(3, '0')}`)
+    : 'MEMBER'
 
   const handleDisconnect = () => {
     setFlickering(true)
@@ -282,6 +314,67 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
 
         </motion.div>
       </main>
+
+      {/* ── Grow the Movement (invite / status) ── */}
+      <motion.section
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 shrink-0 px-4 sm:px-12 py-10 sm:py-14"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
+        aria-label="Grow the movement"
+      >
+        <div className="max-w-3xl mx-auto">
+          <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="mb-5 uppercase">
+            Grow the Movement
+          </p>
+          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 4.5vw, 36px)', color: '#111111', fontWeight: 500, lineHeight: 1.15 }} className="mb-3">
+            This grows through people. Not ads.
+          </h3>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: 'rgba(0,0,0,0.55)', lineHeight: 1.8 }} className="mb-7 max-w-xl">
+            Bring in people who come from where you come from. Share your link.
+            Every person who joins through you moves you up — and members always go first.
+          </p>
+
+          {/* Invite link */}
+          <div className="flex flex-col sm:flex-row items-stretch gap-2 mb-6 max-w-xl">
+            <div className="flex-1 flex items-center px-4 h-[48px] overflow-hidden" style={{ border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(0,0,0,0.02)' }}>
+              <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.55)', letterSpacing: '0.04em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                truevisionproject.com/?ref={inviteCode}
+              </span>
+            </div>
+            <button onClick={handleCopy} aria-label="Copy invite link"
+              style={{ ...mono, fontSize: '9px', letterSpacing: '0.3em', background: '#111111', color: '#F5F3EE' }}
+              className="h-[48px] px-6 uppercase shrink-0 hover:bg-[#2a2a2a] active:scale-[0.98] transition-all duration-300 cursor-pointer">
+              {copied ? '✓ Copied' : 'Copy Link'}
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-px max-w-xl" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+            <div className="flex flex-col gap-1 px-4 py-4" style={{ borderRight: '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '28px', color: '#111111', fontWeight: 500, lineHeight: 1 }}>{broughtIn}</p>
+              <p style={{ ...mono, fontSize: '6.5px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.22em' }} className="uppercase">Brought In</p>
+            </div>
+            <div className="flex flex-col gap-1 px-4 py-4" style={{ borderRight: '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ ...mono, fontSize: '12px', color: '#111111', letterSpacing: '0.04em', lineHeight: 1.4 }}>{rankLabel}</p>
+              <p style={{ ...mono, fontSize: '6.5px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.22em' }} className="uppercase">Your Rank</p>
+            </div>
+            <div className="flex flex-col gap-1 px-4 py-4">
+              <p style={{ ...mono, fontSize: '12px', color: onWall ? '#111111' : 'rgba(0,0,0,0.45)', letterSpacing: '0.04em', lineHeight: 1.4 }}>
+                {onWall ? '✓ ON THE WALL' : `${broughtIn} / 5`}
+              </p>
+              <p style={{ ...mono, fontSize: '6.5px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.22em' }} className="uppercase">Founders Wall</p>
+            </div>
+          </div>
+
+          <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.30)', letterSpacing: '0.16em', lineHeight: 1.8 }} className="mt-4 uppercase">
+            {onWall
+              ? 'You brought five in. Your name belongs on the Founders Wall.'
+              : 'Bring five, and your name goes on the Founders Wall.'}
+          </p>
+        </div>
+      </motion.section>
 
       {/* ── Manifesto ── */}
       <motion.section

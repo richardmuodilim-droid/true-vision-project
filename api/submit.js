@@ -34,6 +34,10 @@ export default async function handler(req, res) {
   const normalised = email.toLowerCase().trim()
   const normalisedName = (name ?? '').trim()
 
+  // Referral: who brought them in (member userId format TVP-001-XXXX)
+  const rawRef = typeof req.body?.ref === 'string' ? req.body.ref.trim().toUpperCase() : ''
+  const ref = /^TVP-\d{3}-[A-Z0-9]{4}$/.test(rawRef) ? rawRef : ''
+
   // Return existing entry if already registered
   const existing = await kv.hget('tvp:emails', normalised)
   if (existing) {
@@ -45,13 +49,17 @@ export default async function handler(req, res) {
   const memberNumber = await kv.incr('tvp:count')
   const userId = generateUserId()
   const timestamp = new Date().toISOString()
-  const entry = { email: normalised, name: normalisedName, userId, timestamp, memberNumber }
+  const entry = { email: normalised, name: normalisedName, userId, timestamp, memberNumber, referredBy: ref || null }
 
   await kv.hset('tvp:emails', { [normalised]: JSON.stringify(entry) })
   await kv.lpush('tvp:members', JSON.stringify(entry))
   await kv.sadd('tvp:drop002:waitlist', normalised)
   // Explicit signup = re-consent: clear any prior unsubscribe
   await kv.srem('tvp:unsubscribed', normalised)
+  // Credit the member who brought them in
+  if (ref && ref !== userId) {
+    await kv.incr(`tvp:ref:${ref}`)
+  }
 
   const firstName = normalisedName.split(' ')[0] || 'Member'
   const capName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()

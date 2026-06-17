@@ -139,10 +139,12 @@ export default function Vault({ onSuccess, glitching }) {
     setStatus('loading')
     setErrorMsg('')
     try {
+      let ref = ''
+      try { ref = localStorage.getItem('tvp_ref') || '' } catch {}
       const res  = await fetch('/api/submit', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email: email.trim(), name: trimmedName }),
+        body:    JSON.stringify({ email: email.trim(), name: trimmedName, ref }),
       })
       const data = await res.json()
       if (!res.ok) {
