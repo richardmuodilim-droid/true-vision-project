@@ -28,7 +28,7 @@ export default function Landing() {
 
   useEffect(() => {
     setMember(loadMember())
-    fetch('/api/count').then(r => r.json()).then(d => setMemberCount(d.count)).catch(() => {})
+    fetch('/api/lookup').then(r => r.json()).then(d => setMemberCount(d.count)).catch(() => {})
   }, [])
 
   const isReturning = member && !showAllDoors

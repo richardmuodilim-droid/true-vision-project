@@ -82,7 +82,7 @@ export default function Vault({ onSuccess, glitching }) {
   }, [])
 
   useEffect(() => {
-    fetch('/api/count').then(r => r.json()).then(d => setMemberCount(d.count)).catch(() => {})
+    fetch('/api/lookup').then(r => r.json()).then(d => setMemberCount(d.count)).catch(() => {})
   }, [])
 
   const handleBtnEnter = () => {

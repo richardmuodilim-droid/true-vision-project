@@ -1,6 +1,16 @@
 import { kv } from '@vercel/kv'
 
 export default async function handler(req, res) {
+  // GET -> member count (was /api/count)
+  if (req.method === 'GET') {
+    try {
+      const count = await kv.get('tvp:count')
+      return res.status(200).json({ count: count ?? 0 })
+    } catch {
+      return res.status(200).json({ count: 0 })
+    }
+  }
+
   if (req.method !== 'POST') return res.status(405).end()
 
   const { email } = req.body ?? {}

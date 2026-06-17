@@ -48,9 +48,12 @@ export default function Tee() {
     if (!name)  { setError('Enter your name.'); return }
     setLoading(true); setError('')
     try {
-      const res = await fetch('/api/create-tee-checkout', {
+      const res = await fetch('/api/create-checkout-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), name: name.trim(), colour, size, qty }),
+        body: JSON.stringify({
+          email: email.trim(),
+          items: [{ name: `The Tee — ${active.label} (${size})`, price: PRICE, qty, color: active.label, size }],
+        }),
       })
       const data = await res.json()
       if (res.ok && data.url) { window.location.href = data.url }

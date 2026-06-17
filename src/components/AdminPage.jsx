@@ -211,7 +211,7 @@ function PromoSection({ password }) {
   const loadPromos = async () => {
     setLoading(true)
     try {
-      const res  = await fetch('/api/list-promos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
+      const res  = await fetch('/api/create-promo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, action: 'list' }) })
       const data = await res.json()
       if (res.ok) setPromos(data.promos)
     } catch {}
