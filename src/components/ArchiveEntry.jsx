@@ -373,6 +373,11 @@ export default function ArchiveEntry({ onLogout, userId, memberName }) {
               ? 'You brought five in. Your name belongs on the Founders Wall.'
               : 'Bring five, and your name goes on the Founders Wall.'}
           </p>
+          <Link to="/founders"
+            style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.28em', borderBottom: '1px solid rgba(0,0,0,0.12)' }}
+            className="inline-block mt-3 uppercase pb-px hover:opacity-60 transition-opacity duration-300">
+            See the Founders Wall →
+          </Link>
         </div>
       </motion.section>
 
