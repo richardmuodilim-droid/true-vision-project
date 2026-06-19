@@ -138,7 +138,7 @@ export default function Home() {
 
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.58)}
-            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 9px)', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.28em' }}
+            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 9px)', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.28em', textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}
             className="uppercase mb-5"
           >
             A movement. A representation. All of us.
@@ -146,7 +146,7 @@ export default function Home() {
 
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={fast(0.64)}
-            style={{ ...mono, fontSize: 'clamp(8px, 1.8vw, 10px)', color: 'rgba(255,255,255,0.50)', letterSpacing: '0.32em' }}
+            style={{ ...mono, fontSize: 'clamp(8px, 1.8vw, 10px)', color: 'rgba(255,255,255,0.58)', letterSpacing: '0.32em', textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}
             className="uppercase mb-12"
           >
             For people who come from where we come from.
@@ -169,8 +169,8 @@ export default function Home() {
             >
               [ Join the Movement ]
             </Link>
-            <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.22em' }} className="text-center">
-              Free. Become a member. Be part of it.
+            <p style={{ ...mono, fontSize: 'clamp(10px, 2vw, 12px)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.12em', lineHeight: 1.7, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }} className="text-center">
+              Join the TVP Archive — free. Members get every drop 48 hours early.
             </p>
           </motion.div>
         </div>
@@ -359,16 +359,16 @@ export default function Home() {
           </motion.h2>
           <motion.div {...reveal(0.16)} className="flex flex-col gap-[10px] mb-10 sm:mb-12">
             <p style={{ ...mono, fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.32em' }} className="uppercase">[ August 2026 — The Tracksuit ]</p>
-            <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.22em', lineHeight: 1.9 }} className="uppercase">
+            <p style={{ ...mono, fontSize: '11px', color: 'rgba(255,255,255,0.52)', letterSpacing: '0.34em', lineHeight: 2 }} className="uppercase">
               3 colourways. Hidden pocket. Limited run.
             </p>
           </motion.div>
 
           <motion.div {...reveal(0.26)} className="flex flex-col gap-3 w-full max-w-[360px]">
             <Link to="/archive"
-              style={{ ...mono, fontSize: '10px', letterSpacing: '0.40em', background: '#F5F3EE', color: '#111111' }}
+              style={{ ...mono, fontSize: '10px', letterSpacing: '0.34em', background: '#F5F3EE', color: '#111111' }}
               className="w-full flex items-center justify-center py-[22px] uppercase hover:bg-white/90 active:scale-[0.98] transition-all duration-300">
-              [ Join the Movement ]
+              [ Get Drop 002 Early Access ]
             </Link>
             <div className="flex items-center justify-between px-1 pt-1">
               <p style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.20em' }}>
@@ -435,74 +435,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          06 — THE PEOPLE
-      ═══════════════════════════════════════════════════════════════ */}
-      <section
-        className="relative py-16 sm:py-24"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}
-        aria-label="The People"
-      >
-        <div className="max-w-4xl mx-auto px-6 sm:px-10">
-          <SectionTag n="06" label="The People" />
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
-            {[
-              '/community-dublin.jpg',
-              '/richard-cap.jpg',
-              '/billy-cap.jpg',
-              '/cap-hooded.jpg',
-              '/customer-1.jpg',
-              '/customer-3.jpg',
-            ].map((src, i) => (
-              <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.65, delay: i * 0.07, ease }}
-                className="relative overflow-hidden bg-[#DEDAD4] aspect-[3/4]"
-              >
-                <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l z-10" style={{ borderColor: 'rgba(0,0,0,0.10)' }} />
-                <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r z-10" style={{ borderColor: 'rgba(0,0,0,0.10)' }} />
-                <img src={src} alt="Foundation Cap — worn"
-                  className="absolute inset-0 w-full h-full object-cover select-none"
-                  style={{ filter: 'saturate(0.18) brightness(0.92)' }}
-                  draggable="false" />
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            {['/unbox-2.mp4', '/customer-wearing.mp4'].map((src, i) => (
-              <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.65, delay: i * 0.1, ease }}
-                className="relative overflow-hidden w-full aspect-[3/4] sm:aspect-video"
-                style={{ background: '#1a1a1a' }}
-              >
-                <span aria-hidden="true" className="absolute top-0 left-0 w-4 h-4 border-t border-l z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
-                <span aria-hidden="true" className="absolute bottom-0 right-0 w-4 h-4 border-b border-r z-10" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
-                <video autoPlay muted loop playsInline preload="metadata"
-                  className="absolute inset-0 w-full h-full object-cover">
-                  <source src={src} type="video/mp4" />
-                </video>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.p
-            {...reveal(0.1, 0)}
-            style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.22)', letterSpacing: '0.35em' }}
-            className="uppercase text-center"
-          >
-            Drop 001 — Received by the foundation
-          </motion.p>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════════
           QUOTE

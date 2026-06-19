@@ -23,16 +23,16 @@ export default function Footer({ className = '' }) {
               className="uppercase">
               Built From Nothing.
             </p>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-1" style={{ marginLeft: '-14px' }}>
               <a
                 href="https://www.tiktok.com/@truevisionproject"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
                 style={{ color: 'rgba(0,0,0,0.28)' }}
-                className="hover:opacity-50 transition-opacity duration-300"
+                className="inline-flex items-center justify-center w-11 h-11 hover:opacity-50 transition-opacity duration-300"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
                 </svg>
               </a>
@@ -42,9 +42,9 @@ export default function Footer({ className = '' }) {
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 style={{ color: 'rgba(0,0,0,0.28)' }}
-                className="hover:opacity-50 transition-opacity duration-300"
+                className="inline-flex items-center justify-center w-11 h-11 hover:opacity-50 transition-opacity duration-300"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                   <circle cx="12" cy="12" r="4"/>
                   <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
