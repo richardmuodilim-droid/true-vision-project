@@ -17,6 +17,7 @@ import Drop002 from './pages/Drop002'
 import Tee from './pages/Tee'
 import Press from './pages/Press'
 import Founders from './pages/Founders'
+import TeeConcept from './pages/TeeConcept'
 
 function StoreShell() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="/tee"         element={<Tee />} />
           <Route path="/press"       element={<Press />} />
           <Route path="/founders"    element={<Founders />} />
+          <Route path="/tee-concept" element={<TeeConcept />} />
         </Route>
       </Routes>
     </BrowserRouter>
