@@ -295,7 +295,7 @@ Archive (/archive)
 - **Team:** 2 founders (Wexford + Bergamo)
 - **Website traffic:** Not measured yet (focus on conversion over traffic)
 - **Current waitlist:** Growing (exact number in Vercel KV)
-- **Admin access:** truevisionproject.com/archive-admin (password: BUILTFROMNOTHING2026)
+- **Admin access:** truevisionproject.com/archive-admin (password: [rotated — set in Vercel env])
 
 ---
 

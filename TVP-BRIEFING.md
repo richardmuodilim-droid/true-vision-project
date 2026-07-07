@@ -103,7 +103,7 @@ The brand is as much a mindset and a story as it is a clothing label.
 - Files: `api/create-promo.js`, `api/list-promos.js`
 
 ### Admin Panel (`/archive-admin`)
-- Password: `BUILTFROMNOTHING2026`
+- Password: `[rotated — set in Vercel env]`
 - Shows: member count, revenue, break-even progress, financial model
 - Member registry with delete
 - Promo code generator + usage tracker
@@ -210,7 +210,7 @@ Every product carries that. Every hat is physical proof that it is possible — 
 
 - All code changes → push to GitHub main → Vercel auto-deploys in ~60 seconds
 - Test payments in Stripe test mode before going live
-- Admin panel at `/archive-admin` password: `BUILTFROMNOTHING2026`
+- Admin panel at `/archive-admin` password: `[rotated — set in Vercel env]`
 - Email sending via Resend — verified domain `truevisionproject.com`
 - Stripe promotion codes are created in the admin panel, used at Stripe checkout
 

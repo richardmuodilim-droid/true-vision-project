@@ -154,7 +154,7 @@ ArchiveEntry (member interior)
 - **ArchiveEntry** — Member interior. Shows Drop 001 manifest (sold out), Drop 002 as next. Image gallery, colourways, manifesto, footer.
 - **WaitlistConfirmScreen** — Full-screen animation. Status log lines → phase 2 reveals (colour dots, message). Auto-redirects to Drop002Entry.
 - **Drop002Entry** — Member-only view (cached in localStorage). Shows colourways, access status, countdown, manifesto.
-- **AdminPage** — Password protected (`BUILTFROMNOTHING2026`). Shows members, last-seen, revenue, break-even, promo codes, Drop 002 count.
+- **AdminPage** — Password protected (`[rotated — set in Vercel env]`). Shows members, last-seen, revenue, break-even, promo codes, Drop 002 count.
 
 ---
 
@@ -571,7 +571,7 @@ VITE_API_BASE = https://truevisionproject.com/api
 RESEND_API_KEY = (set in Vercel dashboard)
 STRIPE_SECRET_KEY = (set in Vercel dashboard)
 STRIPE_PUBLIC_KEY = (set in Vercel dashboard)
-ADMIN_PASSWORD = BUILTFROMNOTHING2026
+ADMIN_PASSWORD = [rotated — set in Vercel env]
 KV_REST_API_URL = (auto-set by Vercel)
 KV_REST_API_TOKEN = (auto-set by Vercel)
 ```
@@ -629,7 +629,7 @@ git push origin main
 - **Access in code:** `process.env.VARIABLE_NAME`
 
 ### Password Protection
-- **Admin panel:** `/archive-admin` requires `BUILTFROMNOTHING2026`
+- **Admin panel:** `/archive-admin` requires `[rotated — set in Vercel env]`
 - **Method:** Hardcoded password check (simple, not production-grade)
 - **Better approach (future):** OAuth or JWT tokens
 
@@ -783,7 +783,7 @@ git push origin main  # Or feature/my-feature
 | Check logs | Vercel dashboard | Select function, view logs |
 | Query KV | Vercel dashboard | Data > KV Store |
 | Send test email | Resend dashboard | Test email template |
-| View members | `/archive-admin` | Password: `BUILTFROMNOTHING2026` |
+| View members | `/archive-admin` | Password: `[rotated — set in Vercel env]` |
 
 ---
 

@@ -1,6 +1,6 @@
 import { kv } from '@vercel/kv'
 
-const ADMIN_PASSWORD = 'BUILTFROMNOTHING2026'
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 
 const FINANCIALS = {
   initialInvestment: 500,

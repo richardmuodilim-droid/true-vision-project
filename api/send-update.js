@@ -2,7 +2,7 @@ import { kv } from '@vercel/kv'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'BUILTFROMNOTHING2026'
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 
 // Send a plain-text update to the whole movement.
 // - Admin password protected

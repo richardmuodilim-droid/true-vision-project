@@ -20,6 +20,43 @@
 
 ---
 
+## ⚡ CURRENT DIRECTION — "THE INVITATION" (LOCKED JULY 2026)
+> This section SUPERSEDES the "Conversion Funnel" section and any older strategy doc. No re-deciding for 60 days. If a request conflicts with this section, flag it before building.
+
+**The idea:** TVP is not a shop. It is an invitation. You have to be let in.
+
+**Four pillars:**
+1. **Locked brand** — whole site behind an invite/password gate (built: `src/lib/gate.js`, `src/components/GateScreen.jsx`, see `GATE-NOTES.md`). Default code `UNDERSTOOD`, per-drop codes via `VITE_GATE_CODES` env.
+2. **Numbered pieces** — every garment numbered; NFC tag planned (tap → its Vault record).
+3. **Seeding, not ads** — gift numbered pieces to nano/micro creators + musicians (Ireland + Lombardy). Note: rising Wexford rapper Lil Skag = warm local target.
+4. **Two-city editions** — Wexford Edition / Bergamo Edition per drop.
+
+**ACTIVE DROP — EDITION 01: "THE DOCUMENT" TEE (decision closed, do not reopen):**
+Cream heavyweight boxy tee (240–280 GSM), black print. Back: BUILT FROM NOTHING + city coordinates + "EDITION 01 — N° ___/50" with corner marks. Front: 8cm V left chest. Inside neck: NEVER FORGET WHERE YOU CAME FROM. €35–40, 50 units, numbered. Full supplier spec: `TEE-SAMPLE-ORDER-SPEC.docx`.
+
+**Who works where (two rooms, one brain):**
+- **Claude Code** = code room: build, test (`npm run build`), commit, push, deploy.
+- **Fable (Cowork)** = strategy room: research, plans, documents, design, outreach assets.
+- Only ONE session edits the repo at a time. This file is the shared brain — both update it.
+
+**Weekly rhythm (both founders work full-time — keep it small):**
+- Richard: outreach DMs (Ireland) + one weekly 30-min call with partner. ~3–4 h/week.
+- Partner (Bergamo): production line (supplier/sample/batch/shipping) + Italian outreach. ~3–4 h/week.
+- AI: everything repeatable — scripts, copy, emails, research, tracking.
+
+**60-day sequence:** gate live → sample ordered → seeding list + DMs (wk 2–3) → pre-order opens members-first, buyers get 2 invites (wk 4) → batch + fulfil + seed pieces ship (wk 5–6) → one small real-world pickup event in Wexford, filmed (wk 7–8).
+
+**NEXT ACTIONS (July 2026):**
+1. Claude Code: run build → commit → push the gate (files uncommitted right now).
+2. Richard: send `TVP-The-Invitation-Strategy.docx` to partner; order tee sample per spec doc.
+3. Then: pre-order page for Edition 01, seeding list + DM scripts, Higgsfield "Door" teaser prompts.
+
+**Key docs:** `TVP-HONEST-BRIEF.md` (the honest diagnosis) · `GATE-NOTES.md` (gate handoff) · `TEE-SAMPLE-ORDER-SPEC.docx` (supplier spec) · `THE-STATEMENT-TEE-PACK.md` (superseded by Edition 01 spec above).
+
+**Drop 001 status:** closed / unavailable. (Candid internal history is kept privately in Claude's memory, not in this repo — do not restate it in committed files.)
+
+---
+
 ## COMMANDS
 
 ```bash
@@ -134,14 +171,13 @@ ease  = [0.16, 1, 0.3, 1]
 ## CURRENT DROP STATUS
 
 ### DROP 001 — THE FOUNDATION CAP
-- **Status: SOLD OUT**
-- 24 units. Sold out in 24 hours. No restock.
+- **Status: CLOSED** (honest: 24 units made — some sold, some gifted to a rapper/sponsors, some unsold. Public framing: unavailable. Do not cite as sellout proof.)
 - Price: €32 + €6 shipping per hat
 - Colours: Black, White
 - Stock in products.js: `{ 'One Size': 0 }` — shows as sold out on product page
 
 ### DROP 002 — THE TRACKSUIT
-- **Status: COMING AUGUST 2026**
+- **Status: PARKED — resumes only after Edition 01 (The Document tee) completes its cycle**
 - Price: €70 full set
 - Sizes: S / M / L
 - Colourways: Purple/Black, Light Blue/Grey, Pink/Black
@@ -225,6 +261,8 @@ Navbar (store pages)
 - Footer — consistent across all pages
 - Shared design tokens (`src/lib/design.js`)
 - Mobile hamburger nav
+- Invitation gate (GateScreen + gate.js + GATE-NOTES.md) — **built, NOT yet deployed**
+- Edition 01 tee supplier spec (TEE-SAMPLE-ORDER-SPEC.docx)
 
 ## WHAT'S NOT BUILT YET ❌
 
@@ -234,6 +272,10 @@ Navbar (store pages)
 - Drop 002 product page (tracksuit) with Stripe checkout
 - TikTok Shop integration
 - Stall location tracker page
+- Gate deploy (build → commit → push — FIRST code task)
+- Edition 01 pre-order page (tee, numbered, two city editions, members-first)
+- Seeding target list + DM scripts (Fable, in progress)
+- NFC tag integration (tap → Vault record) — later, not blocking
 
 ---
 
@@ -269,7 +311,7 @@ Navbar (store pages)
 ## ADMIN ACCESS
 
 **URL:** truevisionproject.com/archive-admin
-**Password:** `BUILTFROMNOTHING2026`
+**Password:** set via the `ADMIN_PASSWORD` env var in Vercel — NEVER write the value in this file (repo may be public). The old hardcoded password is burned and must be rotated.
 
 Shows: Archive members, last seen, revenue, break-even, promo codes, Drop 002 waitlist count.
 

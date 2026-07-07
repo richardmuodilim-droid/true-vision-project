@@ -248,7 +248,7 @@ Section 08: Closing — "Built from nothing. / Worn by those who understand." + 
 - Checkout button → `/checkout`
 
 **`src/components/AdminPage.jsx`** — FULL COMMAND CENTER
-- Password: `BUILTFROMNOTHING2026`
+- Password: `[rotated — set in Vercel env]`
 - Light mode: `bg-[#F5F3EE]` matching rest of site
 - Login form → calls `POST /api/admin`
 - Dashboard sections:
@@ -303,7 +303,7 @@ Section 08: Closing — "Built from nothing. / Worn by those who understand." + 
 **`api/admin.js`** — ADMIN DATA
 ```
 POST { password }
-Password hardcoded: 'BUILTFROMNOTHING2026'
+Password hardcoded: '[rotated — set in Vercel env]'
 Returns: { count, members: [{name, email, userId, memberNumber, timestamp, lastSeen}], financials }
 Financials hardcoded: initialInvestment:500, unitCost:25, totalUnits:20, retailPrice:55, breakEvenUnits:10, projectedProfit:600
 Uses: Vercel KV — kv.get('tvp:count'), kv.lrange('tvp:members',0,-1), kv.hgetall('tvp:lastseen')
@@ -341,7 +341,7 @@ Plain text fallback included (key for spam avoidance)
 **`api/create-promo.js`** — CREATE PROMO CODE
 ```
 POST { password, promoterName, code, percentOff, maxRedemptions }
-Password: process.env.ADMIN_PASSWORD || 'BUILTFROMNOTHING2026'
+Password: process.env.ADMIN_PASSWORD || '[rotated — set in Vercel env]'
 Stripe apiVersion: '2023-10-16' (IMPORTANT: pinned — v22 SDK defaults to 2025 API where coupon is deprecated)
 Creates: stripe.coupons.create({ percent_off, duration:'once', name, metadata:{promoter} })
 Then: stripe.promotionCodes.create({ coupon: coupon.id, code: code.toUpperCase(), max_redemptions, metadata:{promoter} })
@@ -352,7 +352,7 @@ Error handling: 409 if code already exists
 **`api/list-promos.js`** — LIST ALL PROMO CODES
 ```
 POST { password }
-Password: process.env.ADMIN_PASSWORD || 'BUILTFROMNOTHING2026'
+Password: process.env.ADMIN_PASSWORD || '[rotated — set in Vercel env]'
 Stripe apiVersion: '2023-10-16' (same reason — pinned)
 stripe.promotionCodes.list({ limit: 100, expand: ['data.coupon'] })
 Returns: { promos: [{id, code, promoter, percentOff, active, maxRedemptions, timesRedeemed, created}] }
@@ -396,7 +396,7 @@ STRIPE_SECRET_KEY     → Stripe live secret key (set in Vercel)
 RESEND_API_KEY        → re_5VdShmMD_3mXR6Y2FDMrzSDGaRS7k9gBc (set in Vercel)
 KV_REST_API_URL       → Vercel KV connection URL (set in Vercel)
 KV_REST_API_TOKEN     → Vercel KV token (set in Vercel)
-ADMIN_PASSWORD        → NOT set in Vercel — falls back to hardcoded 'BUILTFROMNOTHING2026'
+ADMIN_PASSWORD        → NOT set in Vercel — falls back to hardcoded '[rotated — set in Vercel env]'
 ```
 
 **Email infrastructure:**
@@ -420,7 +420,7 @@ ADMIN_PASSWORD        → NOT set in Vercel — falls back to hardcoded 'BUILTFR
    returns null shipping, section was hidden. Now always shown with fallback text.
 8. **Promo codes returning 401 Unauthorized** — `api/admin.js` has password hardcoded but
    `create-promo.js` and `list-promos.js` were using `process.env.ADMIN_PASSWORD` (not set).
-   Fixed with `|| 'BUILTFROMNOTHING2026'` fallback.
+   Fixed with `|| '[rotated — set in Vercel env]'` fallback.
 9. **Promo "Received unknown parameter: coupon"** — Stripe v22 SDK defaults to 2025 API
    where coupon parameter syntax changed. Fixed by pinning `apiVersion: '2023-10-16'`
    in both promo API files.
@@ -515,7 +515,7 @@ photos before using them. Send full quality originals from phone camera.
 ## ADMIN ACCESS
 
 **URL:** https://truevisionproject.com/archive-admin
-**Password:** `BUILTFROMNOTHING2026`
+**Password:** `[rotated — set in Vercel env]`
 **What you can do:**
 - See all archive members + when they joined + last access
 - Delete members
@@ -545,7 +545,7 @@ Foundation Cap price: 32 (€)
 Shipping: 6 (€ per hat, NOT flat rate — multiplied by quantity)
 
 // Admin password (hardcoded in admin.js)
-'BUILTFROMNOTHING2026'
+'[rotated — set in Vercel env]'
 
 // Email addresses
 FROM:     'True Vision Project <archive@truevisionproject.com>'
@@ -575,7 +575,7 @@ apiVersion: '2023-10-16'
    `{ apiVersion: '2023-10-16' }` in the Stripe constructor.
 
 4. **Admin password:** `api/admin.js` has it hardcoded. Other admin endpoints use
-   `process.env.ADMIN_PASSWORD || 'BUILTFROMNOTHING2026'`
+   `process.env.ADMIN_PASSWORD || '[rotated — set in Vercel env]'`
 
 5. **Shipping calculation:** Always `qty * 6` — never a flat rate.
 
