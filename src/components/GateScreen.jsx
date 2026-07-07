@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { tryCode } from '../lib/gate'
+import { mono, serif, ease } from '../lib/design'
 
 const reduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const HEADLINE = 'THIS DOOR IS LOCKED.'
 const SUBLINE = '[ TRUE VISION PROJECT // ACCESS BY INVITATION ONLY ]'
 
 function useTyping(text, { startDelay = 0, charInterval = 45 } = {}) {
@@ -31,13 +32,21 @@ export default function GateScreen({ onUnlock }) {
   const navigate = useNavigate()
   const [code, setCode] = useState('')
   const [status, setStatus] = useState('idle') // idle | error | granted
+  const [btnHovered, setBtnHovered] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const scanTimeout = useRef(null)
   const inputRef = useRef(null)
 
   const subline = useTyping(SUBLINE, { startDelay: 1200, charInterval: 40 })
 
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+  useEffect(() => { inputRef.current?.focus() }, [])
+
+  const handleBtnEnter = () => {
+    setBtnHovered(true); setScanning(false)
+    clearTimeout(scanTimeout.current)
+    scanTimeout.current = setTimeout(() => setScanning(true), 10)
+  }
+  const handleBtnLeave = () => { setBtnHovered(false); setScanning(false) }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -53,61 +62,107 @@ export default function GateScreen({ onUnlock }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black text-white px-6">
-      <div className="w-full max-w-md flex flex-col items-center text-center">
-        <img src="/logo.svg" alt="TVP" className="w-10 h-10 mb-10 invert" />
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6" style={{ background: '#0a0909' }}>
+      <div className="grain" aria-hidden="true" style={{ opacity: 0.5 }} />
 
-        <h1 className="text-xl sm:text-2xl font-semibold tracking-widest-2 mb-4">
-          {HEADLINE}
-        </h1>
+      {/* Top status strip */}
+      <div className="fixed top-0 left-0 right-0 h-[22px] flex items-center justify-between px-5 sm:px-10"
+        style={{ background: '#0a0909', borderBottom: '1px solid rgba(255,255,255,0.05)' }} aria-hidden="true">
+        <span style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.14)', letterSpacing: '0.38em' }}>
+          [ TRUE VISION PROJECT ]
+        </span>
+        <span style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.14)', letterSpacing: '0.38em' }}>
+          [ LOCKED ]
+        </span>
+      </div>
 
-        <p className="font-mono text-[11px] text-tvp-gray tracking-widest mb-12 min-h-[16px]">
+      <div className="relative z-10 w-full max-w-md flex flex-col items-center text-center">
+
+        {/* Logo */}
+        <motion.img
+          src="/logo.svg" alt="True Vision Project"
+          initial={{ opacity: 0, y: reduced ? 0 : 10 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0 : 1.1, ease }}
+          className="w-[clamp(120px,34vw,180px)] h-auto object-contain select-none mb-10"
+          draggable="false"
+        />
+
+        {/* Headline — serif */}
+        <motion.h1
+          initial={{ opacity: 0, y: reduced ? 0 : 12 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0 : 0.9, delay: 0.15, ease }}
+          style={{ ...serif, fontSize: 'clamp(30px, 7vw, 46px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.06, letterSpacing: '-0.01em' }}
+          className="mb-5"
+        >
+          This door is locked.
+        </motion.h1>
+
+        {/* Subline — mono typing */}
+        <p style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.28em', minHeight: '14px' }}
+          className="uppercase mb-12">
           {subline}
+          {subline.length < SUBLINE.length && (
+            <span className="inline-block w-[1ch] animate-pulse" style={{ color: 'rgba(255,255,255,0.30)' }}>_</span>
+          )}
         </p>
 
         {status === 'granted' ? (
-          <p className="font-mono text-xs tracking-widest text-green-500">
-            ACCESS GRANTED. WELCOME IN.
-          </p>
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            style={{ ...mono, fontSize: '10px', color: 'rgba(120,220,150,0.85)', letterSpacing: '0.35em' }}
+            className="uppercase">
+            [ Access Granted — Welcome In ]
+          </motion.p>
         ) : (
-          <>
-            <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: reduced ? 0 : 14 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.8, delay: 0.3, ease }}
+            className="w-full flex flex-col items-center"
+          >
+            <form onSubmit={handleSubmit} className="w-full max-w-[340px] flex flex-col items-center gap-3">
               <input
                 ref={inputRef}
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
+                type="text" value={code}
+                onChange={(e) => { setCode(e.target.value); if (status === 'error') setStatus('idle') }}
                 placeholder="ENTER ACCESS CODE"
-                autoCapitalize="characters"
-                autoComplete="off"
-                spellCheck="false"
-                className="w-full bg-transparent border border-tvp-border focus:border-white outline-none text-center font-mono text-sm tracking-widest py-3 px-4 placeholder:text-tvp-gray/60 transition-colors"
-                style={{ backgroundColor: 'transparent', color: '#ffffff' }}
+                autoCapitalize="characters" autoComplete="off" spellCheck="false"
+                style={{ ...mono, fontSize: '11px', letterSpacing: '0.22em', color: '#F5F3EE', caretColor: '#F5F3EE',
+                  background: 'rgba(255,255,255,0.04)',
+                  borderColor: status === 'error' ? 'rgba(220,80,80,0.5)' : 'rgba(255,255,255,0.12)' }}
+                className="w-full h-[52px] border outline-none px-5 text-center uppercase placeholder:text-white/20 focus:border-white/30 transition-colors duration-300"
               />
               <button
                 type="submit"
-                className="w-full border border-white py-3 font-mono text-xs tracking-widest-2 hover:bg-white hover:text-black transition-colors"
+                onMouseEnter={handleBtnEnter} onMouseLeave={handleBtnLeave}
+                className={`btn-vault w-full h-[52px] border text-[11px] tracking-[0.45em] uppercase transition-all duration-500 cursor-pointer ${scanning ? 'scanning' : ''}`}
+                style={{ ...mono, borderColor: btnHovered ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.16)',
+                  color: btnHovered ? '#F5F3EE' : 'rgba(255,255,255,0.45)',
+                  background: btnHovered ? 'rgba(255,255,255,0.06)' : 'transparent' }}
               >
-                ENTER
+                <span className="scanline" aria-hidden="true" />
+                {btnHovered ? '[ Enter ]' : 'Enter'}
               </button>
             </form>
 
-            <p className={`font-mono text-[11px] tracking-widest mt-4 min-h-[16px] transition-opacity ${status === 'error' ? 'text-red-500 opacity-100' : 'opacity-0'}`}>
-              CODE NOT RECOGNISED.
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(220,80,80,0.70)', letterSpacing: '0.18em',
+              minHeight: '14px', opacity: status === 'error' ? 1 : 0, transition: 'opacity 0.3s' }}
+              className="uppercase mt-4">
+              Code not recognised.
             </p>
 
             <button
-              type="button"
-              onClick={() => navigate('/archive')}
-              className="mt-10 font-mono text-[11px] tracking-widest text-tvp-gray hover:text-white underline underline-offset-4 transition-colors"
+              type="button" onClick={() => navigate('/archive')}
+              style={{ ...mono, fontSize: '9px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.28em', borderBottom: '1px solid rgba(255,255,255,0.14)' }}
+              className="mt-10 uppercase pb-px hover:opacity-60 transition-opacity duration-300"
             >
-              NO CODE? REQUEST ACCESS →
+              No code? Request access →
             </button>
 
-            <p className="font-mono text-[10px] text-tvp-gray/50 tracking-widest mt-12">
-              BUILT FROM NOTHING. WORN BY THOSE WHO UNDERSTAND.
+            <p style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.18)', letterSpacing: '0.30em' }}
+              className="uppercase mt-14">
+              Built from nothing. Worn by those who understand.
             </p>
-          </>
+          </motion.div>
         )}
       </div>
     </div>
