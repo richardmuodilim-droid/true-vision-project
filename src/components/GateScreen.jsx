@@ -63,7 +63,12 @@ export default function GateScreen({ onUnlock }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6" style={{ background: '#0a0909' }}>
-      <div className="grain" aria-hidden="true" style={{ opacity: 0.5 }} />
+      {/* soft spotlight behind the logo */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0"
+        style={{ background: 'radial-gradient(ellipse 55% 45% at 50% 38%, rgba(255,255,255,0.06), transparent 62%)' }} />
+      {/* edge vignette for depth */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0"
+        style={{ background: 'radial-gradient(ellipse 92% 92% at 50% 50%, transparent 52%, rgba(0,0,0,0.55) 100%)' }} />
 
       {/* Top status strip */}
       <div className="fixed top-0 left-0 right-0 h-[22px] flex items-center justify-between px-5 sm:px-10"
