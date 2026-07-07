@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
+import GateScreen from './components/GateScreen'
+import { GATE_ENABLED, isUnlocked, isExemptPath, consumeUrlUnlock } from './lib/gate'
 import Navbar from './components/Navbar'
 import Cart from './components/Cart'
 import Landing from './pages/Landing'
@@ -59,6 +61,24 @@ function ArchiveFlow() {
   return <Vault onSuccess={handleSuccess} />
 }
 
+// The Invitation: everything behind the gate except the front door (/archive),
+// the admin panel, and Stripe's return page. Members and invite links pass through.
+function GateKeeper({ children }) {
+  const location = useLocation()
+  const [unlocked, setUnlocked] = useState(() => {
+    consumeUrlUnlock() // invite links (?ref=) and shared codes (?key=) unlock on arrival
+    return isUnlocked()
+  })
+
+  // Re-check when returning from /archive (joining the Vault makes you a member)
+  useEffect(() => {
+    if (!unlocked && isUnlocked()) setUnlocked(true)
+  }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!GATE_ENABLED || unlocked || isExemptPath(location.pathname)) return children
+  return <GateScreen onUnlock={() => setUnlocked(true)} />
+}
+
 export default function App() {
   // Capture invite code from ?ref= so the referrer gets credit when this visitor joins
   useEffect(() => {
@@ -72,6 +92,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <GateKeeper>
       <Routes>
         {/* Standalone — no navbar */}
         <Route path="/intro"         element={<Landing />} />
@@ -94,6 +115,7 @@ export default function App() {
           <Route path="/tee-concept" element={<TeeConcept />} />
         </Route>
       </Routes>
+      </GateKeeper>
     </BrowserRouter>
   )
 }
