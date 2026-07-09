@@ -16,6 +16,7 @@ import AdminPage from './components/AdminPage'
 import OrderSuccess from './pages/OrderSuccess'
 import OurStory from './pages/OurStory'
 import Drop002 from './pages/Drop002'
+import Edition01 from './pages/Edition01'
 import Tee from './pages/Tee'
 import Press from './pages/Press'
 import Founders from './pages/Founders'
@@ -97,6 +98,7 @@ export default function App() {
         {/* Standalone — no navbar */}
         <Route path="/intro"         element={<Landing />} />
         <Route path="/drop-002"      element={<Drop002 />} />
+        <Route path="/edition-01"    element={<Edition01 />} />
         <Route path="/archive"       element={<ArchiveFlow />} />
         <Route path="/archive-admin" element={<AdminPage />} />
 

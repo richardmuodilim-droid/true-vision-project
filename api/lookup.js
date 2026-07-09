@@ -6,6 +6,18 @@ function capFirst(name) {
 }
 
 export default async function handler(req, res) {
+  // GET ?edition01=1 -> live drop counter (reserved 1-22, public starts at 23, total 50)
+  if (req.method === 'GET' && req.query?.edition01) {
+    const RESERVED = 22, TOTAL = 50
+    try {
+      const raw = Number(await kv.get('tvp:edition01:count')) || 0
+      const assigned = Math.max(raw, RESERVED)
+      return res.status(200).json({ next: Math.min(assigned + 1, TOTAL), remaining: Math.max(TOTAL - assigned, 0), total: TOTAL })
+    } catch {
+      return res.status(200).json({ next: RESERVED + 1, remaining: TOTAL - RESERVED, total: TOTAL })
+    }
+  }
+
   // GET ?wall=1 -> public Founders Wall (first names only, privacy-safe)
   if (req.method === 'GET' && req.query?.wall) {
     try {

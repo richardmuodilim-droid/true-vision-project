@@ -1,8 +1,24 @@
 import Stripe from 'stripe'
 import { Resend } from 'resend'
+import { kv } from '@vercel/kv'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const resend  = new Resend(process.env.RESEND_API_KEY)
+
+// Edition 01: reserved 1-22 (founders + seeding), public starts at 23, total 50.
+// Idempotent per Stripe session so refreshing the success page never double-assigns.
+async function assignEditionNumber(sessionId, email) {
+  const RESERVED = 22, TOTAL = 50
+  const sessKey = `tvp:edition01:session:${sessionId}`
+  const existing = await kv.get(sessKey)
+  if (existing) return Number(existing)
+  let n = await kv.incr('tvp:edition01:count')
+  if (n <= RESERVED) { await kv.set('tvp:edition01:count', RESERVED + 1); n = RESERVED + 1 }
+  const number = Math.min(n, TOTAL)
+  await kv.set(sessKey, number)
+  if (email) await kv.hset('tvp:edition01:numbers', { [email.toLowerCase()]: number })
+  return number
+}
 
 const BUSINESS_EMAIL = 'truevisionstore2@gmail.com'
 const FROM_ADDRESS   = 'True Vision Project <archive@truevisionproject.com>'
@@ -39,7 +55,7 @@ function addressHtml(shipping) {
 
 // ─── Customer email ──────────────────────────────────────────────────────────
 
-function customerEmailHtml({ ref, email, items, shipping, total }) {
+function customerEmailHtml({ ref, email, items, shipping, total, editionNumber }) {
   const shippingCost = calcShipping(total, items)
 
   const itemRows = items.map(item => `
@@ -75,7 +91,8 @@ function customerEmailHtml({ ref, email, items, shipping, total }) {
 
   <tr><td style="padding:36px 40px 28px;border-bottom:1px solid #eeebe6;">
     <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.44em;color:#bbb;text-transform:uppercase;">True Vision Project</p>
-    <p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#111;font-style:italic;line-height:1.2;">Order Confirmed.</p>
+    <p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#111;font-style:italic;line-height:1.2;">${editionNumber ? `N° ${editionNumber} of 50 is yours.` : 'Order Confirmed.'}</p>
+    ${editionNumber ? `<p style="margin:12px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.2em;color:#888;text-transform:uppercase;">Edition 01 — The Document · Hand-numbered · Never repeated</p>` : ''}
   </td></tr>
 
   <tr><td style="padding:32px 40px 0;">
@@ -147,12 +164,12 @@ function customerEmailHtml({ ref, email, items, shipping, total }) {
 </html>`
 }
 
-function customerEmailText({ ref, email, items, shipping, total }) {
+function customerEmailText({ ref, email, items, shipping, total, editionNumber }) {
   const shippingCost = calcShipping(total, items)
   const itemLines = items.map(i => `  ${i.name}${i.variant ? ' - ' + i.variant : ''} x${i.qty}  €${(i.price * i.qty).toFixed(2)}`).join('\n')
   const addr = addressText(shipping)
-  return `TRUE VISION PROJECT — ORDER CONFIRMED
-======================================
+  return `TRUE VISION PROJECT — ${editionNumber ? `N° ${editionNumber} OF 50 IS YOURS` : 'ORDER CONFIRMED'}
+======================================${editionNumber ? `\n\nEdition 01 — The Document. Hand-numbered. Never repeated.\nYour piece: N° ${editionNumber} of 50.` : ''}
 
 Reference: TVP-${ref}
 Confirmation sent to: ${email}
@@ -299,6 +316,13 @@ export default async function handler(req, res) {
       price:   li.amount_total / 100 / li.quantity,
     }))
 
+    // Edition 01 — assign the piece number (idempotent)
+    const isEdition = items.some(i => (i.name || '').toLowerCase().includes('edition 01'))
+    let editionNumber = null
+    if (isEdition) {
+      try { editionNumber = await assignEditionNumber(session_id, email) } catch (e) { console.error('edition number error:', e.message) }
+    }
+
     const emailPromises = []
 
     if (email) {
@@ -307,9 +331,11 @@ export default async function handler(req, res) {
           from:    FROM_ADDRESS,
           to:      email,
           replyTo: 'archive@truevisionproject.com',
-          subject: `Your order is confirmed — TVP-${ref}`,
-          html:    customerEmailHtml({ ref, email, items, shipping, total }),
-          text:    customerEmailText({ ref, email, items, shipping, total }),
+          subject: (isEdition && editionNumber)
+            ? `N° ${editionNumber} of 50 is yours — True Vision Project`
+            : `Your order is confirmed — TVP-${ref}`,
+          html:    customerEmailHtml({ ref, email, items, shipping, total, editionNumber }),
+          text:    customerEmailText({ ref, email, items, shipping, total, editionNumber }),
         }).catch(err => console.error('Customer email error:', err.message))
       )
     }
