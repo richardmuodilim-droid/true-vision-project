@@ -11,10 +11,11 @@ const MEMBER_KEY = 'TrueVisionMember'
 
 // Each colourway is cropped straight out of the poster (3 tracksuits side by side):
 // pink = left third, grey/blue = centre, purple = right third.
+// img = individual colour photo (drop into public/). Until it exists, the poster crop (pos) shows.
 const COLORWAYS = [
-  { id: 'pink',   name: 'Pink / Black',      accent: '#EC008C', pos: '0% 26%' },
-  { id: 'blue',   name: 'Light Blue / Grey', accent: '#7DD3DA', pos: '50% 26%' },
-  { id: 'purple', name: 'Purple / Black',    accent: '#7B2FBE', pos: '100% 26%' },
+  { id: 'pink',   name: 'Pink / Black',      accent: '#EC008C', pos: '0% 26%',   img: '/ts-pink.jpg' },
+  { id: 'blue',   name: 'Light Blue / Grey', accent: '#7DD3DA', pos: '50% 26%',  img: '/ts-blue.jpg' },
+  { id: 'purple', name: 'Purple / Black',    accent: '#7B2FBE', pos: '100% 26%', img: '/ts-purple.jpg' },
 ]
 
 const boom = (d = 0) => ({
@@ -73,6 +74,13 @@ export default function Drop002() {
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
+      {/* Free-shipping announcement bar */}
+      <div className="w-full text-center py-3 px-4" style={{ background: '#111' }}>
+        <span style={{ ...mono, fontSize: 'clamp(7px, 1.7vw, 9px)', color: '#F5F3EE', letterSpacing: '0.26em' }} className="uppercase">
+          ★ &nbsp; Free Shipping Worldwide &nbsp;·&nbsp; Limited Drop &nbsp;·&nbsp; Pre-Order Live &nbsp; ★
+        </span>
+      </div>
+
       {/* ── 1. HERO — big poster, PRE-ORDER LIVE ── */}
       <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-5 py-16" style={{ background: '#0a0909' }}>
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
@@ -100,8 +108,12 @@ export default function Drop002() {
             You'll never find it.
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}
-            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 10px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }} className="uppercase mb-9">
+            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 10px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }} className="uppercase mb-4">
             A pocket only the owner knows · Three colours · Numbered
+          </motion.p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.55 }}
+            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 10px)', color: '#F5F3EE', letterSpacing: '0.34em' }} className="uppercase mb-9">
+            ✦ Free Shipping Worldwide ✦
           </motion.p>
 
           <motion.button initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.6 }}
@@ -157,9 +169,15 @@ export default function Drop002() {
                 style={{ border: `1.5px solid ${sel ? c.accent : 'rgba(0,0,0,0.10)'}`, padding: '8px',
                   boxShadow: sel ? `0 18px 50px ${c.accent}40` : 'none', background: '#0a0909' }}>
                 <div className="relative w-full aspect-[3/4] overflow-hidden">
-                  <img src="/pre-order.jpg" alt={c.name}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    style={{ objectPosition: c.pos }} onError={e => { e.currentTarget.style.opacity = 0 }} />
+                  <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+                    {/* base: crop from the poster (fallback) */}
+                    <img src="/pre-order.jpg" alt="" aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: c.pos }} />
+                    {/* individual colour photo — shows once added, hides if missing */}
+                    <img src={c.img} alt={c.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={e => { e.currentTarget.style.display = 'none' }} />
+                  </div>
                   <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 55%, ${c.accent}30, #0a0909f0)` }} />
                   <span className="absolute top-3 left-3 w-3.5 h-3.5 rounded-full z-10" style={{ background: c.accent, boxShadow: `0 0 14px ${c.accent}` }} />
                   {sel && <span className="absolute top-3 right-3 z-10" style={{ ...mono, fontSize: '8px', color: '#fff', letterSpacing: '0.2em' }}>✓ YOURS</span>}
@@ -193,7 +211,7 @@ export default function Drop002() {
         </div>
         <motion.div {...boom(0.34)} className="mt-8 flex items-baseline gap-4 flex-wrap">
           <p style={{ ...serif, fontSize: 'clamp(26px, 5vw, 38px)', color: '#111', fontWeight: 500 }}>
-            €{PRICE} <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.2em' }}>+ €6 SHIPPING</span>
+            €{PRICE} <span style={{ ...mono, fontSize: '10px', color: '#111', letterSpacing: '0.2em' }}>· FREE SHIPPING</span>
           </p>
           <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.14em' }} className="uppercase">
             Pre-order price · <span style={{ textDecoration: 'line-through' }}>€{RETAIL}</span> after the drop
@@ -262,7 +280,7 @@ export default function Drop002() {
               {loading ? 'Processing…' : `Claim N° ${String(counter.next).padStart(2, '0')} — €${PRICE}`}
             </motion.button>
             <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.14em', lineHeight: 1.9 }} className="uppercase mt-5">
-              Pre-order €{PRICE} · €{RETAIL} after the drop. Ships 2–3 weeks after the pre-order closes. We film the whole process.
+              Free shipping worldwide. Pre-order €{PRICE} · €{RETAIL} after the drop. Ships 2–3 weeks after the pre-order closes. We film the whole process.
             </p>
           </motion.div>
         ) : (

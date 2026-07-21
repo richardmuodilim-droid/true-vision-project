@@ -14,10 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const subtotal    = items.reduce((sum, i) => sum + i.price * i.qty, 0)
-    const totalQty    = items.reduce((sum, i) => sum + i.qty, 0)
-    const shippingCost = totalQty * 6
-
+    // Free shipping — no shipping line item added (site-wide free shipping).
     const line_items = items.map(item => ({
       price_data: {
         currency: 'eur',
@@ -29,15 +26,6 @@ export default async function handler(req, res) {
       },
       quantity: item.qty,
     }))
-
-    line_items.push({
-      price_data: {
-        currency: 'eur',
-        product_data: { name: 'Shipping' },
-        unit_amount: 600,
-      },
-      quantity: totalQty,
-    })
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
