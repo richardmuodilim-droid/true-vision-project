@@ -4,8 +4,9 @@ import { motion } from 'framer-motion'
 import { mono, serif, inter, ease, reveal } from '../lib/design'
 
 const PRICE = 70
+const RETAIL = 80
 const TOTAL = 100
-const SIZES = ['S', 'M', 'L']
+const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const MEMBER_KEY = 'TrueVisionMember'
 
 const COLORWAYS = [
@@ -27,8 +28,8 @@ export default function Drop002() {
   const [counter, setCounter]   = useState({ next: 23, remaining: 78 })
   const orderRef = useRef(null)
 
-  const publicOpen = import.meta.env.VITE_TRACKSUIT_PUBLIC === 'true'
-  const canOrder = publicOpen || !!(member && member.userId)
+  // Public presale (linked from Instagram). Set VITE_TRACKSUIT_PUBLIC='false' to go members-only.
+  const canOrder = import.meta.env.VITE_TRACKSUIT_PUBLIC !== 'false'
   const activeCw = COLORWAYS.find(c => c.id === colorway)
 
   useEffect(() => {
@@ -114,9 +115,17 @@ export default function Drop002() {
 
       {/* ── 3. THE THREE ── */}
       <section className="max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-        <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-8">
+        <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-3">
           [ Choose your version ]
         </motion.p>
+        <motion.h2 {...reveal(0.04)} style={{ ...serif, fontSize: 'clamp(24px, 4.5vw, 38px)', color: '#111', fontWeight: 400, lineHeight: 1.1 }} className="mb-10">
+          Three colours. One standard.<br /><span style={{ fontStyle: 'italic', opacity: 0.7 }}>Which one are you?</span>
+        </motion.h2>
+        {/* Real render — add public/ts-lineup.jpg (the 3-tracksuit image) */}
+        <motion.div {...reveal(0.06)} className="relative w-full overflow-hidden mb-8" style={{ maxHeight: '60vh' }}>
+          <img src="/ts-lineup.jpg" alt="The three colourways" className="w-full object-cover"
+            style={{ maxHeight: '60vh' }} onError={e => { e.currentTarget.style.display = 'none' }} />
+        </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {COLORWAYS.map((c, i) => (
             <motion.button key={c.id} {...reveal(i * 0.08)}
@@ -159,19 +168,24 @@ export default function Drop002() {
             </motion.div>
           ))}
         </div>
-        <motion.p {...reveal(0.34)} style={{ ...serif, fontSize: 'clamp(22px, 4vw, 32px)', color: '#111', fontWeight: 500 }} className="mt-8">
-          €{PRICE} <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.2em' }}>+ €6 SHIPPING</span>
-        </motion.p>
+        <motion.div {...reveal(0.34)} className="mt-8 flex items-baseline gap-4 flex-wrap">
+          <p style={{ ...serif, fontSize: 'clamp(24px, 4.5vw, 34px)', color: '#111', fontWeight: 500 }}>
+            €{PRICE} <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.2em' }}>+ €6 SHIPPING</span>
+          </p>
+          <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.14em' }} className="uppercase">
+            Pre-order price · <span style={{ textDecoration: 'line-through' }}>€{RETAIL}</span> after the drop
+          </p>
+        </motion.div>
       </section>
 
       {/* ── 5. THE RULES ── */}
       <section className="px-6 sm:px-10 py-16 sm:py-24" style={{ background: '#111' }}>
         <div className="max-w-3xl mx-auto flex flex-col gap-6">
           {[
-            'One hundred sets. Numbered. Never repeated.',
-            'Members see it 48 hours before anyone.',
-            'Every buyer receives 2 invites.',
-            "Pre-order funds the drop. When it's claimed, the door closes.",
+            'One hundred sets. Numbered. Limited drop.',
+            'When the pre-order closes, production begins.',
+            'No additional stock guaranteed. Not available in stores.',
+            'Ships 2–3 weeks after the pre-order closes.',
           ].map((line, i) => (
             <motion.p key={i} {...reveal(i * 0.08)}
               style={{ ...mono, fontSize: 'clamp(10px, 1.8vw, 13px)', color: 'rgba(245,243,238,0.78)', letterSpacing: '0.14em', lineHeight: 1.6 }} className="uppercase">
@@ -225,7 +239,7 @@ export default function Drop002() {
               {loading ? 'Processing…' : `Claim N° ${String(counter.next).padStart(2, '0')} — €${PRICE}`}
             </button>
             <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.14em', lineHeight: 1.9 }} className="uppercase mt-5">
-              Pre-order. Production starts when the drop is claimed. Ships in 3–4 weeks. We film the whole process.
+              Pre-order €{PRICE} · €{RETAIL} after the drop. Ships 2–3 weeks after the pre-order closes. We film the whole process.
             </p>
           </motion.div>
         ) : (

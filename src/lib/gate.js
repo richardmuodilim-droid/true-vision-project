@@ -19,7 +19,8 @@ const DEFAULT_CODES = ['UNDERSTOOD']
 //  - /archive is the front door (join → become member → unlocked)
 //  - /archive-admin is the admin panel
 //  - /order-success is Stripe's return URL — never block a paying customer
-export const EXEMPT_PATHS = ['/archive', '/archive-admin', '/order-success']
+// /drop-002 is the public tracksuit presale — linked from Instagram, must be reachable without a code.
+export const EXEMPT_PATHS = ['/archive', '/archive-admin', '/order-success', '/drop-002']
 
 function getCodes() {
   const env = import.meta.env.VITE_GATE_CODES
