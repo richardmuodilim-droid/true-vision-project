@@ -9,11 +9,20 @@ const TOTAL = 100
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const MEMBER_KEY = 'TrueVisionMember'
 
+// Each colourway is cropped straight out of the poster (3 tracksuits side by side):
+// pink = left third, grey/blue = centre, purple = right third.
 const COLORWAYS = [
-  { id: 'pink',   name: 'Pink / Black',      accent: '#EC008C', img: '/ts-pink.jpg' },
-  { id: 'blue',   name: 'Light Blue / Grey', accent: '#7DD3DA', img: '/ts-blue.jpg' },
-  { id: 'purple', name: 'Purple / Black',    accent: '#7B2FBE', img: '/ts-purple.jpg' },
+  { id: 'pink',   name: 'Pink / Black',      accent: '#EC008C', pos: '0% 26%' },
+  { id: 'blue',   name: 'Light Blue / Grey', accent: '#7DD3DA', pos: '50% 26%' },
+  { id: 'purple', name: 'Purple / Black',    accent: '#7B2FBE', pos: '100% 26%' },
 ]
+
+const boom = (d = 0) => ({
+  initial: { opacity: 0, scale: 0.92, y: 20 },
+  whileInView: { opacity: 1, scale: 1, y: 0 },
+  viewport: { once: true, margin: '-40px' },
+  transition: { duration: 0.6, delay: d, ease: [0.16, 1, 0.3, 1] },
+})
 
 function loadMember() {
   try { const r = localStorage.getItem(MEMBER_KEY); return r ? JSON.parse(r) : null } catch { return null }
@@ -28,7 +37,6 @@ export default function Drop002() {
   const [counter, setCounter]   = useState({ next: 23, remaining: 78 })
   const orderRef = useRef(null)
 
-  // Public presale (linked from Instagram). Set VITE_TRACKSUIT_PUBLIC='false' to go members-only.
   const canOrder = import.meta.env.VITE_TRACKSUIT_PUBLIC !== 'false'
   const activeCw = COLORWAYS.find(c => c.id === colorway)
 
@@ -44,7 +52,7 @@ export default function Drop002() {
 
   const handleClaim = async (e) => {
     e.preventDefault()
-    if (!colorway) { setError('Choose your version.'); return }
+    if (!colorway) { setError('Choose your colour.'); return }
     if (!size) { setError('Pick a size.'); return }
     setLoading(true); setError('')
     try {
@@ -65,94 +73,109 @@ export default function Drop002() {
     <div className="bg-[#F5F3EE]">
       <div className="grain" aria-hidden="true" />
 
-      {/* ── 1. HERO ── */}
-      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-6" style={{ background: '#0a0909' }}>
+      {/* ── 1. HERO — big poster, PRE-ORDER LIVE ── */}
+      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-5 py-16" style={{ background: '#0a0909' }}>
         <div aria-hidden="true" className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 55% 45% at 50% 40%, rgba(255,255,255,0.05), transparent 62%)' }} />
-        <div className="relative z-10 flex flex-col items-center">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.1 }}
-            style={{ ...mono, fontSize: '8px', color: 'rgba(255,255,255,0.30)', letterSpacing: '0.5em' }} className="uppercase mb-9">
-            [ TVP // The Hidden-Pocket Tracksuit ]
-          </motion.p>
-          <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2, ease }}
-            style={{ ...serif, fontSize: 'clamp(42px, 10vw, 88px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.02, letterSpacing: '-0.01em' }} className="mb-6">
+          style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 45%, rgba(255,255,255,0.06), transparent 65%)' }} />
+        <div className="relative z-10 flex flex-col items-center w-full">
+          {/* Pulsing PRE-ORDER LIVE */}
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+            className="flex items-center gap-2 mb-7">
+            <motion.span className="w-2 h-2 rounded-full" style={{ background: '#ff3b3b' }}
+              animate={{ opacity: [1, 0.2, 1], scale: [1, 0.8, 1] }} transition={{ duration: 1.3, repeat: Infinity }} />
+            <span style={{ ...mono, fontSize: 'clamp(9px, 2vw, 11px)', color: '#F5F3EE', letterSpacing: '0.42em' }} className="uppercase">
+              Pre-Order Is Live
+            </span>
+          </motion.div>
+
+          {/* Big poster */}
+          <motion.img src="/pre-order.jpg" alt="TVP Tracksuit — three colours"
+            initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.9, ease }}
+            className="w-full max-w-[560px] h-auto object-contain select-none"
+            style={{ maxHeight: '58vh', boxShadow: '0 30px 80px rgba(0,0,0,0.6)' }}
+            onError={e => { e.currentTarget.style.display = 'none' }} draggable="false" />
+
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
+            style={{ ...serif, fontSize: 'clamp(26px, 6vw, 46px)', color: '#F5F3EE', fontWeight: 400, lineHeight: 1.05 }} className="mt-8 mb-2">
             You'll never find it.
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.4 }}
-            style={{ ...mono, fontSize: 'clamp(9px, 1.8vw, 11px)', color: 'rgba(255,255,255,0.42)', letterSpacing: '0.32em' }} className="uppercase mb-12">
-            A pocket only the owner knows. Three versions. Numbered.
           </motion.p>
-          <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.6 }}
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}
+            style={{ ...mono, fontSize: 'clamp(8px, 1.6vw, 10px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }} className="uppercase mb-9">
+            A pocket only the owner knows · Three colours · Numbered
+          </motion.p>
+
+          <motion.button initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.6 }}
             onClick={scrollToOrder}
-            style={{ ...mono, fontSize: '10px', letterSpacing: '0.4em', border: '1px solid rgba(255,255,255,0.35)', color: '#F5F3EE' }}
-            className="px-9 py-4 uppercase hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-            Claim yours →
+            style={{ ...mono, fontSize: 'clamp(10px, 2vw, 12px)', letterSpacing: '0.4em', background: '#F5F3EE', color: '#111' }}
+            className="px-10 py-5 uppercase hover:bg-white active:scale-95 transition-all duration-300 cursor-pointer">
+            Claim yours — €{PRICE} →
           </motion.button>
         </div>
       </section>
 
-      {/* ── 2. THE SECRET ── */}
+      {/* ── 2. THE SECRET — scanning pocket reveal ── */}
       <section className="max-w-4xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
-          <motion.div {...reveal(0)}>
-            <h2 style={{ ...serif, fontSize: 'clamp(28px, 5.5vw, 44px)', color: '#111', fontWeight: 400, lineHeight: 1.12 }} className="mb-6">
-              Every tracksuit hides a pocket.
+          <motion.div {...boom(0)}>
+            <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-5">[ The Secret ]</p>
+            <h2 style={{ ...serif, fontSize: 'clamp(30px, 6vw, 50px)', color: '#111', fontWeight: 400, lineHeight: 1.08 }} className="mb-6">
+              Every tracksuit<br />hides a pocket.
             </h2>
             <p style={{ ...inter, fontSize: 'clamp(14px, 2vw, 16px)', color: 'rgba(0,0,0,0.62)', lineHeight: 1.9 }}>
               A seamless zip on the jacket. A hidden pocket sewn inside the waistband. Invisible when closed — impossible to find unless you know it's there. Your cash, your keys, your cards, held where nobody looks. Some things are only for the ones who understand.
             </p>
           </motion.div>
-          <motion.div {...reveal(0.12)} className="relative w-full aspect-[4/5] overflow-hidden" style={{ background: '#111' }}>
+          {/* Scanning image */}
+          <motion.div {...boom(0.12)} className="relative w-full aspect-[4/5] overflow-hidden" style={{ background: '#111' }}>
             {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r','bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r'].map((c,i)=>(
-              <span key={i} aria-hidden="true" className={`absolute w-5 h-5 z-10 ${c}`} style={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+              <span key={i} aria-hidden="true" className={`absolute w-5 h-5 z-20 ${c}`} style={{ borderColor: 'rgba(255,255,255,0.18)' }} />
             ))}
-            <img src="/ts-pocket.jpg" alt="Hidden pocket — closed to open"
-              className="w-full h-full object-cover" style={{ filter: 'saturate(0.9) brightness(0.85)' }}
-              onError={e => { e.currentTarget.style.display = 'none' }} />
+            <img src="/ts-pocket.jpg" alt="Hidden pocket" className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'saturate(0.9) brightness(0.8)' }} onError={e => { e.currentTarget.style.display = 'none' }} />
+            {/* scan line */}
+            <motion.div aria-hidden="true" className="absolute left-0 right-0 z-10" style={{ height: '2px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent)', boxShadow: '0 0 14px rgba(255,255,255,0.5)' }}
+              initial={{ top: '0%' }} animate={{ top: ['2%', '96%', '2%'] }} transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }} />
+            <span className="absolute bottom-3 left-3 z-20" style={{ ...mono, fontSize: '7px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.3em' }}>[ SCANNING — POCKET FOUND ]</span>
           </motion.div>
         </div>
       </section>
 
-      {/* ── 3. THE THREE ── */}
-      <section className="max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-        <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-3">
-          [ Choose your version ]
-        </motion.p>
-        <motion.h2 {...reveal(0.04)} style={{ ...serif, fontSize: 'clamp(24px, 4.5vw, 38px)', color: '#111', fontWeight: 400, lineHeight: 1.1 }} className="mb-10">
+      {/* ── 3. THE THREE — punchy colour cards from the poster ── */}
+      <section className="max-w-5xl mx-auto px-6 sm:px-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+        <motion.p {...boom(0)} style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-3">[ Choose your colour ]</motion.p>
+        <motion.h2 {...boom(0.05)} style={{ ...serif, fontSize: 'clamp(28px, 5.5vw, 44px)', color: '#111', fontWeight: 400, lineHeight: 1.1 }} className="mb-12">
           Three colours. One standard.<br /><span style={{ fontStyle: 'italic', opacity: 0.7 }}>Which one are you?</span>
         </motion.h2>
-        {/* Real render — add public/ts-lineup.jpg (the 3-tracksuit image) */}
-        <motion.div {...reveal(0.06)} className="relative w-full overflow-hidden mb-8" style={{ maxHeight: '60vh' }}>
-          <img src="/ts-lineup.jpg" alt="The three colourways" className="w-full object-cover"
-            style={{ maxHeight: '60vh' }} onError={e => { e.currentTarget.style.display = 'none' }} />
-        </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-          {COLORWAYS.map((c, i) => (
-            <motion.button key={c.id} {...reveal(i * 0.08)}
-              onClick={() => { setColorway(c.id); setError(''); }}
-              aria-pressed={colorway === c.id}
-              className="flex flex-col text-left cursor-pointer transition-all duration-300"
-              style={{ border: `1px solid ${colorway === c.id ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.10)'}`, padding: '10px' }}>
-              <div className="relative w-full aspect-[3/4] overflow-hidden mb-3"
-                style={{ background: `linear-gradient(160deg, ${c.accent}22, #1a1a1a 85%)` }}>
-                <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover"
-                  onError={e => { e.currentTarget.style.display = 'none' }} />
-                <span className="absolute top-3 left-3 w-3 h-3 rounded-full z-10" style={{ background: c.accent, boxShadow: `0 0 10px ${c.accent}` }} />
-                {colorway === c.id && (
-                  <span className="absolute bottom-3 right-3 z-10" style={{ ...mono, fontSize: '8px', color: '#fff', letterSpacing: '0.2em' }}>✓ SELECTED</span>
-                )}
-              </div>
-              <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.7)', letterSpacing: '0.14em' }} className="uppercase">{c.name}</span>
-            </motion.button>
-          ))}
+          {COLORWAYS.map((c, i) => {
+            const sel = colorway === c.id
+            return (
+              <motion.button key={c.id} {...boom(i * 0.1)}
+                onClick={() => { setColorway(c.id); setError(''); }} aria-pressed={sel}
+                whileHover={{ y: -6 }}
+                className="group flex flex-col text-left cursor-pointer transition-all duration-300"
+                style={{ border: `1.5px solid ${sel ? c.accent : 'rgba(0,0,0,0.10)'}`, padding: '8px',
+                  boxShadow: sel ? `0 18px 50px ${c.accent}40` : 'none', background: '#0a0909' }}>
+                <div className="relative w-full aspect-[3/4] overflow-hidden">
+                  <img src="/pre-order.jpg" alt={c.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{ objectPosition: c.pos }} onError={e => { e.currentTarget.style.opacity = 0 }} />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 55%, ${c.accent}30, #0a0909f0)` }} />
+                  <span className="absolute top-3 left-3 w-3.5 h-3.5 rounded-full z-10" style={{ background: c.accent, boxShadow: `0 0 14px ${c.accent}` }} />
+                  {sel && <span className="absolute top-3 right-3 z-10" style={{ ...mono, fontSize: '8px', color: '#fff', letterSpacing: '0.2em' }}>✓ YOURS</span>}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                    <span style={{ ...mono, fontSize: 'clamp(11px, 2.4vw, 13px)', color: '#fff', letterSpacing: '0.14em' }} className="uppercase font-bold">{c.name}</span>
+                  </div>
+                </div>
+              </motion.button>
+            )
+          })}
         </div>
       </section>
 
       {/* ── 4. THE PIECE ── */}
       <section className="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-        <motion.p {...reveal(0)} style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-8">
-          [ The Set — Jacket + Bottoms ]
-        </motion.p>
+        <motion.p {...boom(0)} style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.45em' }} className="uppercase mb-8">[ The Set — Jacket + Bottoms ]</motion.p>
         <div className="flex flex-col">
           {[
             '92% Polyester / 8% Elastane · ~300 GSM · Four-way stretch',
@@ -160,16 +183,16 @@ export default function Drop002() {
             'Hidden zip pocket (jacket) + hidden waistband pocket (bottoms)',
             'TV embroidered — left chest + back neck',
             'Each set numbered — N° __ / 100',
-            'Sizes S / M / L',
+            'Sizes S / M / L / XL / XXL',
           ].map((line, i) => (
-            <motion.div key={i} {...reveal(0.04 + i * 0.05)} className="flex items-start gap-4 py-4" style={{ borderTop: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.07)' }}>
+            <motion.div key={i} {...boom(0.04 + i * 0.05)} className="flex items-start gap-4 py-4" style={{ borderTop: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.07)' }}>
               <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.28)', letterSpacing: '0.1em', paddingTop: '3px' }}>{String(i + 1).padStart(2, '0')}</span>
               <span style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.68)', letterSpacing: '0.06em', lineHeight: 1.7 }} className="uppercase">{line}</span>
             </motion.div>
           ))}
         </div>
-        <motion.div {...reveal(0.34)} className="mt-8 flex items-baseline gap-4 flex-wrap">
-          <p style={{ ...serif, fontSize: 'clamp(24px, 4.5vw, 34px)', color: '#111', fontWeight: 500 }}>
+        <motion.div {...boom(0.34)} className="mt-8 flex items-baseline gap-4 flex-wrap">
+          <p style={{ ...serif, fontSize: 'clamp(26px, 5vw, 38px)', color: '#111', fontWeight: 500 }}>
             €{PRICE} <span style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.2em' }}>+ €6 SHIPPING</span>
           </p>
           <p style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.14em' }} className="uppercase">
@@ -187,8 +210,8 @@ export default function Drop002() {
             'No additional stock guaranteed. Not available in stores.',
             'Ships 2–3 weeks after the pre-order closes.',
           ].map((line, i) => (
-            <motion.p key={i} {...reveal(i * 0.08)}
-              style={{ ...mono, fontSize: 'clamp(10px, 1.8vw, 13px)', color: 'rgba(245,243,238,0.78)', letterSpacing: '0.14em', lineHeight: 1.6 }} className="uppercase">
+            <motion.p key={i} {...boom(i * 0.08)}
+              style={{ ...mono, fontSize: 'clamp(11px, 1.9vw, 14px)', color: 'rgba(245,243,238,0.82)', letterSpacing: '0.14em', lineHeight: 1.6 }} className="uppercase">
               {line}
             </motion.p>
           ))}
@@ -197,30 +220,30 @@ export default function Drop002() {
 
       {/* ── 6. ORDER BLOCK ── */}
       <section ref={orderRef} className="max-w-md mx-auto px-6 py-20 sm:py-28 text-center scroll-mt-6">
-        <motion.h2 {...reveal(0)} style={{ ...serif, fontSize: 'clamp(30px, 6vw, 48px)', color: '#111', fontWeight: 400 }} className="mb-6">
+        <motion.h2 {...boom(0)} style={{ ...serif, fontSize: 'clamp(32px, 6.5vw, 50px)', color: '#111', fontWeight: 400 }} className="mb-6">
           Claim your number.
         </motion.h2>
-        <motion.p {...reveal(0.06)} style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.28em' }} className="uppercase mb-12">
+        <motion.p {...boom(0.06)} style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.28em' }} className="uppercase mb-12">
           N° {String(counter.next).padStart(2, '0')} — {counter.remaining} of {TOTAL} remaining
         </motion.p>
 
         {canOrder ? (
-          <motion.div {...reveal(0.12)} className="flex flex-col items-center">
-            {/* Colorway (mirror of section 3) */}
-            <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.4em' }} className="uppercase mb-3">Version</p>
-            <div className="flex gap-2 mb-7">
+          <motion.div {...boom(0.12)} className="flex flex-col items-center">
+            <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.4em' }} className="uppercase mb-3">Colour</p>
+            <div className="flex flex-wrap justify-center gap-2 mb-7">
               {COLORWAYS.map(c => (
                 <button key={c.id} onClick={() => { setColorway(c.id); setError('') }} aria-pressed={colorway === c.id}
                   className="flex items-center gap-2 px-3 h-11 transition-all duration-300 cursor-pointer"
-                  style={{ border: `1px solid ${colorway === c.id ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.12)'}` }}>
+                  style={{ border: `1.5px solid ${colorway === c.id ? c.accent : 'rgba(0,0,0,0.12)'}`,
+                    boxShadow: colorway === c.id ? `0 6px 18px ${c.accent}40` : 'none' }}>
                   <span className="w-3 h-3 rounded-full" style={{ background: c.accent }} />
-                  <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.6)', letterSpacing: '0.1em' }} className="uppercase">{c.name}</span>
+                  <span style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.65)', letterSpacing: '0.1em' }} className="uppercase">{c.name}</span>
                 </button>
               ))}
             </div>
 
             <p style={{ ...mono, fontSize: '7px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.4em' }} className="uppercase mb-3">Size</p>
-            <div className="flex gap-2 mb-8">
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
               {SIZES.map(s => (
                 <button key={s} onClick={() => { setSize(s); setError('') }} aria-pressed={size === s}
                   className="w-12 h-12 transition-all duration-300 cursor-pointer"
@@ -232,18 +255,18 @@ export default function Drop002() {
               ))}
             </div>
 
-            {error && <p style={{ ...mono, fontSize: '9px', color: 'rgba(200,80,80,0.75)', letterSpacing: '0.08em' }} className="mb-4">{error}</p>}
-            <button onClick={handleClaim} disabled={loading}
-              style={{ ...mono, fontSize: '11px', letterSpacing: '0.32em', background: '#111', color: '#F5F3EE' }}
-              className="w-full py-[20px] uppercase hover:bg-[#2a2a2a] disabled:opacity-50 active:scale-[0.98] transition-all duration-300">
+            {error && <p style={{ ...mono, fontSize: '9px', color: 'rgba(200,80,80,0.8)', letterSpacing: '0.08em' }} className="mb-4">{error}</p>}
+            <motion.button onClick={handleClaim} disabled={loading} whileTap={{ scale: 0.97 }}
+              style={{ ...mono, fontSize: '12px', letterSpacing: '0.32em', background: '#111', color: '#F5F3EE' }}
+              className="w-full py-[22px] uppercase hover:bg-[#2a2a2a] disabled:opacity-50 transition-all duration-300">
               {loading ? 'Processing…' : `Claim N° ${String(counter.next).padStart(2, '0')} — €${PRICE}`}
-            </button>
+            </motion.button>
             <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.14em', lineHeight: 1.9 }} className="uppercase mt-5">
               Pre-order €{PRICE} · €{RETAIL} after the drop. Ships 2–3 weeks after the pre-order closes. We film the whole process.
             </p>
           </motion.div>
         ) : (
-          <motion.div {...reveal(0.12)} className="flex flex-col items-center gap-5">
+          <motion.div {...boom(0.12)} className="flex flex-col items-center gap-5">
             <p style={{ ...mono, fontSize: '11px', color: '#111', letterSpacing: '0.3em' }} className="uppercase">Members go first.</p>
             <Link to="/archive"
               style={{ ...mono, fontSize: '10px', letterSpacing: '0.36em', background: '#111', color: '#F5F3EE' }}
