@@ -5,18 +5,18 @@ import { kv } from '@vercel/kv'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const resend  = new Resend(process.env.RESEND_API_KEY)
 
-// Edition 01: reserved 1-22 (founders + seeding), public starts at 23, total 50.
-// Idempotent per Stripe session so refreshing the success page never double-assigns.
-async function assignEditionNumber(sessionId, email) {
-  const RESERVED = 22, TOTAL = 50
-  const sessKey = `tvp:edition01:session:${sessionId}`
+// Numbered drops (Edition 01 tee = 50, Tracksuit = 100). Reserved 1-22 (founders + seeding),
+// public starts at N° 23. Idempotent per Stripe session so a success-page refresh never double-assigns.
+async function assignDropNumber(kind, sessionId, email, total, meta) {
+  const RESERVED = 22
+  const sessKey = `tvp:${kind}:session:${sessionId}`
   const existing = await kv.get(sessKey)
   if (existing) return Number(existing)
-  let n = await kv.incr('tvp:edition01:count')
-  if (n <= RESERVED) { await kv.set('tvp:edition01:count', RESERVED + 1); n = RESERVED + 1 }
-  const number = Math.min(n, TOTAL)
+  let n = await kv.incr(`tvp:${kind}:count`)
+  if (n <= RESERVED) { await kv.set(`tvp:${kind}:count`, RESERVED + 1); n = RESERVED + 1 }
+  const number = Math.min(n, total)
   await kv.set(sessKey, number)
-  if (email) await kv.hset('tvp:edition01:numbers', { [email.toLowerCase()]: number })
+  if (email) await kv.hset(`tvp:${kind}:numbers`, { [email.toLowerCase()]: meta ? `${number} · ${meta}` : String(number) })
   return number
 }
 
@@ -55,7 +55,7 @@ function addressHtml(shipping) {
 
 // ─── Customer email ──────────────────────────────────────────────────────────
 
-function customerEmailHtml({ ref, email, items, shipping, total, editionNumber }) {
+function customerEmailHtml({ ref, email, items, shipping, total, dropNumber, dropTotal }) {
   const shippingCost = calcShipping(total, items)
 
   const itemRows = items.map(item => `
@@ -91,8 +91,8 @@ function customerEmailHtml({ ref, email, items, shipping, total, editionNumber }
 
   <tr><td style="padding:36px 40px 28px;border-bottom:1px solid #eeebe6;">
     <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.44em;color:#bbb;text-transform:uppercase;">True Vision Project</p>
-    <p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#111;font-style:italic;line-height:1.2;">${editionNumber ? `N° ${editionNumber} of 50 is yours.` : 'Order Confirmed.'}</p>
-    ${editionNumber ? `<p style="margin:12px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.2em;color:#888;text-transform:uppercase;">Edition 01 — The Document · Hand-numbered · Never repeated</p>` : ''}
+    <p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#111;font-style:italic;line-height:1.2;">${dropNumber ? `N° ${dropNumber} of ${dropTotal} is yours.` : 'Order Confirmed.'}</p>
+    ${dropNumber ? `<p style="margin:12px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.2em;color:#888;text-transform:uppercase;">Hand-numbered · Never repeated · Yours alone</p>` : ''}
   </td></tr>
 
   <tr><td style="padding:32px 40px 0;">
@@ -164,12 +164,12 @@ function customerEmailHtml({ ref, email, items, shipping, total, editionNumber }
 </html>`
 }
 
-function customerEmailText({ ref, email, items, shipping, total, editionNumber }) {
+function customerEmailText({ ref, email, items, shipping, total, dropNumber, dropTotal }) {
   const shippingCost = calcShipping(total, items)
   const itemLines = items.map(i => `  ${i.name}${i.variant ? ' - ' + i.variant : ''} x${i.qty}  €${(i.price * i.qty).toFixed(2)}`).join('\n')
   const addr = addressText(shipping)
-  return `TRUE VISION PROJECT — ${editionNumber ? `N° ${editionNumber} OF 50 IS YOURS` : 'ORDER CONFIRMED'}
-======================================${editionNumber ? `\n\nEdition 01 — The Document. Hand-numbered. Never repeated.\nYour piece: N° ${editionNumber} of 50.` : ''}
+  return `TRUE VISION PROJECT — ${dropNumber ? `N° ${dropNumber} OF ${dropTotal} IS YOURS` : 'ORDER CONFIRMED'}
+======================================${dropNumber ? `\n\nHand-numbered. Never repeated. Yours alone.\nYour piece: N° ${dropNumber} of ${dropTotal}.` : ''}
 
 Reference: TVP-${ref}
 Confirmation sent to: ${email}
@@ -316,12 +316,14 @@ export default async function handler(req, res) {
       price:   li.amount_total / 100 / li.quantity,
     }))
 
-    // Edition 01 — assign the piece number (idempotent)
-    const isEdition = items.some(i => (i.name || '').toLowerCase().includes('edition 01'))
-    let editionNumber = null
-    if (isEdition) {
-      try { editionNumber = await assignEditionNumber(session_id, email) } catch (e) { console.error('edition number error:', e.message) }
-    }
+    // Numbered drops — assign the piece number (idempotent)
+    const isTracksuit = items.some(i => (i.name || '').toLowerCase().includes('tracksuit'))
+    const isEdition   = items.some(i => (i.name || '').toLowerCase().includes('edition 01'))
+    let dropNumber = null, dropTotal = null
+    try {
+      if (isTracksuit)    { dropTotal = 100; dropNumber = await assignDropNumber('tracksuit', session_id, email, dropTotal, items[0]?.variant) }
+      else if (isEdition) { dropTotal = 50;  dropNumber = await assignDropNumber('edition01', session_id, email, dropTotal) }
+    } catch (e) { console.error('drop number error:', e.message) }
 
     const emailPromises = []
 
@@ -331,11 +333,11 @@ export default async function handler(req, res) {
           from:    FROM_ADDRESS,
           to:      email,
           replyTo: 'archive@truevisionproject.com',
-          subject: (isEdition && editionNumber)
-            ? `N° ${editionNumber} of 50 is yours — True Vision Project`
+          subject: (dropNumber && dropTotal)
+            ? `N° ${dropNumber} of ${dropTotal} is yours — True Vision Project`
             : `Your order is confirmed — TVP-${ref}`,
-          html:    customerEmailHtml({ ref, email, items, shipping, total, editionNumber }),
-          text:    customerEmailText({ ref, email, items, shipping, total, editionNumber }),
+          html:    customerEmailHtml({ ref, email, items, shipping, total, dropNumber, dropTotal }),
+          text:    customerEmailText({ ref, email, items, shipping, total, dropNumber, dropTotal }),
         }).catch(err => console.error('Customer email error:', err.message))
       )
     }
