@@ -249,6 +249,10 @@ Navbar (store pages)
 
 ## WHAT'S BUILT ✅
 
+- **Invitation gate** — whole site behind GateScreen (`src/lib/gate.js`); exempt: /archive, /archive-admin, /order-success
+- **TRACKSUIT pre-order (ACTIVE) — `/drop-002`**: hero → secret → 3 colorways → spec → rules → order block. Numbered /100 (KV `tvp:tracksuit:count`, public from N° 23), members-first via `VITE_TRACKSUIT_PUBLIC`, Stripe €70 + €6/unit ship, "N° X of 100 is yours" email. Placeholder imgs: add `ts-pink.jpg` / `ts-purple.jpg` (ts-blue, ts-pocket exist).
+- **Edition 01 tee pre-order — `/edition-01`** (DORMANT, drop after tracksuit): numbered /50, same logic, `VITE_EDITION01_PUBLIC` flag
+- Counter API: `GET /api/lookup?tracksuit=1` / `?edition01=1`; numbering in `order-confirm.js` (idempotent per Stripe session)
 - Landing / hero page
 - Editorial store homepage
 - Product detail page (cap shows as sold out)
