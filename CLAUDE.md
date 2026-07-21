@@ -31,8 +31,9 @@
 3. **Seeding, not ads** — gift numbered pieces to nano/micro creators + musicians (Ireland + Lombardy). Note: rising Wexford rapper Lil Skag = warm local target.
 4. **Two-city editions** — Wexford Edition / Bergamo Edition per drop.
 
-**ACTIVE DROP — EDITION 01: "THE DOCUMENT" TEE (decision closed, do not reopen):**
-Cream heavyweight boxy tee (240–280 GSM), black print. Back: BUILT FROM NOTHING + city coordinates + "EDITION 01 — N° ___/50" with corner marks. Front: 8cm V left chest. Inside neck: NEVER FORGET WHERE YOU CAME FROM. €35–40, 50 units, numbered. Full supplier spec: `TEE-SAMPLE-ORDER-SPEC.docx`.
+**ACTIVE DROP — THE HIDDEN-POCKET TRACKSUIT (founder decision, July 2026 — tracksuit ships FIRST):**
+Full tracksuit (jacket + bottoms), 92% polyester / 8% elastane, ~300 GSM, four-way stretch, moisture-wicking. THE feature: hidden seamless zip pocket on the jacket + hidden zip pocket inside the waistband of the bottoms ("impossible to find" — secret only the owner knows; fits the vision/seeing lore). Three colorways: Pink/Black, Light Blue/Grey, Purple/Black. TV embroidered left chest + small back neck. Sizes S/M/L. €70/set. Numbered pieces per the Invitation system. Reference visuals generated in Claude Design (Richard has exports). Supplier: existing Pakistan contact, 3–4 wk lead. Quote pack: `TRACKSUIT-QUOTE-PACK.md`.
+**QUEUED NEXT — EDITION 01 "THE VISION CHART" TEE (design final, do not reopen):** full package ready (`TEE-SAMPLE-ORDER-SPEC.docx` + `TVP-EDITION01-PRINT-ARTWORK.pdf` + `TVP-EDITION01-MOCKUP.png`). Ships as the drop after the tracksuit. The chart remains the brand's repeatable FORMAT.
 
 **Who works where (two rooms, one brain):**
 - **Claude Code** = code room: build, test (`npm run build`), commit, push, deploy.
@@ -46,12 +47,16 @@ Cream heavyweight boxy tee (240–280 GSM), black print. Back: BUILT FROM NOTHIN
 
 **60-day sequence:** gate live → sample ordered → seeding list + DMs (wk 2–3) → pre-order opens members-first, buyers get 2 invites (wk 4) → batch + fulfil + seed pieces ship (wk 5–6) → one small real-world pickup event in Wexford, filmed (wk 7–8).
 
-**NEXT ACTIONS (July 2026):**
-1. Claude Code: run build → commit → push the gate (files uncommitted right now).
-2. Richard: send `TVP-The-Invitation-Strategy.docx` to partner; order tee sample per spec doc.
-3. Then: pre-order page for Edition 01, seeding list + DM scripts, Higgsfield "Door" teaser prompts.
+**NEXT ACTIONS (July 2026 — tracksuit-first):**
+1. Richard/Partner: send `TRACKSUIT-QUOTE-PACK.md` + Claude Design reference images to the Pakistan supplier → get sample-set cost, unit cost at 50/100, lead time IN WRITING. Fable checks margin before any payment.
+2. Order ONE sample set (one colorway) on quote approval. No batch before sample in hand.
+3. Richard + Partner: seeding DMs from `SEEDING-OUTREACH-PACK.md` continue unchanged (Lil Skag first) — seeded pieces become tracksuits.
+4. Claude Code: adapt pre-order page plan to the tracksuit (reuse `/drop-002` teaser + waitlist, add Stripe checkout when sample approved).
+5. Edition 01 tee: frozen, package complete, next drop after tracksuit.
+DONE: gate live · seeding pack · tee package (queued) · tracksuit visuals · master plan repointed.
 
 **Key docs:** `TVP-HONEST-BRIEF.md` (the honest diagnosis) · `GATE-NOTES.md` (gate handoff) · `TEE-SAMPLE-ORDER-SPEC.docx` (supplier spec) · `THE-STATEMENT-TEE-PACK.md` (superseded by Edition 01 spec above).
+**Design lives in Figma:** https://www.figma.com/design/lY3xDW4oWf3uw8IDtAyNhk (file key `lY3xDW4oWf3uw8IDtAyNhk`) — Vision Chart artwork, editable. Workflow: Fable executes design changes there on request; founders comment in Figma; final export → print files for supplier.
 
 **Drop 001 status:** closed / unavailable. (Candid internal history is kept privately in Claude's memory, not in this repo — do not restate it in committed files.)
 
@@ -177,7 +182,7 @@ ease  = [0.16, 1, 0.3, 1]
 - Stock in products.js: `{ 'One Size': 0 }` — shows as sold out on product page
 
 ### DROP 002 — THE TRACKSUIT
-- **Status: PARKED — resumes only after Edition 01 (The Document tee) completes its cycle**
+- **Status: ACTIVE — ships FIRST (founder decision July 2026). See "ACTIVE DROP" section above for the current spec (hidden pockets, 3 colorways, €70).**
 - Price: €70 full set
 - Sizes: S / M / L
 - Colourways: Purple/Black, Light Blue/Grey, Pink/Black
