@@ -5,7 +5,6 @@ import { mono, serif, inter, ease, reveal } from '../lib/design'
 
 const PRICE = 70
 const RETAIL = 80
-const TOTAL = 100
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const MEMBER_KEY = 'TrueVisionMember'
 
@@ -35,7 +34,7 @@ export default function Drop002() {
   const [size, setSize]         = useState('')
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
-  const [counter, setCounter]   = useState({ next: 23, remaining: 78 })
+  const [counter, setCounter]   = useState({ next: 1 })
   const orderRef = useRef(null)
 
   const canOrder = import.meta.env.VITE_TRACKSUIT_PUBLIC !== 'false'
@@ -45,7 +44,7 @@ export default function Drop002() {
     setMember(loadMember())
     fetch('/api/lookup?tracksuit=1')
       .then(r => r.json())
-      .then(d => { if (d && typeof d.remaining === 'number') setCounter({ next: d.next, remaining: d.remaining }) })
+      .then(d => { if (d && typeof d.next === 'number') setCounter({ next: d.next }) })
       .catch(() => {})
   }, [])
 
@@ -201,7 +200,7 @@ export default function Drop002() {
             'Moisture-wicking · Breathable · Athletic fit',
             'Hidden zip pocket (jacket) + hidden waistband pocket (bottoms)',
             'TV embroidered — left chest + back neck',
-            'Each set numbered — N° __ / 100',
+            'Each set numbered in order of purchase',
             'Sizes S / M / L / XL / XXL',
           ].map((line, i) => (
             <motion.div key={i} {...boom(0.04 + i * 0.05)} className="flex items-start gap-4 py-4" style={{ borderTop: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.07)' }}>
@@ -224,7 +223,7 @@ export default function Drop002() {
       <section className="px-6 sm:px-10 py-16 sm:py-24" style={{ background: '#111' }}>
         <div className="max-w-3xl mx-auto flex flex-col gap-6">
           {[
-            'One hundred sets. Numbered. Limited drop.',
+            'Limited pre-order. Every set numbered in order of purchase.',
             'When the pre-order closes, production begins.',
             'No additional stock guaranteed. Not available in stores.',
             'Ships 2–3 weeks after the pre-order closes.',
@@ -246,7 +245,7 @@ export default function Drop002() {
           €{PRICE} · Free shipping
         </motion.p>
         <motion.p {...boom(0.1)} style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.2em' }} className="uppercase mb-12">
-          Only {counter.remaining} of {TOTAL} left
+          Numbered in order · you'll be N° {String(counter.next).padStart(3, '0')}
         </motion.p>
 
         {canOrder ? (
@@ -285,8 +284,8 @@ export default function Drop002() {
             </motion.button>
             <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.12em', lineHeight: 2 }} className="uppercase mt-5">
               Free shipping worldwide · €{RETAIL} after the drop<br />
-              Each set is numbered — your N° arrives by email<br />
-              Ships 2–3 weeks after the pre-order closes
+              Numbered in order — the earlier you order, the lower your N°<br />
+              Your number arrives by email · ships 2–3 weeks after the pre-order closes
             </p>
           </motion.div>
         ) : (
