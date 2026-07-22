@@ -238,11 +238,14 @@ export default function Drop002() {
 
       {/* ── 6. ORDER BLOCK ── */}
       <section ref={orderRef} className="max-w-md mx-auto px-6 py-20 sm:py-28 text-center scroll-mt-6">
-        <motion.h2 {...boom(0)} style={{ ...serif, fontSize: 'clamp(32px, 6.5vw, 50px)', color: '#111', fontWeight: 400 }} className="mb-6">
-          Claim your number.
+        <motion.h2 {...boom(0)} style={{ ...serif, fontSize: 'clamp(32px, 6.5vw, 50px)', color: '#111', fontWeight: 400 }} className="mb-5">
+          Pre-order the tracksuit.
         </motion.h2>
-        <motion.p {...boom(0.06)} style={{ ...mono, fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.28em' }} className="uppercase mb-12">
-          N° {String(counter.next).padStart(2, '0')} — {counter.remaining} of {TOTAL} remaining
+        <motion.p {...boom(0.06)} style={{ ...mono, fontSize: '11px', color: '#111', letterSpacing: '0.24em' }} className="uppercase mb-2">
+          €{PRICE} · Free shipping
+        </motion.p>
+        <motion.p {...boom(0.1)} style={{ ...mono, fontSize: '10px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.2em' }} className="uppercase mb-12">
+          Only {counter.remaining} of {TOTAL} left
         </motion.p>
 
         {canOrder ? (
@@ -275,12 +278,14 @@ export default function Drop002() {
 
             {error && <p style={{ ...mono, fontSize: '9px', color: 'rgba(200,80,80,0.8)', letterSpacing: '0.08em' }} className="mb-4">{error}</p>}
             <motion.button onClick={handleClaim} disabled={loading} whileTap={{ scale: 0.97 }}
-              style={{ ...mono, fontSize: '12px', letterSpacing: '0.32em', background: '#111', color: '#F5F3EE' }}
-              className="w-full py-[22px] uppercase hover:bg-[#2a2a2a] disabled:opacity-50 transition-all duration-300">
-              {loading ? 'Processing…' : `Claim N° ${String(counter.next).padStart(2, '0')} — €${PRICE}`}
+              style={{ ...mono, fontSize: '13px', letterSpacing: '0.3em', background: '#111', color: '#F5F3EE' }}
+              className="w-full py-[24px] uppercase hover:bg-[#2a2a2a] disabled:opacity-50 transition-all duration-300">
+              {loading ? 'Processing…' : `Pre-order now — €${PRICE}`}
             </motion.button>
-            <p style={{ ...mono, fontSize: '8px', color: 'rgba(0,0,0,0.3)', letterSpacing: '0.14em', lineHeight: 1.9 }} className="uppercase mt-5">
-              Free shipping worldwide. Pre-order €{PRICE} · €{RETAIL} after the drop. Ships 2–3 weeks after the pre-order closes. We film the whole process.
+            <p style={{ ...mono, fontSize: '9px', color: 'rgba(0,0,0,0.45)', letterSpacing: '0.12em', lineHeight: 2 }} className="uppercase mt-5">
+              Free shipping worldwide · €{RETAIL} after the drop<br />
+              Each set is numbered — your N° arrives by email<br />
+              Ships 2–3 weeks after the pre-order closes
             </p>
           </motion.div>
         ) : (
