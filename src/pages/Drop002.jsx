@@ -62,6 +62,7 @@ export default function Drop002() {
         body: JSON.stringify({
           email: member?.email || undefined,
           items: [{ name: 'TVP Hidden-Pocket Tracksuit', price: PRICE, qty: 1, color: activeCw?.name, size }],
+          meta: { drop: 'tracksuit', colour: activeCw?.name, size },
         }),
       })
       const data = await res.json()

@@ -347,7 +347,7 @@ export default async function handler(req, res) {
         from:    FROM_ADDRESS,
         to:      BUSINESS_EMAIL,
         replyTo: email || 'archive@truevisionproject.com',
-        subject: `New order TVP-${ref} — €${total}${shipping?.name ? ' — ' + shipping.name : ''}`,
+        subject: `${dropNumber ? `N° ${dropNumber}/${dropTotal} — ` : ''}New order TVP-${ref} — €${total}${shipping?.name ? ' — ' + shipping.name : ''}`,
         html:    internalEmailHtml({ ref, email, items, shipping, total, sessionId: session_id }),
         text:    internalEmailText({ ref, email, items, shipping, total, sessionId: session_id }),
       }).catch(err => console.error('Internal email error:', err.message))
